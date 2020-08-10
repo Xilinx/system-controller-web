@@ -1,0 +1,178 @@
+#!/bin/bash
+
+while [[ $# -gt 0 ]]
+do
+key="$1"
+
+case $key in
+    -v|--extension)
+    shift # past argument
+    shift # past value
+    ;;
+    -c|--searchpath)
+    if [ $2 == "listvoltage" ]
+    then
+        echo "VCCINT
+VCCINT_SOC
+VCCINT_PSLP
+VCCINT_PSFP
+VCCAUX
+VCC_RAM
+VCC_PMC
+VCCO_MIO
+VCC3V3
+VCC1V8
+VCCAUX_PMC
+MGTYAVTT
+VADJ_FMC
+MGTYAVCC
+UTIL_1V13
+UTIL_2V5
+VCC1V2_DDR4
+VCC1V1_LP4"
+    fi
+    if [ $2 == "listgpio" ]
+    then 
+        echo "500 - SYSCTLR_PB
+500 - DC_SYS_CTRL3
+500 - DC_SYS_CTRL2
+500 - DC_SYS_CTRL1
+500 - DC_SYS_CTRL0
+501 - SYSCTLR_SD1_CLK
+501 - SYSCTLR_SD1_CMD
+501 - SYSCTLR_SD1_DATA3
+501 - SYSCTLR_SD1_DATA2
+501 - SYSCTLR_SD1_DATA1
+501 - SYSCTLR_SD1_DATA0
+501 - SYSCTLR_SD1_CD_B
+501 - SYSCTLR_ETH_RESET_B_R
+501 - SYSCTLR_UART0_TXD_OUT
+501 - SYSCTLR_UART0_RXD_IN
+501 - LP_I2C1_SDA
+501 - LP_I2C1_SCL
+501 - LP_I2C0_PMC_SDA
+501 - LP_I2C0_PMC_SCL
+502 - SYSCTLR_ETH_MDIO
+502 - SYSCTLR_ETH_MDC"
+    fi
+
+    if [ $2 == "listpower" ]
+    then
+        echo "VCCINT
+VCC_SOC
+VCC_PMC
+VCCINT_RAM
+VCCINT_PSLP
+VCCINT_PSFP
+VCCAUX
+VCCAUX_PMC
+VCC_MIO
+VCC1V8
+VCC3V3
+VCC1V2_DDR4
+VCC1V1_LP4
+VADJ_FMC
+MGTYAVCC
+MGTYAVTT
+MGTYVCCAUX"
+    fi
+        if [ $2 == "eeprom" ]
+    then
+echo "Language: 0
+Manufacturing Date: Tue Jun  2 01:33:00 1981
+Manufacturer: XILINX
+Product Name: VC-E-A2197
+Board Serial Number: 1281041a005
+Board Part Number: �043123
+Board Reversion: 
+MAC Address 0: ff:ff:ff:ff:ff:ff
+MAC Address 1: ff:ff:ff:ff:ff:ff
+"
+    fi
+        if [ $2 == "getgpio" ]
+    then
+        echo "500 - SYSCTLR_PB (line 12): 0"
+    fi
+        if [ $2 == "getvoltage" ]
+    then
+        echo "Voltage(V):     0.78"
+    fi
+        if [ $2 == "ddr" ]
+    then
+	if [ $4 == "spd" ]
+        then
+        echo "DDR4 SDRAM?     Yes
+Size(Gb):       8
+Temp. Sensor?   Yes"
+        fi
+	if [ $4 == "temp" ]
+        then
+        echo "Temperature(C): 32.44"
+        fi
+    fi
+        if [ $2 == "getpower" ]
+    then
+        echo "Voltage(mV):     783
+Current(mA):     312
+Power(mW):       237"
+    fi
+
+        if [ $2 == "listclock" ]
+    then
+        echo "zSFP Si570
+User1 FMC1 Si570
+Versal Sys Clk Si570
+Dimm1 Si570
+LPDDR4 CLK1 Si570
+LPDDR4 CLK2 Si570
+HSPD Si570"
+    fi
+
+
+        if [ $2 == "listbootmode" ]
+    then
+        echo "jtag	0x0
+qspi24	0x1
+qspi32	0x2
+sd0_ls	0x3
+sd1	0x5
+emmc	0x6
+usb	0x7
+ospi	0x8
+smap	0xa
+dft	0xd
+sd1_ls	0xe
+"
+    fi
+        if [ $2 == "BIT" ]
+    then
+        echo "Check Clocks: PASS"
+    fi
+        if [ $2 == "listBIT" ]
+    then
+        echo "Check Clocks
+Check Voltage"
+    fi
+        if [ $2 == "getclock" ]
+    then
+        echo "Frequency(Hz):  156249999"
+    fi
+
+
+    shift # past argument
+    shift # past value
+    ;;
+    -t|--lib)
+    shift # past argument
+    shift # past value
+    ;;
+    --default)
+    DEFAULT=YES
+    shift # past argument
+    ;;
+    *)    # unknown option
+    POSITIONAL+=("$1") # save it in an array for later
+    shift # past argument
+    ;;
+esac
+done

@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>VCK190 Evaluation kit</title>
+  <meta charset="utf-8">
+  <link rel="icon" href="{{url_for('static',filename='images/icon.png')}}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/common.css') }}">
+  <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/gen_sc.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/gen_bit.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/gen_bm.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/config_sc.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/config_bit.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+</head>
+
+
+<body onload="showloading()" style="margin:0;">
+<div id="loader"></div>
+
+<div style="display:none;" id="root" class="animate-bottom bgColor">
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="logo-align align-left" href="#"><img
+            src="{{url_for('static',filename='images/xilinx.png')}}" alt="logo" height="38"/></a>
+        <h4 class="app-title">Versal AI Core Series VCK190 Evaluation Kit</h4>
+      </div>
+    </div>
+  </nav>
+  <section class="content_sec ">
+    <div class="tab_section ">
+      <nav class="tab_sec">
+        <ul class="tabitemlist" id="top_menu">
+        <li class="tabitem_right active">Home</li>
+        <li class="tabitem_right">About</li>
+        <li class="tabitem_right">Help</li>
+        </ul>
+      </nav>
+    </div>
+  </section>
+  <!-- Home Screen-->
+  <div class="homelandingrow" id="home_screen_db">
+    <span class="homecolumn" id="railcolumn">
+      <div class="clock_dashboard">
+        <p class='clock_key'>Board Temperature</p>
+        <p class='clock_value' id='home_board_temp_id'>- °C</p>
+      </div>
+        <div class="second_dashboard">
+        <br><br><br><br><br><br>
+                <p class='link_key'>For more information regarding Hardware, Documentation, Tools & IP and Training & Support</p>
+        <br><br>
+            <button class="prod_page_btn" onclick=openInNewTab("https://www.xilinx.com/products/boards-and-kits/vck190.html#specifications")>View Product Page</button>
+      </div>
+    </span>
+    <span class="homecolumn2">
+      <div class="image_bg_div">
+        <img src="../static/images/vck190.jpg" class="image_bg">
+      </div>
+<!--      <div class="link_dashboard">-->
+<!--        <p class='link_key'>For more information regarding Hardware, Documentation, Tools & IP and Training & Support</p>-->
+<!--        <button class="prod_page_btn" onclick=openInNewTab("https://www.google.com")>View Product Page</button>-->
+<!--      </div>-->
+    </span>
+    <span class="homecolumn3" id="tables">
+      <div class="block_dashboard">
+          <a class="logo-align align-center" href="#"><img
+            src="{{url_for('static',filename='images/versal.png')}}" alt="logo" height="38"/></a>
+        <p class='details_info' id="db_details_Device">Device:</p>
+          <p class='details_info' id="db_details_silrev">Silicon Rev:</p>
+          <p class='details_info' id="db_details_boardpn">Board P/N:</p>
+          <p class='details_info' id="db_details_rev">Rev:</p>
+          <p class='details_info' id="db_details_serno">Serial Number:</p>
+          <p class='details_info' id="db_details_mac1">MAC Address 1:</p>
+          <p class='details_info' id="db_details_mac2">MAC Address 2:</p>
+
+      </div>
+        <div class= "block_dashboard" id="detectBootModeID">
+           <p class='details_info'> <b>Boot Mode:</b></p>
+          <!--<p class='details_info'>JTAG : [0000]</p>
+          <p class='details_info'>Boot Module : [0010]</p>
+          <p class='details_info'>SD1_3.0 : [1110]</p>-->
+
+      </div>
+    </span>
+  </div>
+<!-- Help Screen-->
+  <div class="homelandingrow hide" id="help_screen">
+    <span class="" id="railcolumn">
+      <div class="clock_dashboard">
+        <p class='clock_key'>Help Screen</br> <b>Work in progress</b></p>
+      </div>
+    </span>
+  </div>
+<!-- About Screen-->
+    <div class="homelandingrow hide" id="about_screen">
+    <span class="" id="railcolumn">
+      <div class="clock_dashboard">
+        <p class='clock_key'>About Screen</br> <b>Work in progress</b></p>
+      </div>
+
+    </span>
+  </div>
+  <!-- Demos and Design Screen-->
+  <div class="homelandingrow hide" id="dnd_screen">
+    <span class="" id="railcolumn">
+      <div class="clock_dashboard">
+        <p class='clock_key'>Demos & Design Screen</br> <b>Work in progress</b></p>
+      </div>
+    </span>
+  </div>
+  <div class="homelandingrow hide" id="boardseettings_screen">
+    <span class="" id="railcolumn">
+      <!--                -->
+
+<div class="boardtests-pagecontent">
+          <div class="sidemenu">
+            <ul id = "boardtestdiv" class="menuitems">
+<!--              <li class="active">Clocks</li>-->
+<!--              <li>Voltages</li>-->
+<!--              <li>Power</li>-->
+            </ul>
+          </div>
+          <div class="preview_body">
+            <div class="tabsection" id="bsettings_subtabs">
+              <div class="content-body" id="clocksSubTabs">
+<!--                <div class=" ">-->
+<!--                    <nav class="">-->
+<!--                        <ul class="subtabitemlist" >-->
+<!--                            <li class="tab_subitem active">Set</li>-->
+<!--                            <li class="tab_subitem">Get</li>-->
+<!--                            <li class="tab_subitem">Restore to Default</li>-->
+<!--                        </ul>-->
+<!--                    </nav>-->
+<!--                </div>-->
+<!--                <div id="clock_set_div">-->
+<!--                <table id="boardsettings" class="boardsettings_table" style="width:100%">-->
+<!--                    <tbody class="table_body" id="clocksSet">-->
+<!--                        <tr>-->
+<!--                            <td><input type="checkbox"></td>-->
+<!--                            <td>zSFP Si570 Frequency</td>-->
+<!--                          <td><input type="text"> </td>-->
+<!--                            <td>(Between 10 and 810 MHz)</td>-->
+<!--                            <td><button type="button">Set Frequency</button></td>-->
+<!--                        </tr>-->
+<!--                                <tr>-->
+<!--                            <td><input type="checkbox"></td>-->
+<!--                            <td>zSFP DIMM1 Frequency</td>-->
+<!--                          <td><input type="text"> </td>-->
+<!--                            <td>(Between 10 and 810 MHz)</td>-->
+<!--                            <td><button type="button" >Set Frequency</button></td>-->
+<!--                        </tr>-->
+<!--                    </tbody>-->
+<!--                </table>-->
+<!--            </div>-->
+                  <div id="clock_get_div" class="hide">
+                <table id="" class="boardsettings_table" style="width:100%">
+                    <tbody class="table_body" id="clocksget">
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>zSFP Si570 Frequency</td>
+                                                      <td><input type="text"> </td>
+
+
+                            <td><button type="button">Get Frequency</button></td>
+                        </tr>
+                                <tr>
+                            <td><input type="checkbox"></td>
+                            <td>DIMM1 Si570 Frequency</td>
+                          <td><input type="text"> </td>
+                            <td><button type="button" >Get Frequency</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+                  <div id="clock_restore_div" class="hide">
+                <table id="" class="boardsettings_table" style="width:100%">
+                    <tbody class="table_body" id="clocksreset">
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>zSFP Si570 Frequency</td>
+<!--                          <td><input type="text"> </td>-->
+<!--                            <td>(Between 10 and 810 MHz)</td>-->
+                            <td><button type="button">Restore to Default</button></td>
+                        </tr>
+                                <tr>
+                            <td><input type="checkbox"></td>
+                            <td>zSFP DIMM1 Frequency</td>
+<!--                          <td><input type="text"> </td>-->
+<!--                            <td>(Between 10 and 810 MHz)</td>-->
+                            <td><button type="button" >Restore to Default</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+                <div id="test2view" class="tabsection hide">
+                <h4 class="preview_title">Clock test</h4>
+                <div class="content-body" id="test2viewcontent">
+
+                  Clock test
+                </div>
+            </div>
+                                <div id="test3view" class="tabsection hide">
+                <h4 class="preview_title">GT lopback test</h4>
+                <div class="content-body" id="test3viewcontent">
+                  GT lopback test
+                </div>
+            </div>
+                                <div id="test4view" class="tabsection hide">
+                <h4 class="preview_title">FMCP Test</h4>
+                <div class="content-body" id="test4viewcontent">
+                  FMCP Test
+                </div>
+            </div>
+                                <div id="test5view" class="tabsection hide">
+                <h4 class="preview_title">PCIe loopback test</h4>
+                <div class="content-body" id="test5viewcontent">
+                  PCIe loopback test
+                </div>
+            </div>
+                                <div id="test6view" class="tabsection hide">
+                <h4 class="preview_title">HDMI test</h4>
+                <div class="content-body" id="test6viewcontent"></div>
+            </div>
+                                <div id="test7view" class="tabsection hide">
+                <h4 class="preview_title">MIO test</h4>
+                <div class="content-body" id="test7viewcontent">
+                  MIO test
+                </div>
+            </div>
+                                <div id="test8view" class="tabsection hide">
+                <h4 class="preview_title">Memory test</h4>
+                <div class="content-body" id="test8viewcontent">
+                  Memory test
+                </div>
+            </div>
+              </div>
+                <div class="content-body hide" id="voltagesubtabs">
+                <table id="" class="boardsettings_table" style="width:100%">
+                    <tbody class="table_body" id="clocksSet">
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>zSFP Si570 Frequency</td>
+                          <td><input type="text"> </td>
+                            <td>(voltage 10 and 810 MHz)</td>
+                            <td><button type="button">Set Frequency</button></td>
+                        </tr>
+                                <tr>
+                            <td><input type="checkbox"></td>
+                            <td>zSFP DIMM1 Frequency</td>
+                          <td><input type="text"> </td>
+                            <td>(Between 10 and 810 MHz)</td>
+                            <td><button type="button" >Set Frequency</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                  <div id="" class="hide">
+                <table id="" class="boardsettings_table" style="width:100%">
+                    <tbody class="table_body" id="">
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>zSFP Si570 Frequency</td>
+<!--                          <td><input type="text"> </td>-->
+<!--                            <td>(Between 10 and 810 MHz)</td>-->
+                            <td><button type="button">Restore to Default</button></td>
+                        </tr>
+                                <tr>
+                            <td><input type="checkbox"></td>
+                            <td>zSFP DIMM1 Frequency</td>
+<!--                          <td><input type="text"> </td>-->
+<!--                            <td>(Between 10 and 810 MHz)</td>-->
+                            <td><button type="button" >Restore to Default</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+                <div id="" class="tabsection hide">
+                <h4 class="preview_title">Clock test</h4>
+                <div class="content-body" id="">
+
+                  Clock test
+                </div>
+            </div>
+                                <div id="test3view" class="tabsection hide">
+                <h4 class="preview_title">GT lopback test</h4>
+                <div class="content-body" id="test3viewcontent">
+                  GT lopback test
+                </div>
+            </div>
+                                <div id="test4view" class="tabsection hide">
+                <h4 class="preview_title">FMCP Test</h4>
+                <div class="content-body" id="test4viewcontent">
+                  FMCP Test
+                </div>
+            </div>
+                                <div id="test5view" class="tabsection hide">
+                <h4 class="preview_title">PCIe loopback test</h4>
+                <div class="content-body" id="test5viewcontent">
+                  PCIe loopback test
+                </div>
+            </div>
+                                <div id="test6view" class="tabsection hide">
+                <h4 class="preview_title">HDMI test</h4>
+                <div class="content-body" id="test6viewcontent"></div>
+            </div>
+                                <div id="test7view" class="tabsection hide">
+                <h4 class="preview_title">MIO test</h4>
+                <div class="content-body" id="test7viewcontent">
+                  MIO test
+                </div>
+            </div>
+                                <div id="test8view" class="tabsection hide">
+                <h4 class="preview_title">Memory test</h4>
+                <div class="content-body" id="test8viewcontent">
+                  Memory test
+                </div>
+            </div>
+              </div>
+            </div>
+          </div>
+        </div>
+<!--       dfaf     -->
+    </span>
+  </div>
+    <div class="homelandingrow hide" id="testandebug_screen">
+    <span class="" id="railcolumn">
+<!--    another tab            -->
+        <div id="bit_tab_screen">
+
+            </div>
+<!--       dfaf     -->
+    </span>
+  </div>
+
+  <section class="content_sec ">
+    <div class="tab_section footer">
+      <nav class="tab_sec ">
+        <ul class="tabitemlist " id="bottom_menu">
+          <li class="tabitem">Demos & Design</li>
+          <li class="tabitem">Board Settings</li>
+          <li class="tabitem">Test & Debug</li>
+          <div id="versionLabel">V 0.0</div>
+        </ul>
+      </nav>
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>
