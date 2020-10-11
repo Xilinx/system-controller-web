@@ -1,0 +1,4 @@
+function getlocallinkwithport (portno){
+var url = window.location.href;
+return "http://"+url.split(":")[1].substring(2)+":"+portno
+}

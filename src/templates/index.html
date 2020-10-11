@@ -1,12 +1,14 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <title>VCK190 Evaluation kit</title>
   <meta charset="utf-8">
   <link rel="icon" href="{{url_for('static',filename='images/icon.png')}}">
   <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/common.css') }}">
   <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/common.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/vck190_strings.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='js/gen_sc.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='js/gen_bit.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='js/gen_bm.js') }}"></script>
@@ -18,6 +20,7 @@
 
 
 <body onload="showloading()" style="margin:0;">
+
 <div id="loader"></div>
 
 <div style="display:none;" id="root" class="animate-bottom bgColor">
@@ -25,8 +28,8 @@
     <div class="container-fluid">
       <div class="navbar-header">
         <a class="logo-align align-left" href="#"><img
-            src="{{url_for('static',filename='images/xilinx.png')}}" alt="logo" height="38"/></a>
-        <h4 class="app-title">Versal AI Core Series VCK190 Evaluation Kit</h4>
+            src="{{url_for('static',filename='images/xilinx.png')}}" alt="logo" height="38" style="padding:10px 10px"/></a>
+        <h4 class="app-title" id="app-title-id"></h4>
       </div>
     </div>
   </nav>
@@ -34,6 +37,7 @@
     <div class="tab_section ">
       <nav class="tab_sec">
         <ul class="tabitemlist" id="top_menu">
+        <li id="ttbbackid" class="tabitem_left hide">❮</li>
         <li class="tabitem_right active">Home</li>
         <li class="tabitem_right">About</li>
         <li class="tabitem_right">Help</li>
@@ -42,32 +46,54 @@
     </div>
   </section>
   <!-- Home Screen-->
-  <div class="homelandingrow" id="home_screen_db">
+  <div class="homelandingrow" id="home_screen_com">
+      <div class="app-title"></div>
+    <span class="homecolumn" id="railcolumn_com">
+    </span>
+    <span class="homecolumn2" id="railcolumn_com2">
+    </span>
+    <span class="homecolumn3" id="tables_com">
+        <div>
+        <button class="navopt_btn" id="testtheboard" onclick=navClick(this.id);>Test The Board</button>
+        </div>
+         <div>
+        <button class="navopt_btn" id="linuxprompts" onclick=navClick(this.id)>Obtain linux Prompts</button>
+        </div>
+         <div>
+             <button class="navopt_btn" id="demosdesigns" onclick=navClick(this.id)>Run Demos & Designs</button>
+         </div>
+         <div>
+             <button class="navopt_btn" id="developusingtools" onclick=navClick(this.id)>Develop using Tools</button>
+         </div>
+</span>
+  </div>
+    <!-- test the board Home Screen-->
+  <div class="homelandingrow hide" id="home_screen_db">
+      <div class="app-title"></div>
     <span class="homecolumn" id="railcolumn">
       <div class="clock_dashboard">
         <p class='clock_key'>Board Temperature</p>
         <p class='clock_value' id='home_board_temp_id'>- °C</p>
       </div>
-        <div class="second_dashboard">
+        <div>
+        <button class="navopt_btn" id="boardsettings" onclick=navClick(this.id);>Board Settings</button>
+        </div>
+         <div>
+        <button class="navopt_btn" id="boardinterfacetest" onclick=navClick(this.id)>Board Interface Test</button>
+        </div>
+        <!--<div class="second_dashboard">
         <br><br><br><br><br><br>
                 <p class='link_key'>For more information regarding Hardware, Documentation, Tools & IP and Training & Support</p>
         <br><br>
             <button class="prod_page_btn" onclick=openInNewTab("https://www.xilinx.com/products/boards-and-kits/vck190.html#specifications")>View Product Page</button>
-      </div>
+      </div>-->
     </span>
-    <span class="homecolumn2">
-      <div class="image_bg_div">
-        <img src="../static/images/vck190.jpg" class="image_bg">
-      </div>
-<!--      <div class="link_dashboard">-->
-<!--        <p class='link_key'>For more information regarding Hardware, Documentation, Tools & IP and Training & Support</p>-->
-<!--        <button class="prod_page_btn" onclick=openInNewTab("https://www.google.com")>View Product Page</button>-->
-<!--      </div>-->
+    <span class="homecolumn2" id="testboard_home">
     </span>
     <span class="homecolumn3" id="tables">
-      <div class="block_dashboard">
+      <div class="block_dashboard_1">
           <a class="logo-align align-center" href="#"><img
-            src="{{url_for('static',filename='images/versal.png')}}" alt="logo" height="38"/></a>
+            src="{{url_for('static',filename='images/versal.png')}}" alt="logo" height="38" style="padding-top:30px; padding-bottom:10px"/></a>
         <p class='details_info' id="db_details_Device">Device:</p>
           <p class='details_info' id="db_details_silrev">Silicon Rev:</p>
           <p class='details_info' id="db_details_boardpn">Board P/N:</p>
@@ -77,7 +103,7 @@
           <p class='details_info' id="db_details_mac2">MAC Address 2:</p>
 
       </div>
-        <div class= "block_dashboard" id="detectBootModeID">
+        <div class= "block_dashboard_1" id="detectBootModeID">
            <p class='details_info'> <b>Boot Mode:</b></p>
           <!--<p class='details_info'>JTAG : [0000]</p>
           <p class='details_info'>Boot Module : [0010]</p>
@@ -88,6 +114,7 @@
   </div>
 <!-- Help Screen-->
   <div class="homelandingrow hide" id="help_screen">
+      <div class="app-title"></div>
     <span class="" id="railcolumn">
       <div class="clock_dashboard">
         <p class='clock_key'>Help Screen</br> <b>Work in progress</b></p>
@@ -96,6 +123,7 @@
   </div>
 <!-- About Screen-->
     <div class="homelandingrow hide" id="about_screen">
+      <div class="app-title"></div>
     <span class="" id="railcolumn">
       <div class="clock_dashboard">
         <p class='clock_key'>About Screen</br> <b>Work in progress</b></p>
@@ -103,15 +131,32 @@
 
     </span>
   </div>
-  <!-- Demos and Design Screen-->
-  <div class="homelandingrow hide" id="dnd_screen">
+          <!-- linux prompt screen-->
+  <div class="homelandingrow hide" id="linuxprompt_screen">
+      <div class="app-title"></div>
     <span class="" id="railcolumn">
       <div class="clock_dashboard">
-        <p class='clock_key'>Demos & Design Screen</br> <b>Work in progress</b></p>
+        <p class='clock_key'>Linux prompt Screen</br> <b>Work in progress</b></p>
       </div>
     </span>
   </div>
+
+        <!-- Demos and Design Screen-->
+  <div class="homelandingrow hide" id="dnd_screen">
+      <div class="app-title"></div>
+    <span class="" id="railcolumn">
+    </span>
+  </div>
+
+          <!-- Tools screen-->
+  <div class="homelandingrow hide" id="tools_screen">
+      <div class="app-title"></div>
+  </div>
+
+
+	<!-- Others -->
   <div class="homelandingrow hide" id="boardseettings_screen">
+      <div class="app-title"></div>
     <span class="" id="railcolumn">
       <!--                -->
 
@@ -326,6 +371,7 @@
     </span>
   </div>
     <div class="homelandingrow hide" id="testandebug_screen">
+      <div class="app-title"></div>
     <span class="" id="railcolumn">
 <!--    another tab            -->
         <div id="bit_tab_screen">
@@ -339,9 +385,9 @@
     <div class="tab_section footer">
       <nav class="tab_sec ">
         <ul class="tabitemlist " id="bottom_menu">
-          <li class="tabitem">Demos & Design</li>
-          <li class="tabitem">Board Settings</li>
-          <li class="tabitem">Test & Debug</li>
+<!--          <li class="tabitem">Demos & Design</li>-->
+<!--          <li class="tabitem">Board Settings</li>-->
+<!--          <li class="tabitem">Test & Debug</li>-->
           <div id="versionLabel">V 0.0</div>
         </ul>
       </nav>

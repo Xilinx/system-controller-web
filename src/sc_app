@@ -56,6 +56,11 @@ VCC1V1_LP4"
 502 - SYSCTLR_ETH_MDC"
     fi
 
+    if [ $2 == "listSFP" ]
+    then
+        echo "zSFP-0
+zSFP-1"
+    fi
     if [ $2 == "listpower" ]
     then
         echo "VCCINT
@@ -88,6 +93,33 @@ Board Reversion:
 MAC Address 0: ff:ff:ff:ff:ff:ff
 MAC Address 1: ff:ff:ff:ff:ff:ff
 "
+    fi
+        if [ $2 == "getioexp" ]
+    then
+        if [ $4 == "all" ]
+        then
+        echo "Input GPIO: 0x13bf
+Output GPIO:    0x20
+Direction:  0xffdf"
+        fi
+        if [ $4 == "input" ]
+        then
+        echo "Port 0(7) - MAX6643 FULLSPD:    0
+Port 0(4) - PMBUS2 INA226 ALERT:    1
+Port 0(1) - MAX6643 Fan Fail (AL):  1
+Port 0(0) - MAX6643 Fan Over Temp (AL): 1
+Port 1(7) - PMBUS1 INA226 Alert (AL):   1
+Port 1(6) - PMBUS Alert (AL):   0
+Port 1(4) - VCCINT VRHOT B (AL):    1
+Port 1(3) - FMCP2 FMCP PRSNT M2C B (AL):    1
+Port 1(2) - FMCP1 FMCP PRSNT M2C B (AL):    1
+Port 1(1) - FMCP2 FMC PRSNT M2C B (AL): 1
+Port 1(0) - FMCP1 FMC PRSNT M2C B (AL): 1"
+        fi
+        if [ $4 == "output" ]
+        then
+        echo "Port 1(5) - 8A34001_EXP_RST_B (AL): 1"
+        fi
     fi
         if [ $2 == "getgpio" ]
     then
@@ -152,6 +184,18 @@ sd1_ls	0xe
     then
         echo "Check Clocks
 Check Voltage"
+    fi
+        if [ $2 == "getpwmSFP" ]
+    then
+        echo "Power Mode(0-2W):   101"
+    fi
+        if [ $2 == "getSFP" ]
+    then
+        echo "Manufacturer:   MULTILANE-SAL   
+Serial Number:  415             
+Internal Temperature(C):    27.000
+Supply Voltage(V):  3.30
+Alarm:  0"
     fi
         if [ $2 == "getclock" ]
     then

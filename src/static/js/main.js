@@ -10,7 +10,6 @@ function showPage() {
   document.getElementById("loader").style.display = "none";
   document.getElementById("root").style.display = "block";
 }
-
 /*
 * API calls and rendering data to html pages.
 */
@@ -68,8 +67,25 @@ function openInNewTab(url) {
   var win = window.open(url, '_blank');
   win.focus();
 }
+function jnurllink(){
+    $.ajax({
+            url: "/funcreq",
+            type: 'GET',
+            data:{"func":"jnlink","params":""},
+            dataType: 'json',
+            success: function (res){
+                if(res.data[0] == 1){
+                    openInNewTab(res.data[1]);
+                }else{
+                    window.alert(res.data[1]);
+                }
+            },
+            error: function(){
+            }
+    });
+}
 function hideAllPages(){
-    $("#home_screen_db, #help_screen, #about_screen, #dnd_screen, #boardseettings_screen, #testandebug_screen").addClass('hide');
+    $("#home_screen_com, #home_screen_db, #help_screen, #about_screen, #dnd_screen, #boardseettings_screen, #tools_screen, #testandebug_screen, #linuxprompt_screen, #ttbbackid").addClass('hide');
 }
 
 function renderComponentDiv(name, comps,heads){
@@ -361,18 +377,20 @@ function generateBoardSettingsUI(){
                     try{
                         if(cn.getAttribute("respKey")){
                             if(cn.nodeName.toLowerCase() == "label"){
-                                cn.innerHTML = res.data[cn.getAttribute("respKey")] + " " + cn.getAttribute("notation");
+                                if (res.data[cn.getAttribute("respKey")] != undefined){
+                                    cn.innerHTML = res.data[cn.getAttribute("respKey")] + " " + cn.getAttribute("notation");
+                                }
                             }
                         }
 			if(cn.nodeName.toLowerCase() == "div"){
 			    if (res.status == "error"){
-                                cn.childNodes[0].innerHTML = res.data;
+                                cn.childNodes[0].innerHTML = res.data+restime();
                                 cn.className = '';
                                 cn.classList.add("ministatusfail");
                                 cn.classList.add("tooltip");
 			    }
                             else{
-                                cn.childNodes[0].innerHTML = "Success";
+                                cn.childNodes[0].innerHTML = "Success"+restime();
                                 cn.className = '';
                                 cn.classList.add("ministatussuccess");
                                 cn.classList.add("tooltip");
@@ -391,7 +409,8 @@ function generateBoardSettingsUI(){
                     try{
 
                         if(cn.nodeName.toLowerCase() == "div"){
-                            cn.getElementByClass("tooltip").innerHTML = "Network Error";
+                            cn.childNodes[0].innerHTML = "Network Error"+restime();
+                            //cn.getElementByClass("tooltip").innerHTML = "Network Error";
                             cn.className = '';
                             cn.classList.add("ministatusfail");
                             cn.classList.add("tooltip");
@@ -407,6 +426,9 @@ function generateBoardSettingsUI(){
 
 
     });
+}
+function restime(){
+    return "";//"</br>"+(new Date()).toLocaleTimeString();
 }
 function generateBITUI(){
     var tablecomp = document.createElement("table");
@@ -442,7 +464,7 @@ function generateBITUI(){
         em.setAttribute("type", "button");
         em.setAttribute("value", "Run");
         em.setAttribute("request",c["url"]);
-        em.setAttribute("target",c["test"]);
+        em.setAttribute("target_s",c);
         tdcomp.appendChild(em)
         trcomp.appendChild(tdcomp);
 
@@ -463,7 +485,8 @@ function generateBITUI(){
 
 
     $(".buttons_bit").click(function(e){
-    console.log("button clicked");
+    
+    console.log("button clicked"+e.target.getAttribute("target_s"));
 /*        var erow = $(e.target).parent().parent().parent().parent().find('tbody').find("tr");
             jQuery.each(erow, function(j,trs){
                 var checkSelected = false
@@ -513,19 +536,23 @@ function generateBITUI(){
 					url: "/cmdquery",
 					type: 'GET',
 					dataType: 'json',
-					data:{"sc_cmd":"BIT", "target": "Check Clocks", "params":"" },
+					data:{"sc_cmd":"BIT", "target": e.target.getAttribute("target_s"), "params":"" },
 					success: function (res){
 						inprg.className="";
 						inprg.classList.add("progress_inprogress_bar");
-						if(res.data.state.indexOf("PASS") >= 0){
-							cn.childNodes[0].innerHTML = res.data.message;
+						if(res.status === 'success' && res.data.state.indexOf("PASS") >= 0){
+							cn.childNodes[0].innerHTML = res.data.message+restime();
 							cn.className = '';
 							cn.classList.add("ministatussuccess");
 							cn.classList.add("tooltip");
 							setTimeout(()=>{inprg.classList.add("inprogress_bar_state_success"); },10);
 						}
 						else{
-							cn.childNodes[0].innerHTML = res.data.message.replace("\n","</br>");
+                                                        if(res.data.hasOwnProperty('message')){
+				    			    cn.childNodes[0].innerHTML = res.data.message.replace("\n","</br>")+restime();
+                                                        }else{
+				    			    cn.childNodes[0].innerHTML = res.data.replace("\n","</br>")+restime();
+							}
 							cn.className = '';
 							cn.classList.add("ministatusfail");
 							cn.classList.add("tooltip");
@@ -533,7 +560,7 @@ function generateBITUI(){
 						}
 					},
 					error: function(){
-						cn.childNodes[0].innerHTML = 'Network Issue';
+						cn.childNodes[0].innerHTML = 'Network Issue'+restime();
 						cn.className = '';
 						cn.classList.add("ministatusfail");
 						cn.classList.add("tooltip");
@@ -679,8 +706,13 @@ function generateBootModeblock(){
         dataType: 'json',
         data:{"func":"setbootmode", "params": $('#bootmodeselctOption').val().split("\t")[0]},
         success: function (res){
+
 		document.getElementById("setbootloaddivid").className = "";
-		document.getElementById("setbootloaddivid").classList.add("ministatussuccess");
+                if (res.status === 'error'){
+		    document.getElementById("setbootloaddivid").classList.add("ministatusfail");
+                }else{
+		    document.getElementById("setbootloaddivid").classList.add("ministatussuccess");
+                }
 	},
         error: function(){
 		document.getElementById("setbootloaddivid").className = "";
@@ -700,7 +732,11 @@ function generateBootModeblock(){
             data:{"sc_cmd":"reset", "target":"", "params":""},
         success: function (res){
 		document.getElementById("resetbootloaddivid").className = "";
-		document.getElementById("resetbootloaddivid").classList.add("ministatussuccess");
+                if (res.status === 'error'){
+		    document.getElementById("resetbootloaddivid").classList.add("ministatusfail");
+                }else{
+		    document.getElementById("resetbootloaddivid").classList.add("ministatussuccess");
+                }
 	},
         error: function(){
 		document.getElementById("resetbootloaddivid").className = "";
@@ -725,18 +761,206 @@ function generateBootModeblock(){
 //        console.log(e.target.innerHTML);
 //    });
 }
+function navClick(tid){
+    console.log(tid);
+    hideAllPages();
+    if (tid === "testtheboard") {$("#home_screen_db").removeClass('hide');}
+    if (tid === "boardsettings") {$("#boardseettings_screen").removeClass('hide'); $("#ttbbackid").removeClass('hide');}
+    if (tid === "boardinterfacetest") {$("#testandebug_screen").removeClass('hide'); $("#ttbbackid").removeClass('hide');}
+    if (tid === "demosdesigns") {$("#dnd_screen").removeClass('hide');}
+    if (tid === "developusingtools") {$("#tools_screen").removeClass('hide');}
+    if (tid === "linuxprompts") {$("#linuxprompt_screen").removeClass('hide');}
+
+
+}
+function layoutDesigns(){
+    document.title = app_strings.tab_title;
+/*  HOME SCREEN */
+//  left pane
+    $('#app-title-id').html(app_strings.app_title);
+    $('#home_screen_com .app-title').html(app_strings.home_tab.title);
+
+    for(var i = 0; i < app_strings.home_tab.left_pane.length; i++){
+        var em1 = document.createElement("div");
+        em1.classList.add("block_dashboard");
+        var em2 = document.createElement("a");
+        em2.classList.add("logo-align");
+        em2.classList.add("align-center");
+        em2.setAttribute("value", "Reset");
+        var em3 = document.createElement("img");
+        em3.setAttribute("src", app_strings.home_tab.left_pane[i].image);
+        em3.setAttribute("alt", "logo");
+        em3.setAttribute("width", "100%");
+        em2.append(em3)
+        em1.append(em2)
+        var em4 = document.createElement("input");
+        em4.classList.add("prod_page_btn");
+        em4.setAttribute("type", "button");
+        em4.setAttribute("linkv", app_strings.home_tab.left_pane[i].button_link);
+        em4.setAttribute("value", app_strings.home_tab.left_pane[i].button_title);
+        em4.onclick = function (e){ openInNewTab(e.target.attributes.linkv.value);};
+        em1.append(em4)
+        $("#railcolumn_com").append(em1);
+   }
+// center pane
+   {
+        var em1 = document.createElement("div");
+        em1.classList.add("image_bg_div");
+        var em2 = document.createElement("img");
+        em2.classList.add("image_bg");
+        em2.setAttribute("src", app_strings.home_tab.center_pane.image);
+        em1.append(em2)
+        $("#railcolumn_com2").append(em1);
+        var em3 = document.createElement("div");
+        em3.classList.add("link_dashboard_1");
+        var em4 = document.createElement("input");
+        em4.classList.add("prod_page_btn");
+        em4.setAttribute("type", "button");
+        em4.setAttribute("linkv", app_strings.home_tab.center_pane.button_link);
+        em4.setAttribute("value", app_strings.home_tab.center_pane.button_title);
+        em4.onclick = function (e){ openInNewTab(e.target.attributes.linkv.value);};
+        em3.append(em4)
+        $("#railcolumn_com2").append(em3);
+   }
+/*	Test the board */
+   {
+        $('#home_screen_db .app-title').html(app_strings.test_board.title);
+        var em1 = document.createElement("div");
+        em1.classList.add("image_bg_div");
+        var em2 = document.createElement("img");
+        em2.classList.add("image_bg");
+        em2.setAttribute("src", app_strings.test_board.center_pane.image);
+        em1.append(em2)
+        $("#testboard_home").append(em1);
+        var em3 = document.createElement("div");
+        em3.classList.add("link_dashboard");
+        var em5 = document.createElement("p");
+        em5.classList.add("link_key");
+        em5.textContent = app_strings.test_board.center_pane.text;
+        em3.append(em5)
+        var em4 = document.createElement("input");
+        em4.classList.add("prod_page_btn");
+        em4.setAttribute("type", "button");
+        em4.setAttribute("linkv", app_strings.test_board.center_pane.button_link);
+        em4.setAttribute("value", app_strings.test_board.center_pane.button_title);
+        em4.onclick = function (e){ openInNewTab(e.target.attributes.linkv.value);};
+        em3.append(em4)
+        $("#testboard_home").append(em3);
+   }
+/*	Run demos and designs */
+   {
+        $('#dnd_screen .app-title').html(app_strings.run_demos.title);
+        var em7 = document.createElement("span");
+        for(var i = 0; i < app_strings.run_demos.pane.length; i++){
+        var em6 = document.createElement("span");
+        em6.classList.add("homecolumn_4");
+        var em1 = document.createElement("div");
+        em1.classList.add("block_dashboard");
+        var em5 = document.createElement("p");
+        em5.classList.add("link_key");
+        em5.textContent = app_strings.run_demos.pane[i].title;
+        em1.append(em5)
+        var em2 = document.createElement("a");
+        em2.classList.add("logo-align");
+        em2.classList.add("align-center");
+        em2.setAttribute("value", "Reset");
+        var em3 = document.createElement("img");
+        em3.setAttribute("src", app_strings.run_demos.pane[i].image);
+        em3.setAttribute("alt", "logo");
+        em3.setAttribute("width", "100%");
+        em2.append(em3)
+        em1.append(em2)
+        var em9 = document.createElement("span");
+        var em4 = document.createElement("input");
+        em4.classList.add("prod_page_btn");
+        em4.setAttribute("type", "button");
+        em4.setAttribute("linkv", app_strings.run_demos.pane[i].button_link);
+        em4.setAttribute("value", app_strings.run_demos.pane[i].button_title);
+        if(app_strings.run_demos.pane[i].button_link_type){
+            em4.onclick = function (e) {
+              window[e.target.attributes.linkv.value]();
+            };
+        }else{
+        em4.onclick = function (e){ openInNewTab(e.target.attributes.linkv.value);};
+        }
+        em9.append(em4)
+        var em8 = document.createElement("input");
+        em8.classList.add("prod_page_btn");
+        em8.setAttribute("type", "button");
+        em8.setAttribute("linkv", app_strings.run_demos.pane[i].learnmore_link);
+        em8.setAttribute("value", "Learn More");
+        em8.onclick = function (e){ openInNewTab(e.target.attributes.linkv.value);};
+        em9.append(em8)
+        em1.append(em9)
+        em6.append(em1)
+        em7.append(em6)
+        }
+        $("#dnd_screen").append(em7);
+   }
+/*	Develop using tools */
+   {
+        $('#tools_screen .app-title').html(app_strings.develop_tools.title);
+        var em0 = document.createElement("span");
+        em0.classList.add("toolscolumn1");
+        var em1 = document.createElement("div");
+        em1.classList.add("image_tools_bg_div");
+        var em2 = document.createElement("img");
+        em2.classList.add("image_bg");
+        em2.setAttribute("src", app_strings.develop_tools.left_pane.image);
+        em1.append(em2);
+        var em5 = document.createElement("p");
+        em5.classList.add("link_key");
+        em5.textContent = app_strings.develop_tools.left_pane.text;
+        em1.append(em5)
+        em0.append(em1);
+        $("#tools_screen").append(em0);
+        var em7 = document.createElement("span");
+        for(var i = 0; i < app_strings.develop_tools.right_pane.length; i++){
+        var em6 = document.createElement("span");
+        em6.classList.add("homecolumn");
+        var em1 = document.createElement("div");
+        em1.classList.add("block_dashboard");
+        var em2 = document.createElement("a");
+        em2.classList.add("logo-align");
+        em2.classList.add("align-center");
+        em2.setAttribute("value", "Reset");
+        var em3 = document.createElement("img");
+        em3.setAttribute("src", app_strings.develop_tools.right_pane[i].image);
+        em3.setAttribute("alt", "logo");
+        em3.setAttribute("width", "100%");
+        em2.append(em3)
+        em1.append(em2)
+        var em4 = document.createElement("input");
+        em4.classList.add("prod_page_btn");
+        em4.setAttribute("type", "button");
+        em4.setAttribute("linkv", app_strings.develop_tools.right_pane[i].button_link);
+        em4.setAttribute("value", app_strings.develop_tools.right_pane[i].button_title);
+        em4.onclick = function (e){ openInNewTab(e.target.attributes.linkv.value);};
+        em1.append(em4)
+        em6.append(em1)
+        em7.append(em6)
+        }
+        $("#tools_screen").append(em7);
+
+
+   } 
+
+}
 $(document).ready(function () {
+    layoutDesigns();
     generateBoardSettingsTabJSON();
     generateBoardSettingsUI();
     generateBITUI();
     generateBootModeblock();
+    $('.app-title:empty').hide();
       $('#top_menu li').click(function (e) {
 
         $(e.target).addClass('active').siblings().removeClass('active');
             hideAllPages();
-            if (e.target.innerHTML == "Home") {$("#home_screen_db").removeClass('hide');}
-            if (e.target.innerHTML == "Help") {$("#help_screen").removeClass('hide');}
-            if (e.target.innerHTML == "About") {$("#about_screen").removeClass('hide');}
+            if (e.target.innerHTML == "Home") {$("#home_screen_com").removeClass('hide');} // "home_screen_com"  home_screen_db"
+            else if (e.target.innerHTML == "Help") {$("#help_screen").removeClass('hide');}
+            else if (e.target.innerHTML == "About") {$("#about_screen").removeClass('hide');}
+            else { navClick("testtheboard"); }
       });
       $('#bottom_menu li').click(function (e) {
         $(e.target).addClass('active').siblings().removeClass('active');

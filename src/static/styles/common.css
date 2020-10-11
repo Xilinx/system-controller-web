@@ -71,6 +71,7 @@
 #root {
   display: none;
   text-align: center;
+  margin-bottom:25px;
 }
 * {
 margin: 0px;
@@ -97,7 +98,7 @@ width: 100%;
 }
 
 .logo-align {
-padding: 12px 10px;
+/*padding: 12px 10px;*/
 display: inline-block;
 }
 
@@ -182,14 +183,30 @@ background: #ec1c24;
 cursor: pointer;
 }
 .prod_page_btn{
-margin: 15px auto;
+margin: 15px 5px 20px 5px;
 color: white;
 background: #EC1C24;
 border-color: transparent;
-font-size: 18px;
-border-width: 5px 50px;
+font-size: 16px;
+border-width: 5px 20px;
 cursor: pointer;
 
+}
+.navopt_btn{
+margin: 10px 0 0 0;
+color: white;
+/*background: #EC1C24;*/
+border-color: transparent;
+font-size: 18px;
+border-width: 5px 25px;
+cursor: pointer;
+width: 95%;
+height: 6vw;
+border-style: solid;
+border-color: #50525a;
+border-width: 1px;
+background-color: #171c2d;
+font-weight: bold;
 }
 .text-center {
 text-align: center;
@@ -242,6 +259,21 @@ cursor: pointer;
 border-left: solid 1px;
 border-left-color: #50525a;
 }
+.tabitem_left{
+min-width: 40px;
+color: #f1f2fc;
+font-family: sans-serif;
+font-size: 25px;
+text-align: center;
+text-transform: capitalize;
+padding: 10px 10px 0px;
+margin: 0px 0px;
+background: #171c2d00;
+cursor: pointer;
+border-left: solid 1px;
+border-left-color: #50525a;
+float: left;
+}
 .subtabitemlist {
 width: 100%;
 display: inline-block;
@@ -269,11 +301,12 @@ background: #2a3547;
 }
 
 .footer {
-   position:fixed;
    left:0px;
    bottom:0px;
    width:100%;
-   float:left
+   float:left;
+   position: fixed;
+
 }
 
 
@@ -665,13 +698,13 @@ border-radius: 50%;
 /* home page designing */
 .homecolumn {
 float: left;
-width: 25%;
+width: 20%;
 /*  padding: 15px;*/
 /*height: 300px; Should be removed. Only for demonstration */
 }
 .homecolumn2 {
 float: left;
-width: 50%;
+width: 60%;
 /*  padding: 5px;*/
 /*height: 300px; Should be removed. Only for demonstration */
 }
@@ -679,7 +712,13 @@ width: 50%;
 display: left;
 /*  padding: 10px;*/
 float: left;
-width: 25%;
+width: 20%;
+}
+.homecolumn_4 {
+float: left;
+width: 33.3%;
+/*  padding: 15px;*/
+/*height: 300px; Should be removed. Only for demonstration */
 }
 
 /* Clear floats after the columns */
@@ -692,7 +731,7 @@ width: 100%;
 }
 .homelandingrow {
 background: #2a3547;
-margin-bottom: 60px;
+margin-bottom: 0px;
 }
 .image_bg_div{
 float:left;
@@ -723,9 +762,9 @@ width:100%;
 border-style: solid;
 border-color: #50525a;
 border-width:1px;
-height:110px;
+/*height:110px;*/
 background-color: #171c2d;
-margin:10px 0px 70px 0px;
+margin:10px 0px 10px 0px;
 }
 .clock_dashboard{
 border-style: solid;
@@ -766,15 +805,28 @@ background-color: #171c2d;
 margin:10px 10px 10px 10px;
 
 }
-.block_dashboard{
+.block_dashboard_1{
 border-style: solid;
 border-color: #50525a;
 border-width:1px;
-/*width:100%;
+/*width:95%;
 height:150px;*/
 background-color: #171c2d;
-/*margin: auto;*/
-/*padding: 10px 10px 10px 10px;*/
+/*margin: auto;
+padding: 10px 10px 10px 10px;
+/*margin-left: 10px;*/
+margin:10px 10px 10px 10px;
+
+}
+.block_dashboard{
+/*border-style: solid;
+border-color: #50525a;
+border-width:1px;
+width:95%;
+height:150px;
+background-color: #171c2d;
+/*margin: auto;
+padding: 10px 10px 10px 10px;
 /*margin-left: 10px;*/
 margin:10px 10px 10px 10px;
 
@@ -814,7 +866,10 @@ font-size: 16px;
 text-align: center;
 color: white;
 margin-top: 15px;
-font-size: 15px;
+margin-bottom: 8px;
+font-size: 20px;
+padding-left: 10px;
+padding-right: 10px;
 }
 .clock_value{
 text-align: center;
@@ -1117,12 +1172,26 @@ background-color:red;
 }
 #versionLabel{
     float: right;
-    margin-top: 20px;
+    /*margin-top: 20px;*/
     margin-right: 15px;
     color: white;
-    font-size: 15px;
+    font-size: 10px;
 }
 .dash_bm{
 width: calc( 100% / 4);
-margin-left: 30px;
+margin-left: 10px;
 }
+.toolscolumn1 {
+float: left;
+width: 60%;
+/*padding: 10px;*/
+/*height: 300px; Should be removed. Only for demonstration */
+}
+.image_tools_bg_div{
+float:left;
+height:100%; 
+/*width:100%;*/
+content: '';
+margin: 0px 10px 10px 10px;
+}
+

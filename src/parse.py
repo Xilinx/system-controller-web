@@ -16,6 +16,8 @@ class Parse:
             return self.parseDDR(data)
         elif(component == "getgpio"):
             return self.parsegpio(data)
+        elif(component == "getioexp" or component == "getpwmSFP" or component == "getSFP"):
+            return self.parseioexp(data)
         else:
             return ""
     def temperature(self,data):
@@ -107,6 +109,11 @@ class ParseData(Parse):
         resar = data.strip().split("(")
         res = {}
         res["gpio"] = "("+resar[1]
+        return res
+    def parseioexp(self,data):
+        resar = data.strip().replace("\n","</br>")
+        res = {}
+        res["io"] = resar
         return res
     def parseList(self,data):
         res = data.rstrip().split("\n")

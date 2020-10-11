@@ -149,6 +149,22 @@ function addClockTab(){
         };
         innCompsset.push(eachcomp);
     });
+     var innCompssetboot = [];
+        jQuery.each(listsjson_sc["listclock"] , function(i, tds){
+        var eachcomp = {
+            "type":"list"
+            ,"components" : ["C,L0,E0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"L0": tds
+            ,"E0": "value"
+            ,"E0K": "-v"
+            ,"B0": "Set"
+            ,"B0A": "/cmdquery"
+            ,"B0sc_cmd":"setbootclock"
+            , "B0target": tds
+            , "B0params":""
+        };
+        innCompssetboot.push(eachcomp);
+    });
 
      var innCompsreset = [];
         jQuery.each(listsjson_sc["listclock"] , function(i, tds){
@@ -176,6 +192,12 @@ function addClockTab(){
             , "L1" : "Frequency"
             , "B0" : "Set All"
     };
+    var headcompssetboot = {
+            "headcomponents":["C,L0,L1,B0"]
+            ,"L0": "Clock Name"
+            , "L1" : "Frequency"
+            , "B0" : "Set All"
+    };
     var headcompsreset = {
             "headcomponents":["C,L0,B0"]
             ,"L0": "Clock Name"
@@ -196,6 +218,13 @@ function addClockTab(){
             ,"name": "Set Clock"
             ,"components": innCompsset
             , "headcomponents" : headcompsset
+
+            }
+            ,{
+            "subtype":"list"
+            ,"name": "Set Boot Clock"
+            ,"components": innCompssetboot
+            , "headcomponents" : headcompssetboot
 
             }
             ,{
@@ -340,6 +369,167 @@ function addDDRDIMMTab(){
             };
     boardsettingsTab.push(dict);
 }
+function addioexpTab(){
+     var innCompsget = [];
+     var innCompsset = [];
+     var innCompsreset = [];
+     jQuery.each([["IO Expander","all"],["Input","input"],["Output","output"]] , function(i, tds){
+        var eachcomp = {
+            "type":"list"
+            ,"components" : ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"L0": tds[0]
+            ,"V0": "-"
+            ,"V0N": ""
+            ,"V0V": "io"
+            ,"B0": "Get"
+            ,"B0A": "/cmdquery"
+            ,"B0sc_cmd":"getioexp"
+            , "B0target": tds[1]
+            , "B0params":""
+        };
+        innCompsget.push(eachcomp);
+    });
+     jQuery.each([["Direction","direction"],["Output","output"]] , function(i, tds){
+        var eachcomp = {
+            "type":"list"
+            ,"components" : ["C,L0,E0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"L0": tds[0]
+            ,"E0": "value"
+            ,"E0K": "-"
+            ,"B0": "Set"
+            ,"B0A": "/cmdquery"
+            ,"B0sc_cmd":"setioexp"
+            , "B0target": tds[1]
+            , "B0params":""
+        };
+        innCompsset.push(eachcomp);
+    });
+        var eachcomp = {
+            "type":"list"
+            ,"components" : ["C,L0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"L0": "Restore IO Expander"
+            ,"B0": "Restore"
+            ,"B0A": "/cmdquery"
+            ,"B0sc_cmd":"restoreioexp"
+            , "B0target": ""
+            , "B0params":""
+        };
+        innCompsreset.push(eachcomp);
+    var headcompsget = {
+            "headcomponents":["C,L0,L1,B0"]
+            ,"L0": "GPIO Expander"
+            , "L1" : "State"
+            , "B0" : "Get All"
+    };
+    var headcompsset = {
+            "headcomponents":["C,L0,L1,B0"]
+            ,"L0": "GPIO Expander"
+            , "L1" : "State"
+            , "B0" : "Set All"
+    };
+    var headcompsreset = {
+            "headcomponents":["C,L0,B0"]
+            ,"L0": "GPIO Expander"
+            , "L1" : "State"
+            , "B0" : "Restore All"
+    };
+    var dict = {"tab": "GPIO Expander"
+    ,"subtype":"tab"
+        ,"components":[
+            {
+            "subtype":"list"
+            ,"name": "Get GPIO Expander"
+            ,"components": innCompsget
+            , "headcomponents" : headcompsget
+
+            },
+            {
+            "subtype":"list"
+            ,"name": "Set GPIO Expander"
+            ,"components": innCompsset
+            , "headcomponents" : headcompsset
+
+            },
+            {
+            "subtype":"list"
+            ,"name": "Restore IO Expander"
+            ,"components": innCompsreset
+            , "headcomponents" : headcompsreset
+
+            }
+            ]
+            };
+    boardsettingsTab.push(dict);
+
+}
+function addsfpTab(){
+        var innCompsget = [];
+        var innCompsset = [];
+        jQuery.each(listsjson_sc["listSFP"] , function(i, tds){
+        jQuery.each([["PWM SFP","getpwmSFP"],["SFP","getSFP"]] , function(j, tdsd){
+        var eachcomp = {
+            "type":"list"
+            ,"components" : ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"L0":  tdsd[0] + " " + tds
+            ,"V0": "-"
+            ,"V0N": ""
+            ,"V0V": "io"
+            ,"B0": "Get"
+            ,"B0A": "/cmdquery"
+            ,"B0sc_cmd":tdsd[1]
+            , "B0target": tds
+            , "B0params":""
+        };
+        innCompsget.push(eachcomp);
+    });
+    });
+        jQuery.each(listsjson_sc["listSFP"] , function(i, tds){
+        var eachcomp = {
+            "type":"list"
+            ,"components" : ["C,L0,E0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"L0": tds + " PWM SFP"
+            ,"E0": "value"
+            ,"E0K": "-"
+            ,"B0": "Set"
+            ,"B0A": "/cmdquery"
+            ,"B0sc_cmd":"setpwmSFP"
+            , "B0target": tds
+            , "B0params":""
+        };
+        innCompsset.push(eachcomp);
+    });
+    var headcompsget = {
+            "headcomponents":["C,L0,L1,B0"]
+            ,"L0": "Name"
+            , "L1" : "Info"
+            , "B0" : "Get All"
+    };
+    var headcompsset = {
+            "headcomponents":["C,L0,L1,B0"]
+            ,"L0": "Name"
+            , "L1" : "Value"
+            , "B0" : "Set All"
+    };
+    var dict = {"tab": "zSFP Data"
+    ,"subtype":"tab"
+        ,"components":[
+            {
+            "subtype":"list"
+            ,"name": "Get zSFP"
+            ,"components": innCompsget
+            , "headcomponents" : headcompsget
+            }
+            ,{
+            "subtype":"list"
+            ,"name": "Set zSFP"
+            ,"components": innCompsset
+            , "headcomponents" : headcompsset
+            }
+            ]
+            };
+    boardsettingsTab.push(dict);
+
+}
 function generateBoardSettingsTabJSON(){
 
     addPowerTab();
@@ -347,8 +537,8 @@ function generateBoardSettingsTabJSON(){
     addVoltageTab();
     addDDRDIMMTab();
     addgpioTab();
-
-
+    addioexpTab();
+    addsfpTab();
 }
 
 

@@ -3,7 +3,7 @@
 #
 
 # imports
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request 
 from flask import Response  ,jsonify
 from flask_restful import Resource, Api , reqparse
 
@@ -12,7 +12,7 @@ from example import *
 from restserv import *
 from parse import *
 from config_app import *
-
+from jnservice import *
 ##  Main that calls other functions and launches the server.
 #
 #
@@ -37,14 +37,19 @@ req_lock = threading.Lock()
 
 @app.before_request
 def lock_next_requests():
-    global req_lock
-    req_lock.acquire()
-    Logg.log("************* Request locked",Logg.DEBUG)
+    #if  "cmdquery" in request.path or "eeprom_details" in request.path or "funcreq" in request.path:
+    #    if checkJNK() >= 1:
+    #        return {"key":"A jupyter notebook kernel is running"},204
+    if  "cmdquery" in request.path or "eeprom_details" in request.path or "funcreq" in request.path:
+        global req_lock
+        req_lock.acquire()
+        Logg.log("************* Request locked",Logg.DEBUG)
 @app.after_request
 def unlock_for_next_req(response):
     global req_lock
-    req_lock.release()
-    Logg.log("************* Released lock",Logg.DEBUG)
+    if req_lock.locked():
+        req_lock.release()
+        Logg.log("************* Released lock",Logg.DEBUG)
     return response
 
 if __name__ == '__main__':

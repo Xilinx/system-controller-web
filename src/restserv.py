@@ -4,6 +4,7 @@ from flask_restful import Resource, request
 from config_app import *
 from term import *
 from parse import *
+from jnservice import *
 ##
 # TODO :: Change parse data static to dynamic class for realtime data.
 #parse = ParseDataStatic()
@@ -27,8 +28,10 @@ class ReqFunctions:
     @staticmethod
     def polls():
         try:
-            response = Term.exec_cmd(sensors_app+" *-mdio-0 -j")
-            result = parse.temperature(response)
+            result = ""
+            if checkJNK() == 0:
+                response = Term.exec_cmd(sensors_app+" *-mdio-0 -j")
+                result = parse.temperature(response)
             result["active_bootmode"] = BootMode.getActiveBootMode()
             resp_json = {
                 "status":"success"
@@ -44,6 +47,9 @@ class ReqFunctions:
     def bootmode_set(mode):
         BootMode.setBootMode(mode);
         return {"status":"success","data":""},200
+    def jnlink():
+        jnu = jnurl()
+        return {"status":"success","data":jnu},200
 
 class FuncReq(Resource):
     def get(self,):
@@ -54,7 +60,16 @@ class FuncReq(Resource):
         
         if req.startswith('poll'):
             return ReqFunctions.polls()
+        if req.startswith('jnlink'):
+            return ReqFunctions.jnlink()
         if req.startswith('setbootmode'):
+            if checkJNK() >= 1: 
+                resp_json = { 
+                    "status":"error"
+                    ,"data": {"error":"Notebook kernel is running. Please stop running kernel."}
+                }                       
+                return resp_json,200
+
             if len(params):
                 return ReqFunctions.bootmode_set(params[0])
         resp_json = {
@@ -65,6 +80,13 @@ class FuncReq(Resource):
 class Poll(Resource):
     def get(self,):
         try:
+            if checkJNK() >= 1: 
+                resp_json = { 
+                    "status":"error"
+                    ,"data": {"error":"Notebook kernel is running. Please stop running kernel."}
+                }                       
+                return resp_json,200
+
             response = Term.exec_cmd(sensors_app+" *-mdio-0 -j")
             result = parse.temperature(response)
             result["active_bootmode"] = "jtag"
@@ -82,7 +104,9 @@ class Poll(Resource):
 class EEPROMDetails(Resource):
     def get(self,):
         try:
-            response = Term.exec_cmd(sc_app_path+" -c eeprom")
+            response = ""
+            if checkJNK() == 0: 
+                response = Term.exec_cmd(sc_app_path+" -c eeprom")
             result = parse.dashboard_eeprom(response)
             resp_json = {
                 "status":"success"
@@ -99,6 +123,13 @@ class EEPROMDetails(Resource):
 class CmdQuery(Resource):
     def get(self,):
         try:
+            if checkJNK() >= 1: 
+                resp_json = { 
+                    "status":"error"
+                    ,"data": "Notebook kernel is running. Please stop running kernel."
+                }                       
+                return resp_json,200
+
             req = request.args.get('sc_cmd')
 
             tar = request.args.get('target')
