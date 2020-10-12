@@ -1,8 +1,18 @@
 import os
 import json
 from config_app import *
+import psutil
 
 def checkJNK():
+
+    kercount = 0
+
+    for proc in psutil.process_iter():
+        if "python3" in proc.name() and "ipykernel_launcher" in proc.cmdline():
+            kercount = kercount + 1
+    return kercount
+
+
     jnlst = os.listdir(app_config["jnlocalrundir"])
     kercount = 0
     for st in jnlst:
