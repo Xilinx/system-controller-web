@@ -19,7 +19,7 @@ var app_strings = {
 			}
 		],
 		"center_pane":{
-			"image":"../static/images/VCK190_home.jpg",
+			"image":"../static/images/VCK190_home.png",
 			"text":"",
 			"button_title":"Visit Product Page",
 			"button_link":"https://www.xilinx.com/products/boards-and-kits/vck190.html",
@@ -35,33 +35,47 @@ var app_strings = {
 		},
 		
 	},
+	"linuxprompt":{
+		"title":"Obtain Linux Prompts",
+		"pane":[
+			{
+				"title":"Instructions to obtain Linux prompts from Versal",
+				"image":"../static/images/xilinx_banner.png",
+				"text":"",
+				"button_title":"Download",
+				"button_link":"",
+				"learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/XWUC/pages/748617729/Versal+AI+Core+Series+VCK190+Evaluation+Kit",
+			},
+		],
+
+	},
 	"run_demos":{
 		"title":"Demos & Designs",
 		"pane":[
 			{
 				"title":"Petalinux BSP Designs",
-				"image":"../static/images/VersalSilicon.png",
+				"image":"../static/images/xilinx_banner.png",
 				"text":"",
-				"button_title":"Download",
-				"button_link":"",
-				"learnmore_link":"",
+				"button_title":"Product Page",
+				"button_link":"https://www.xilinx.com/products/boards-and-kits/vck190.html",
+				"learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/XWUC/pages/748617729/Versal+AI+Core+Series+VCK190+Evaluation+Kit",
 			},
 			{
 				"title":"Power Advantage Demo",
-				"image":"../static/images/VersalSilicon.png",
+				"image":"../static/images/xilinx_banner.png",
 				"text":"",
 				"button_title":"Run",
                                 "button_link_type":1,
 				"button_link": "jnurllink",
-				"learnmore_link":"",
+				"learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/XWUC/pages/748617729/Versal+AI+Core+Series+VCK190+Evaluation+Kit",
 			},
 			{
 				"title":"Target Reference Designs",
-				"image":"../static/images/VersalSilicon.png",
+				"image":"../static/images/xilinx_banner.png",
 				"text":"",
-				"button_title":"Download",
-				"button_link":"",
-				"learnmore_link":"",
+				"button_title":"Product Page",
+				"button_link":"https://www.xilinx.com/products/boards-and-kits/vck190.html",
+				"learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/XWUC/pages/748617729/Versal+AI+Core+Series+VCK190+Evaluation+Kit",
 			},
 		],
 
@@ -78,7 +92,7 @@ var app_strings = {
 			{
 				"image":"../static/images/ai_sc.png",
 				"text":"",
-				"button_title":"Learn more about Vitis/Vitis AI",
+				"button_title":"About Vitis/Vitis AI",
 				"button_link":"https://www.xilinx.com/products/design-tools/vitis.html",
 			},
 			{
@@ -96,7 +110,7 @@ var app_strings = {
 			{
 				"image":"../static/images/hd.png",
 				"text":"",
-				"button_title":"Learn more about Vivado Design Suite",
+				"button_title":"About Vivado Design Suite",
 				"button_link":"https://www.xilinx.com/products/design-tools/vivado.html",
 			},
 			{
@@ -108,4 +122,45 @@ var app_strings = {
 		],
 
 	},
+        "help_content":{
+                "title":"Help",
+                "content":[
+                        {
+                                "heading":"",
+                                "content_type":0,	// 0: paragraph, 1: bullet points
+                                "content":["The System Controller Landing Page is currently in Beta version ("+listsjson_sc.version+")"]
+                        },
+                        {
+                                "heading":"known issues and bugs",
+                                "content_type":1,	
+                                "content":["Some webpage links may be broken or non-functional. This may happen because the webpage may not exist or is moved to a different location/address. These links will be fixed in subsequent release of the Landing Page.","The System Controller Landing Page can execute one particular action/task only at a time. For example, you cannot run the Board Settings and Board Interface Test at the same time. Please wait till a particular task is complete and then proceed."]
+                        },
+                        {
+                                "heading":"Jupyter Notebook",
+                                "content_type":1,
+                                "content":["Logout from jupyter notebook before exiting. Failing doing so may show login screen for next notebook launch.",
+					"Run jupyter notebook command in linux prompt to use from landing page if \"no jupyter notebook is running\" error message is shown.",
+					"Terminating notebook server using kill command may not able to launch notebook in new tab for next notebook launch.",
+					"Delete all *.json, *.html files from mentioned directory in order to relaunch jupyter notebook if \"Please delete multiple files from directory <jupyter nbrunning dir>.\" error message is shown.",
+					"Shut down any jupyter notebook kernels to use BIT or SCUI tabs components.",
+				]
+                        },
+                ],
+
+        },
+        "about_content":{
+                "title":"About",
+                "content":[
+                        {
+                                "heading":"",
+                                "content_type":0,       // 0: paragraph, 1: bullet points
+                                "content":["The System Controller Landing Page is the main menu of the System Controller. It primarily serves as a launcher for demos and designs, running the board interface test and to set/change/read board parameters.",
+                                           "The purpose of the landing page is to provide Versal users a much easier and far more intuitive experience with Xilinx Evaluation Board products. The goal is to help users get started faster and have all the available resources at one place for easy access.",
+                                           "The Landing Page offers multiple navigation options for users. Depending on the persona type (Hardware, Software or Embedded developer) users can choose to start with either testing the board, use the power advantage demo, download Versal reference designs or learn more above the latest tools and libraries. ",
+                                           "More features will be added in the next releases and existing features will be enhanced for a better out-of-box experience to users."]
+                        },
+                ],
+
+        },
+
 };

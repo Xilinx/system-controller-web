@@ -56,9 +56,9 @@ if __name__ == '__main__':
     if not len(sc_app_path) or not len(SysFactory.exec_cmd("which "+sc_app_path,SysFactory.TERMINAL)):
         Logg.log("Please check sc_app Path",Logg.RELEASE)
         exit(0)
-    if not len(sensors_app) or not len(SysFactory.exec_cmd("which "+sensors_app,SysFactory.TERMINAL)):
-        Logg.log("Please check sensors app Path",Logg.RELEASE)
-        exit(0)
+    #if not len(sensors_app) or not len(SysFactory.exec_cmd("which "+sensors_app,SysFactory.TERMINAL)):
+    #    Logg.log("Please check sensors app Path",Logg.RELEASE)
+    #    exit(0)
     ##  creating a config file which contains list of each tab type.
     #   sc tab components
     f = open("./static/js/gen_sc.js", "w")
@@ -76,6 +76,10 @@ if __name__ == '__main__':
                 finStr = finStr + ","
             finStr = finStr +'"'+k+'"'
         f.write('"'+ke+'":['+finStr+"]");
+
+    vers1 = "" + app_config["major_version"]+"."+app_config["minor_version"]
+    vers2 = "" + p.parse_cmd_resp(Term.exec_cmd(sc_app_path+" -c version"),"version")["version"] 
+    f.write(',\n"version":"'+vers1+'/'+vers2+'"')    
 
     f.write("\n}")
     f.close()

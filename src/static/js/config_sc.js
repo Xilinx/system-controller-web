@@ -276,6 +276,47 @@ function addVoltageTab(){
             };
     boardsettingsTab.push(dict);
 }
+
+function addPowerDomainTab(){
+        var innCompsget = [];
+        jQuery.each(listsjson_sc["listpowerdomain"] , function(i, tds){
+        var eachcomp = {
+            "type":"list"
+            ,"components" : ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"L0": tds
+            ,"V0": "- W"
+            ,"V0N": "W"
+            ,"V0V": "voltage"
+            ,"B0": "Get"
+            ,"B0A": "/cmdquery"
+            ,"B0sc_cmd":"powerdomain"
+            , "B0target": tds
+            , "B0params":""
+        };
+        innCompsget.push(eachcomp);
+    });
+
+    var headcompsget = {
+            "headcomponents":["C,L0,L1,B0"]
+            ,"L0": "Power Domain"
+            , "L1" : "Power(W)"
+            , "B0" : "Get All"
+    };
+    var dict = {"tab": "Power Domain"
+    ,"subtype":"tab"
+        ,"components":[
+            {
+            "subtype":"list"
+            ,"name": "Get Power Domain"
+            ,"components": innCompsget
+            , "headcomponents" : headcompsget
+
+            }
+            ]
+            };
+    boardsettingsTab.push(dict);
+}
+
 function addgpioTab(){
 
         var innCompsget = [];
@@ -324,7 +365,7 @@ function addDDRDIMMTab(){
             "type":"list"
             ,"components" : ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
             ,"L0": "DIMM Slot 1"
-            ,"V0": "DDR4 SDRAM? -Size(Gb): -Temp. Sensor? -"
+            ,"V0": "-"  		//"DDR4 SDRAM? -Size(Gb): -Temp. Sensor? -"
             ,"V0N": ""
             ,"V0V": "info"
             ,"B0": "Get"
@@ -369,6 +410,47 @@ function addDDRDIMMTab(){
             };
     boardsettingsTab.push(dict);
 }
+function addEBMTab(){
+        var innCompsget = [];
+     jQuery.each([["All","all"],["Common","common"],["Board","board"],["Multirecord","multirecord"]] , function(i, tds){
+        var eachcomp = {
+            "type":"list"
+            ,"components" : ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"L0": tds[0]
+            ,"V0": "-"
+            ,"V0N": ""
+            ,"V0V": "io"
+            ,"B0": "Get"
+            ,"B0A": "/cmdquery"
+            ,"B0sc_cmd":"getEBM"
+            , "B0target": tds[1]
+            , "B0params":""
+        };
+        innCompsget.push(eachcomp);
+    });
+    var headcompsget = {
+            "headcomponents":["C,L0,L1,B0"]
+            ,"L0": "Name"
+            , "L1" : "Info"
+            , "B0" : "Get All"
+    };
+    var dict = {"tab": "EBM Data"
+    ,"subtype":"tab"
+        ,"components":[
+            {
+            "subtype":"list"
+            ,"name": "Get EBM"
+            ,"components": innCompsget
+            , "headcomponents" : headcompsget
+
+            }
+            ]
+            };
+    boardsettingsTab.push(dict);
+}
+
+
+
 function addioexpTab(){
      var innCompsget = [];
      var innCompsset = [];
@@ -462,6 +544,76 @@ function addioexpTab(){
     boardsettingsTab.push(dict);
 
 }
+function addqsfpTab(){
+        var innCompsget = [];
+        var innCompsset = [];
+        jQuery.each(listsjson_sc["listQSFP"] , function(i, tds){
+        jQuery.each([["QSFP","getQSFP"],["PWM QSFP","getpwmQSFP"],["PWMO QSFP","getpwmoQSFP"]] , function(j, tdsd){
+        var eachcomp = {
+            "type":"list"
+            ,"components" : ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"L0":  tdsd[0] + " " + tds
+            ,"V0": "-"
+            ,"V0N": ""
+            ,"V0V": "io"
+            ,"B0": "Get"
+            ,"B0A": "/cmdquery"
+            ,"B0sc_cmd":tdsd[1]
+            , "B0target": tds
+            , "B0params":""
+        };
+        innCompsget.push(eachcomp);
+    });
+    });
+        jQuery.each(listsjson_sc["listQSFP"] , function(i, tds){
+        jQuery.each([["PWM QSFP","setpwmQSFP"],["PWMO QSFP","setpwmoQSFP"]] , function(j, tdsd){
+        var eachcomp = {
+            "type":"list"
+            ,"components" : ["C,L0,E0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"L0": tds + " " + tdsd[0]
+            ,"E0": "value"
+            ,"E0K": "-"
+            ,"B0": "Set"
+            ,"B0A": "/cmdquery"
+            ,"B0sc_cmd":tdsd[1]
+            , "B0target": tds
+            , "B0params":""
+        };
+        innCompsset.push(eachcomp);
+    });
+    });
+    var headcompsget = {
+            "headcomponents":["C,L0,L1,B0"]
+            ,"L0": "Name"
+            , "L1" : "Info"
+            , "B0" : "Get All"
+    };
+    var headcompsset = {
+            "headcomponents":["C,L0,L1,B0"]
+            ,"L0": "Name"
+            , "L1" : "Value"
+            , "B0" : "Set All"
+    };
+    var dict = {"tab": "zQSFP Data"
+    ,"subtype":"tab"
+        ,"components":[
+            {
+            "subtype":"list"
+            ,"name": "Get QSFP"
+            ,"components": innCompsget
+            , "headcomponents" : headcompsget
+            }
+            ,{
+            "subtype":"list"
+            ,"name": "Set QSFP"
+            ,"components": innCompsset
+            , "headcomponents" : headcompsset
+            }
+            ]
+            };
+    boardsettingsTab.push(dict);
+
+}
 function addsfpTab(){
         var innCompsget = [];
         var innCompsset = [];
@@ -535,10 +687,13 @@ function generateBoardSettingsTabJSON(){
     addPowerTab();
     addClockTab();
     addVoltageTab();
+//    addPowerDomainTab();
     addDDRDIMMTab();
     addgpioTab();
     addioexpTab();
     addsfpTab();
+    addqsfpTab();
+    addEBMTab();
 }
 
 

@@ -11,7 +11,6 @@ from jnservice import *
 parse = ParseData()
 
 sc_app_path = app_config["sc_app_path"]
-sensors_app = app_config["sensors_app_path"]
 class BootMode:
     active_bootmode = "-"
     @staticmethod
@@ -24,13 +23,12 @@ class BootMode:
         SysFactory.exec_cmd(sc_app_path +" -c reset",SysFactory.TERMINAL)            
 class ReqFunctions:
     global sc_app_path
-    global sensors_app
     @staticmethod
     def polls():
         try:
             result = ""
             if checkJNK() == 0:
-                response = Term.exec_cmd(sensors_app+" *-mdio-0 -j")
+                response = Term.exec_cmd(sc_app_path+" -c temperature")
                 result = parse.temperature(response)
             result["active_bootmode"] = BootMode.getActiveBootMode()
             resp_json = {
@@ -86,8 +84,7 @@ class Poll(Resource):
                     ,"data": {"error":"Notebook kernel is running. Please stop running kernel."}
                 }                       
                 return resp_json,200
-
-            response = Term.exec_cmd(sensors_app+" *-mdio-0 -j")
+            response = Term.exec_cmd(sc_app_path+" -c temperature")
             result = parse.temperature(response)
             result["active_bootmode"] = "jtag"
             resp_json = {
@@ -145,7 +142,7 @@ class CmdQuery(Resource):
             except Exception as d:
                 print(d)
             result = parse.parse_cmd_resp(response, req);
-            if response.startswith("ERROR"):
+            if response.startswith("ERROR") or "ERROR" in response:
                 resp_json = {
                     "status":"error"
                     ,"data":response

@@ -10,6 +10,12 @@ case $key in
     shift # past value
     ;;
     -c|--searchpath)
+    if [ $2 == "version" ]
+    then 
+    echo "Version:        1.1
+Linux:          5.4.0 (Compatible)
+BSP:            v2020.1 (Compatible)"
+    fi
     if [ $2 == "listvoltage" ]
     then
         echo "VCCINT
@@ -56,6 +62,10 @@ VCC1V1_LP4"
 502 - SYSCTLR_ETH_MDC"
     fi
 
+    if [ $2 == "listQSFP" ]
+    then
+        echo "zQSFP1"
+    fi
     if [ $2 == "listSFP" ]
     then
         echo "zSFP-0
@@ -81,6 +91,17 @@ MGTYAVCC
 MGTYAVTT
 MGTYVCCAUX"
     fi
+    if [ $2 == "listpowerdomain" ]
+    then
+echo "FPD
+LPD
+PLD
+PMC
+GTY
+FMC
+system
+chip"
+     fi
         if [ $2 == "eeprom" ]
     then
 echo "Language: 0
@@ -93,6 +114,10 @@ Board Reversion:
 MAC Address 0: ff:ff:ff:ff:ff:ff
 MAC Address 1: ff:ff:ff:ff:ff:ff
 "
+    fi
+        if [ $2 == "temperature" ]
+        then
+        echo "Temperature(C): 36.0"
     fi
         if [ $2 == "getioexp" ]
     then
@@ -129,6 +154,10 @@ Port 1(0) - FMCP1 FMC PRSNT M2C B (AL): 1"
     then
         echo "Voltage(V):     0.78"
     fi
+        if [ $2 == "powerdomain" ]
+    then
+        echo "Power(W):       0.0090"
+    fi
         if [ $2 == "ddr" ]
     then
 	if [ $4 == "spd" ]
@@ -159,7 +188,78 @@ LPDDR4 CLK1 Si570
 LPDDR4 CLK2 Si570
 HSPD Si570"
     fi
+        if [ $2 == "getQSFP" ]
+        then
+            echo "Manufacturer:   Amphenol        
+Part Number:    647080013       
+Serial Number:  APF16120132A5E  
+Internal Temperature(C):    0.000
+Supply Voltage(V):  0.00
+Alarms (Bytes 3-4): 0
+Alarms (Bytes 6-7): 0
+Alarms (Bytes 9-12):    0"
+        fi
+        if [ $2 == "getpwmQSFP" ]
+        then
+            echo "Register 98, bit7 +2.5w, bit6 +1.5w, bits5-0 up to 1.0w:    3"
+        fi
 
+        if [ $2 == "getpwmoQSFP" ]
+        then
+            echo "Register 93, 0 = use LPMode pin, 1 = hi pwr, 3 = low pwr:   1"
+        fi
+
+        if [ $2 == "getEBM" ]
+        then
+        if [ $4 == "all" ]
+        then
+            echo " a  b  c  d ff ff ff ff ff ff ff ff ff ff ff 58 49 4c 49 4e 58 ff ff ff ff 
+ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+ff 4c 4d 4e 4f ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+ff ff ff ff ff ff "
+        fi
+        if [ $4 == "common" ]
+        then
+            echo "0x00 - Version: a
+0x01 - Internal User Area:  b
+0x02 - Chassis Info Area:   c
+0x03 - Board Area:  d
+0x04 - Product Info Area:   ff
+0x05 - Multi Record Area:   ff
+0x06 - Pad, Check Sum:  ff ff"
+        fi
+        if [ $4 == "board" ]
+        then
+            echo "0x08 - Version: ff
+0x09 - Length:  ff
+0x0A - Language Code:   ff
+0x0B - Manufacturing Date:  Wed Nov 24 20:15:00 2027
+0x0F - Manufacturer:    XILINX
+0x16 - Product Name:    ����������������
+0x27 - Serial Number:   ����������������
+0x38 - Part Number: ���������
+0x42 - FRU ID:  �
+0x44 - Revision:    ��������
+0x4C - EoF, Pad, Check Sum: 4c 4d4e 4f"
+        fi
+        if [ $4 == "multirecord" ]
+        then
+            echo "0x50 - Record Type: ff
+0x51 - Record Format:   ff
+0x52 - Length:  ff
+0x53 - Record Check Sum:    ff
+0x54 - Header Check Sum:    ff
+0x55 - Xilinx IANA ID:  ffffff
+0x58 - Field Name Identifier:   ��������"
+        fi
+        fi
 
         if [ $2 == "listbootmode" ]
     then

@@ -822,6 +822,66 @@ function layoutDesigns(){
         em3.append(em4)
         $("#railcolumn_com2").append(em3);
    }
+/*	Help Screen */
+   {
+        $('#help_screen .app-title').html(app_strings.help_content.title);
+        var em3 = document.createElement("div");
+        for(var i = 0; i < app_strings.help_content.content.length; i++){
+        if (app_strings.help_content.content[i].heading.length){
+	        var em5 = document.createElement("p");
+        	em5.classList.add("subheadings");
+	        em5.textContent = "\n"+app_strings.help_content.content[i].heading + "\n";
+        	em3.append(em5)
+        }
+        if(app_strings.help_content.content[i].content_type == 1){
+        var em4 = document.createElement("ul");
+        for(var j = 0; j < app_strings.help_content.content[i].content.length; j++){
+		var em7 = document.createElement("li");
+		em7.classList.add("descontent_2");
+		em7.textContent = app_strings.help_content.content[i].content[j];
+		em4.append(em7)
+                em3.append(em4);
+        }}else{
+        for(var j = 0; j < app_strings.help_content.content[i].content.length; j++){
+		var em5 = document.createElement("p");
+		em5.classList.add("descontent");
+		em5.textContent = app_strings.help_content.content[i].content[j] + "\n";
+		em3.append(em5)
+        }
+        }
+        }
+        $("#help_screen").append(em3);
+   }
+/*	About Screen */
+   {
+        $('#about_screen .app-title').html(app_strings.about_content.title);
+        var em3 = document.createElement("div");
+        for(var i = 0; i < app_strings.about_content.content.length; i++){
+        if (app_strings.help_content.content[i].heading.length){
+	        var em5 = document.createElement("p");
+        	em5.classList.add("subheadings");
+	        em5.textContent = "\n"+app_strings.help_content.content[i].heading + "\n";
+        	em3.append(em5)
+        }
+        if(app_strings.about_content.content[i].content_type == 1){
+        var em4 = document.createElement("ul");
+        for(var j = 0; j < app_strings.about_content.content[i].content.length; j++){
+		var em7 = document.createElement("li");
+		em7.classList.add("descontent_2");
+		em7.textContent = app_strings.about_content.content[i].content[j];
+		em4.append(em7)
+                em3.append(em4);
+        }}else{
+        for(var j = 0; j < app_strings.about_content.content[i].content.length; j++){
+		var em5 = document.createElement("p");
+		em5.classList.add("descontent");
+		em5.textContent = app_strings.about_content.content[i].content[j] + "\n";
+		em3.append(em5)
+        }
+        }
+        }
+        $("#about_screen").append(em3);
+   }
 /*	Test the board */
    {
         $('#home_screen_db .app-title').html(app_strings.test_board.title);
@@ -847,6 +907,64 @@ function layoutDesigns(){
         em3.append(em4)
         $("#testboard_home").append(em3);
    }
+/*      Obtain Linux Prompts  */
+   {
+       $('#linuxprompt_screen .app-title').html(app_strings.linuxprompt.title);
+        var em7 = document.createElement("span");
+        for(var i = 0; i < app_strings.linuxprompt.pane.length; i++){
+        var em6 = document.createElement("span");
+        //em6.classList.add("");
+        var em1 = document.createElement("div");
+        em1.classList.add("block_dashboard_lp");
+        var em5 = document.createElement("p");
+        em5.classList.add("link_key");
+        em5.textContent = app_strings.linuxprompt.pane[i].title;
+        em1.append(em5)
+        var em2 = document.createElement("a");
+        em2.classList.add("logo-align");
+        em2.classList.add("align-center");
+        em2.setAttribute("value", "Reset");
+        var em3 = document.createElement("img");
+        em3.setAttribute("src", app_strings.linuxprompt.pane[i].image);
+        em3.setAttribute("alt", "logo");
+        em3.setAttribute("width", "100%");
+        em2.append(em3)
+        em1.append(em2)
+
+        var em11 = document.createElement("p");
+        em11.classList.add("link_key");
+        em11.textContent = app_strings.linuxprompt.pane[i].text;
+        if (app_strings.linuxprompt.pane[i].text.length) em1.append(em11)
+
+        var em9 = document.createElement("span");
+        var em4 = document.createElement("input");
+        em4.classList.add("prod_page_btn");
+        em4.setAttribute("type", "button");
+        em4.setAttribute("linkv", app_strings.linuxprompt.pane[i].button_link);
+        em4.setAttribute("value", app_strings.linuxprompt.pane[i].button_title);
+        if(app_strings.linuxprompt.pane[i].button_link_type){
+            em4.onclick = function (e) {
+              window[e.target.attributes.linkv.value]();
+            };
+        }else{
+        em4.onclick = function (e){ openInNewTab(e.target.attributes.linkv.value);};
+        }
+        if (app_strings.linuxprompt.pane[i].button_link.length && app_strings.linuxprompt.pane[i].button_title.length ) em9.append(em4)
+        var em8 = document.createElement("input");
+        em8.classList.add("prod_page_btn");
+        em8.setAttribute("type", "button");
+        em8.setAttribute("linkv", app_strings.linuxprompt.pane[i].learnmore_link);
+        em8.setAttribute("value", "Learn More");
+        em8.onclick = function (e){ openInNewTab(e.target.attributes.linkv.value);};
+
+        if (app_strings.linuxprompt.pane[i].learnmore_link.length) em9.append(em8);
+        em1.append(em9)
+        em6.append(em1)
+        em7.append(em6)
+        }
+        $("#linuxprompt_screen").append(em7);
+
+   }
 /*	Run demos and designs */
    {
         $('#dnd_screen .app-title').html(app_strings.run_demos.title);
@@ -870,6 +988,11 @@ function layoutDesigns(){
         em3.setAttribute("width", "100%");
         em2.append(em3)
         em1.append(em2)
+        var em11 = document.createElement("p");
+        em11.classList.add("link_key");
+        em11.textContent = app_strings.run_demos.pane[i].text;
+        if (app_strings.run_demos.pane[i].text.length) em1.append(em11)
+
         var em9 = document.createElement("span");
         var em4 = document.createElement("input");
         em4.classList.add("prod_page_btn");
@@ -883,14 +1006,15 @@ function layoutDesigns(){
         }else{
         em4.onclick = function (e){ openInNewTab(e.target.attributes.linkv.value);};
         }
-        em9.append(em4)
+        if (app_strings.run_demos.pane[i].button_link.length && app_strings.run_demos.pane[i].button_title.length ) em9.append(em4)
         var em8 = document.createElement("input");
         em8.classList.add("prod_page_btn");
         em8.setAttribute("type", "button");
         em8.setAttribute("linkv", app_strings.run_demos.pane[i].learnmore_link);
         em8.setAttribute("value", "Learn More");
         em8.onclick = function (e){ openInNewTab(e.target.attributes.linkv.value);};
-        em9.append(em8)
+        
+        if (app_strings.run_demos.pane[i].learnmore_link.length) em9.append(em8);
         em1.append(em9)
         em6.append(em1)
         em7.append(em6)

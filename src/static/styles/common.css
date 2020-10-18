@@ -831,6 +831,13 @@ padding: 10px 10px 10px 10px;
 margin:10px 10px 10px 10px;
 
 }
+
+.block_dashboard_lp{
+width:34%;
+margin: auto;
+}
+
+
 .img_dashboard{
 border-style: solid;
 border-color: white;
@@ -1194,4 +1201,32 @@ height:100%;
 content: '';
 margin: 0px 10px 10px 10px;
 }
+.subheadings{
+color: white;
+font-weight: bold;
+font-size: 20px;
+text-align: left;
+margin-left: 30px;
+margin-right: 30px;
+white-space: pre;
+word-break: normal;
+}
 
+.descontent{
+color: white;
+font-size: 16px;
+margin-left: 30px;
+text-align: left;
+white-space: pre-line;
+word-break: normal;
+margin-right: 30px;
+}
+.descontent_2{
+color: white;
+font-size: 16px;
+margin-left: 50px;
+text-align: left;
+white-space: pre-line;
+word-break: normal;
+margin-right: 30px;
+}

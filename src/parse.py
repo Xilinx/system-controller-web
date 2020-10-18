@@ -6,7 +6,7 @@ class Parse:
             return self.parseGetPower(data)
         elif(component.startswith("list")):
             return self.parseList(data)
-        elif(component == "getvoltage"):
+        elif(component == "getvoltage" or component == "powerdomain"):
             return self.parseGetVoltage(data)
         elif(component == "getclock"):
             return self.parseGetClock(data)
@@ -14,9 +14,12 @@ class Parse:
             return self.parseBit(data)
         elif(component == "ddr"):
             return self.parseDDR(data)
+        elif(component == "version"):
+            return self.parseversion(data)
         elif(component == "getgpio"):
             return self.parsegpio(data)
-        elif(component == "getioexp" or component == "getpwmSFP" or component == "getSFP"):
+        elif(component == "getioexp" or component == "getpwmSFP" or component == "getSFP" or component == "getQSFP"
+or component == "getpwmQSFP" or component == "getpwmoQSFP" or component == "getEBM"):
             return self.parseioexp(data)
         else:
             return ""
@@ -32,9 +35,11 @@ import json
 class ParseData(Parse):
     def temperature(self,data):
         # Parse temperature data from data.
-        temp = random.randrange(16,19)
-        obj = json.loads(data)
-        return {"temp":obj["ff0b0000ethernetffffffff00-mdio-0"]['temp1']['temp1_input']}
+        obj = data.strip().split(":")
+        if 'ERROR' in data:
+            return {"temp":"-"}
+        else:
+            return {"temp":obj[1]}
 
     def dashboard_eeprom(self,data):
         # Parse eeprom data for details
@@ -94,6 +99,14 @@ class ParseData(Parse):
             res["info"] = resar
         else:
             res["temp"] = resar.split(":")[1]
+        return res
+    def parseversion(self,data):
+        resar = data.strip().split('\n')[0].split(":")
+        res = {}
+        if data.startswith('Error'):
+            res["version"] = '-'
+        else:
+            res["version"] = resar[1].strip()
         return res
     def parseGetVoltage(self,data):
         resar = data.strip().split(":")

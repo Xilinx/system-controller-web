@@ -1,6 +1,7 @@
 import os
 import json
 from config_app import *
+from notebook import notebookapp
 import psutil
 
 def checkJNK():
