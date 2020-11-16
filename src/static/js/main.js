@@ -1,3 +1,34 @@
+/******************************************************************************
+ *
+ * Copyright (C) 2020 Xilinx, Inc.  All rights reserved.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * Use of the Software is limited solely to applications:
+ * (a) running on a Xilinx device, or
+ * (b) that interact with a Xilinx device through a bus or interconnect.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+ * XILINX  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
+ * OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
+ * Except as contained in this notice, the name of the Xilinx shall not be used
+ * in advertising or otherwise to promote the sale, use or other dealings in
+ * this Software without prior written authorization from Xilinx.
+ *
+ ******************************************************************************/
 var myVar;
 var pollresp = false;
 /*
@@ -20,7 +51,15 @@ function loadRefreshData(){
             data:{"func":"poll","params":""},
             dataType: 'json',
             success: function (res){
-                document.getElementById("home_board_temp_id").innerHTML = res.data.temp +" °C"
+                var el = document.getElementById("home_board_temp_id");
+                var tval = 0;
+		tval = res.data.temp > 100 ? 100 : res.data.temp;
+		tval = tval < 0 ? 0 : tval;
+		el.style.setProperty("--temps", tval);
+                if(res.data.temp < 70) el.style.setProperty("--showc","green");
+                else if(res.data.temp < 90) el.style.setProperty("--showc","orange");
+                else el.style.setProperty("--showc","red");
+                document.getElementById("home_board_temp_id").innerHTML = res.data.temp +" °C";
                 document.getElementById("active_bootmode").innerHTML = "Active:<b>"+res.data.active_bootmode+"</b>"
  		pollresp = true;
             },
@@ -37,7 +76,7 @@ function filleepromdetails(){
             dataType: 'json',
             success: function (res){
                 document.getElementById("db_details_Device").innerHTML = "Device : " + "<b>"+res.data.device+ "</b>"
-                document.getElementById("db_details_silrev").innerHTML = "Silicon Rev : " + "<b>"+res.data.sil_rev+ "</b>"
+                document.getElementById("db_details_silrev").innerHTML = "Silicon Rev : " + "<b>Production"+/*res.data.sil_rev+*/ "</b>"
                 document.getElementById("db_details_boardpn").innerHTML = "Board P/N : " + "<b>"+res.data.board_pn+ "</b>"
                 document.getElementById("db_details_rev").innerHTML = "Rev : " + "<b>"+res.data.rev+ "</b>"
                 document.getElementById("db_details_serno").innerHTML = "Serial Number : " + "<b>"+res.data.serial_number+ "</b>"

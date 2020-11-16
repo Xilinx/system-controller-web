@@ -1,5 +1,35 @@
 
 <!DOCTYPE html>
+<!------------------------------------------------------------------------------
+ - Copyright (C) 2020 Xilinx, Inc.  All rights reserved.
+ -
+ - Permission is hereby granted, free of charge, to any person obtaining a copy
+ - of this software and associated documentation files (the "Software"), to deal
+ - in the Software without restriction, including without limitation the rights
+ - to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ - copies of the Software, and to permit persons to whom the Software is
+ - furnished to do so, subject to the following conditions:
+ -
+ - The above copyright notice and this permission notice shall be included in
+ - all copies or substantial portions of the Software.
+ -
+ - Use of the Software is limited solely to applications:
+ - (a) running on a Xilinx device, or
+ - (b) that interact with a Xilinx device through a bus or interconnect.
+ -
+ - THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ - IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ - FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+ - XILINX  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ - WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
+ - OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ - SOFTWARE.
+ -
+ - Except as contained in this notice, the name of the Xilinx shall not be used
+ - in advertising or otherwise to promote the sale, use or other dealings in
+ - this Software without prior written authorization from Xilinx.
+ -
+ ------------------------------------------------------------------------------>
 <html lang="en">
 
 <head>
@@ -72,9 +102,10 @@
       <div class="app-title"></div>
     <span class="homecolumn" id="railcolumn">
       <div class="clock_dashboard">
-        <p class='clock_key'>Board Temperature</p>
-        <p class='clock_value' id='home_board_temp_id'>- °C</p>
-      </div>
+        <p class='clock_key'>Junction Temperature</p>
+        <!--<p class='clock_value' id='home_board_temp_id'>- °C</p>-->
+        <div class="doughnut" id="home_board_temp_id">- °C</div>
+      </div> 
         <div>
         <button class="navopt_btn" id="boardsettings" onclick=navClick(this.id);>Board Settings</button>
         </div>
@@ -95,9 +126,9 @@
           <a class="logo-align align-center" href="#"><img
             src="{{url_for('static',filename='images/versal.png')}}" alt="logo" height="38" style="padding-top:30px; padding-bottom:10px"/></a>
         <p class='details_info' id="db_details_Device">Device:</p>
-          <p class='details_info' id="db_details_silrev">Silicon Rev:</p>
+          <p class='details_info' id="db_details_silrev" hidden>Silicon Rev:</p>
           <p class='details_info' id="db_details_boardpn">Board P/N:</p>
-          <p class='details_info' id="db_details_rev">Rev:</p>
+          <p class='details_info' id="db_details_rev" >Rev:</p>
           <p class='details_info' id="db_details_serno">Serial Number:</p>
           <p class='details_info' id="db_details_mac1">MAC Address 1:</p>
           <p class='details_info' id="db_details_mac2">MAC Address 2:</p>

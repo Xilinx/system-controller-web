@@ -1,3 +1,34 @@
+/******************************************************************************
+ *
+ * Copyright (C) 2020 Xilinx, Inc.  All rights reserved.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * Use of the Software is limited solely to applications:
+ * (a) running on a Xilinx device, or
+ * (b) that interact with a Xilinx device through a bus or interconnect.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+ * XILINX  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
+ * OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
+ * Except as contained in this notice, the name of the Xilinx shall not be used
+ * in advertising or otherwise to promote the sale, use or other dealings in
+ * this Software without prior written authorization from Xilinx.
+ *
+ ******************************************************************************/
 #loader {
   position: absolute;
   left: 50%;
@@ -43,8 +74,8 @@
 }
 
 .ministatusloading {
-  width: 17px;
-  height: 17px;
+  width: 15px;
+  height: 15px;
   margin: -5px 0 0 -5px;
   border: 3px dotted #f3f3f3;
   border-radius: 50%;
@@ -56,14 +87,14 @@
 .ministatussuccess:before{
     content:' \2714';
   color:lightgreen;
-  font-size: 15px;
+  font-size: 12px;
   padding:0 8px 0 0px;
   font-weight: bold;
   }
   .ministatusfail:before{
     content:' \2716';
   color:red;
-  font-size: 15px;
+  font-size: 12px;
   padding:0 8px 0 0px;
   font-weight: bold;
   }
@@ -771,7 +802,9 @@ border-style: solid;
 border-color: #50525a;
 border-width:1px;
 /*width:100%;*/
-height:100px;
+/*height:100px;*/
+height:180px;
+overflow: hidden;
 background-color: #171c2d;
 /*margin: auto;*/
 /*padding: 10px 10px 10px 10px;*/
@@ -1230,3 +1263,35 @@ white-space: pre-line;
 word-break: normal;
 margin-right: 30px;
 }
+.doughnut{
+    --temps: 33.0;
+    --backc: gray;
+    --showc: green;
+  color: white;
+  font-size:24px;
+  width:200px;
+  height:99px;
+  border: 0px;
+  box-sizing : border-box;
+  display:flex;
+  position: relative;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: hidden;
+margin: 25px auto;
+  }
+  .doughnut:after{
+    content:'';
+    width:199px;
+    height:199px;
+    border:40px solid;
+    border-color: var(--backc) var(--backc) var(--showc) var(--showc);
+    position: absolute;
+    box-sizing : border-box;
+    top:0;
+    border-radius: 50%;
+    left:0;   
+    transform: rotate(calc(-45deg + (1deg *(1.8 * var(--temps)))));
+}
+
+

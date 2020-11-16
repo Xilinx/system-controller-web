@@ -117,7 +117,7 @@ MAC Address 1: ff:ff:ff:ff:ff:ff
     fi
         if [ $2 == "temperature" ]
         then
-        echo "Temperature(C): 36.0"
+        echo "Temperature(C): 32.0"
     fi
         if [ $2 == "getioexp" ]
     then
