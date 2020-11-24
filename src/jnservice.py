@@ -1,13 +1,11 @@
 import os
 import json
 from config_app import *
-from notebook import notebookapp
 import psutil
 
 def checkJNK():
 
     kercount = 0
-
     for proc in psutil.process_iter():
         if "python3" in proc.name() and "ipykernel_launcher" in proc.cmdline():
             kercount = kercount + 1

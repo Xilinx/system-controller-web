@@ -1,35 +1,4 @@
-
 <!DOCTYPE html>
-<!------------------------------------------------------------------------------
- - Copyright (C) 2020 Xilinx, Inc.  All rights reserved.
- -
- - Permission is hereby granted, free of charge, to any person obtaining a copy
- - of this software and associated documentation files (the "Software"), to deal
- - in the Software without restriction, including without limitation the rights
- - to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- - copies of the Software, and to permit persons to whom the Software is
- - furnished to do so, subject to the following conditions:
- -
- - The above copyright notice and this permission notice shall be included in
- - all copies or substantial portions of the Software.
- -
- - Use of the Software is limited solely to applications:
- - (a) running on a Xilinx device, or
- - (b) that interact with a Xilinx device through a bus or interconnect.
- -
- - THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- - IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- - FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
- - XILINX  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- - WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
- - OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- - SOFTWARE.
- -
- - Except as contained in this notice, the name of the Xilinx shall not be used
- - in advertising or otherwise to promote the sale, use or other dealings in
- - this Software without prior written authorization from Xilinx.
- -
- ------------------------------------------------------------------------------>
 <html lang="en">
 
 <head>
@@ -57,7 +26,7 @@
   <nav class="navbar navbar-inverse">
     <div class="container-fluid">
       <div class="navbar-header">
-        <a class="logo-align align-left" href="#"><img
+        <a class="logo-align align-left"><img
             src="{{url_for('static',filename='images/xilinx.png')}}" alt="logo" height="38" style="padding:10px 10px"/></a>
         <h4 class="app-title" id="app-title-id"></h4>
       </div>
@@ -102,7 +71,12 @@
       <div class="app-title"></div>
     <span class="homecolumn" id="railcolumn">
       <div class="clock_dashboard">
-        <p class='clock_key'>Junction Temperature</p>
+	<span>
+	    <p class="clock_key tempLabel">Temperature</p>
+	    <div class="tooltipinfo">ⓘ
+	    <a class="tooltiptextinfo">Versal's ethernet MDIO adapter temperature</a>
+	    </div>
+	</span>
         <!--<p class='clock_value' id='home_board_temp_id'>- °C</p>-->
         <div class="doughnut" id="home_board_temp_id">- °C</div>
       </div> 

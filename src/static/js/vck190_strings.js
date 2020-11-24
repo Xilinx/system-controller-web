@@ -1,37 +1,6 @@
-/******************************************************************************
- *
- * Copyright (C) 2020 Xilinx, Inc.  All rights reserved.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * Use of the Software is limited solely to applications:
- * (a) running on a Xilinx device, or
- * (b) that interact with a Xilinx device through a bus or interconnect.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
- * XILINX  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
- * OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- *
- * Except as contained in this notice, the name of the Xilinx shall not be used
- * in advertising or otherwise to promote the sale, use or other dealings in
- * this Software without prior written authorization from Xilinx.
- *
- ******************************************************************************/
 var app_strings = {
-	"tab_title":"VCK190 Evaluation Kit",
-	"app_title":"System Controller Landing Page",
+	"tab_title":"Board Evaluation & Management Tool (BEAM)",
+	"app_title":"Board Evaluation & Management Tool (BEAM)",
 	"xilinx_icon":"../images/icon.png",
 	"home_tab":{
 		"title":"Welcome & Get Started with Versal AI Core Series VCK190 Evaluation Kit",
@@ -75,7 +44,7 @@ var app_strings = {
 				"text":"",
 				"button_title":"Download",
 				"button_link":"",
-				"learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/XWUC/pages/748617729/Versal+AI+Core+Series+VCK190+Evaluation+Kit",
+				"learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/XWUC/pages/701136949/Versal+AI+Core+Series+VCK190+-+Using+the+Pre-Built+Linux+Image",
 			},
 		],
 
@@ -159,18 +128,18 @@ var app_strings = {
                         {
                                 "heading":"",
                                 "content_type":0,	// 0: paragraph, 1: bullet points
-                                "content":["The System Controller Landing Page is currently in Beta version ("+listsjson_sc.version+")"]
+                                "content":["The Board Evaluation & Management Tool (BEAM) is currently in Beta version ("+listsjson_sc.version+")"]
                         },
                         {
                                 "heading":"known issues and bugs",
                                 "content_type":1,	
-                                "content":["Some webpage links may be broken or non-functional. This may happen because the webpage may not exist or is moved to a different location/address. These links will be fixed in subsequent release of the Landing Page.","The System Controller Landing Page can execute one particular action/task only at a time. For example, you cannot run the Board Settings and Board Interface Test at the same time. Please wait till a particular task is complete and then proceed."]
+                                "content":["Some webpage links may be broken or non-functional. This may happen because the webpage may not exist or is moved to a different location/address. These links will be fixed in subsequent release of the Board Evaluation & Management Tool (BEAM).","The Board Evaluation & Management Tool (BEAM) can execute one particular action/task only at a time. For example, you cannot run the Board Settings and Board Interface Test at the same time. Please wait till a particular task is complete and then proceed."]
                         },
                         {
                                 "heading":"Jupyter Notebook",
                                 "content_type":1,
                                 "content":["Logout from jupyter notebook before exiting. Failing doing so may show login screen for next notebook launch.",
-					"Run jupyter notebook command in linux prompt to use from landing page if \"no jupyter notebook is running\" error message is shown.",
+					"Run jupyter notebook command in linux prompt to use from Board Evaluation & Management Tool if \"no jupyter notebook is running\" error message is shown.",
 					"Terminating notebook server using kill command may not able to launch notebook in new tab for next notebook launch.",
 					"Delete all *.json, *.html files from mentioned directory in order to relaunch jupyter notebook if \"Please delete multiple files from directory <jupyter nbrunning dir>.\" error message is shown.",
 					"Jupyter notebook and BITs/SCUI tabs cannot be run at a time. Shut down any jupyter notebook kernels to use BIT or SCUI tabs components.",
@@ -185,9 +154,9 @@ var app_strings = {
                         {
                                 "heading":"",
                                 "content_type":0,       // 0: paragraph, 1: bullet points
-                                "content":["The System Controller Landing Page is the main menu of the System Controller. It primarily serves as a launcher for demos and designs, running the board interface test and to set/change/read board parameters.",
-                                           "The purpose of the landing page is to provide Versal users a much easier and far more intuitive experience with Xilinx Evaluation Board products. The goal is to help users get started faster and have all the available resources at one place for easy access.",
-                                           "The Landing Page offers multiple navigation options for users. Depending on the persona type (Hardware, Software or Embedded developer) users can choose to start with either testing the board, use the power advantage demo, download Versal reference designs or learn more above the latest tools and libraries. ",
+                                "content":["The Board Evaluation & Management Tool (BEAM) is the main menu of the System Controller. It primarily serves as a launcher for demos and designs, running the board interface test and to set/change/read board parameters.",
+                                           "The purpose of the Board Evaluation & Management Tool is to provide Versal users a much easier and far more intuitive experience with Xilinx Evaluation Board products. The goal is to help users get started faster and have all the available resources at one place for easy access.",
+                                           "The Board Evaluation & Management Tool (BEAM) offers multiple navigation options for users. Depending on the persona type (Hardware, Software or Embedded developer) users can choose to start with either testing the board, use the power advantage demo, download Versal reference designs or learn more above the latest tools and libraries. ",
                                            "More features will be added in the next releases and existing features will be enhanced for a better out-of-box experience to users."]
                         },
                 ],
