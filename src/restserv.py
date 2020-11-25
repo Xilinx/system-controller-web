@@ -1,3 +1,8 @@
+##
+# Copyright (c) 2020, Xilinx Inc. and Contributors. All rights reserved.
+#
+# SPDX-License-Identifier: MIT
+##
 from flask import render_template
 from flask_restful import Resource, request
 

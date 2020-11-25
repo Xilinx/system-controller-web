@@ -1,3 +1,8 @@
+/*
+* Copyright (c) 2020, Xilinx Inc. and Contributors. All rights reserved.
+*
+* SPDX-License-Identifier: MIT
+*/
 #loader {
   position: absolute;
   left: 50%;
@@ -1201,6 +1206,7 @@ color: white;
   margin-top:10px;
   float:left;
   margin-left: -20px;
+  cursor: context-menu;
 }
 
 .tooltipinfo .tooltiptextinfo {

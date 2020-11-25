@@ -1,3 +1,8 @@
+/*
+* Copyright (c) 2020, Xilinx Inc. and Contributors. All rights reserved.
+*
+* SPDX-License-Identifier: MIT
+*/
 /**
 *   Spec to create json for board interface tests
     each object in the below array is a row for the test case which contains lable, progress bar and button to run test.

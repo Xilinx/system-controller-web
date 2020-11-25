@@ -1,3 +1,8 @@
+##
+# Copyright (c) 2020, Xilinx Inc. and Contributors. All rights reserved.
+#
+# SPDX-License-Identifier: MIT
+##
 from config_app import *
 
 class Parse:
@@ -64,8 +69,10 @@ class ParseData(Parse):
             #    res["sil_rev"].ary[1].strip()
             if ary[0].startswith('Board Part Number'):
                 res["board_pn"]=ary[1].strip()
-            if ary[0].startswith('Board Reversion'):
+            if ary[0].startswith('Board Revision'):
                 res["rev"]=ary[1].strip()
+            if ary[0].startswith('Silicon Revision'):
+                res["sil_rev"]=ary[1].strip()
             if ary[0].startswith('Board Serial Number'):
                 res["serial_number"]=ary[1].strip()
             if ary[0].startswith('MAC Address 0'):

@@ -1,3 +1,8 @@
+##
+# Copyright (c) 2020, Xilinx Inc. and Contributors. All rights reserved.
+#
+# SPDX-License-Identifier: MIT
+##
 ##  @logg.py
 #   This class contains print methods for different levels of log
 #

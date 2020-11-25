@@ -1,3 +1,9 @@
+##
+# Copyright (c) 2020, Xilinx Inc. and Contributors. All rights reserved.
+#
+# SPDX-License-Identifier: MIT
+##
+
 ##  @term.py
 #   This class contains methods that interact with terminals and returns results.
 #

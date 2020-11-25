@@ -1,3 +1,8 @@
+/*
+* Copyright (c) 2020, Xilinx Inc. and Contributors. All rights reserved.
+*
+* SPDX-License-Identifier: MIT
+*/
 var app_strings = {
 	"tab_title":"Board Evaluation & Management Tool (BEAM)",
 	"app_title":"Board Evaluation & Management Tool (BEAM)",
@@ -140,8 +145,6 @@ var app_strings = {
                                 "content_type":1,
                                 "content":["Logout from jupyter notebook before exiting. Failing doing so may show login screen for next notebook launch.",
 					"Run jupyter notebook command in linux prompt to use from Board Evaluation & Management Tool if \"no jupyter notebook is running\" error message is shown.",
-					"Terminating notebook server using kill command may not able to launch notebook in new tab for next notebook launch.",
-					"Delete all *.json, *.html files from mentioned directory in order to relaunch jupyter notebook if \"Please delete multiple files from directory <jupyter nbrunning dir>.\" error message is shown.",
 					"Jupyter notebook and BITs/SCUI tabs cannot be run at a time. Shut down any jupyter notebook kernels to use BIT or SCUI tabs components.",
 				]
                         },

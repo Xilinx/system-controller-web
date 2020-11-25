@@ -1,3 +1,8 @@
+/*
+* Copyright (c) 2020, Xilinx Inc. and Contributors. All rights reserved.
+*
+* SPDX-License-Identifier: MIT
+*/
 var app_strings = {
 	"tab_title":"VCK190 Evaluation Kit",
 	"app_title":"System Controller Landing Page",

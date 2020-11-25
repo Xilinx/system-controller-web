@@ -1,3 +1,9 @@
+##
+# Copyright (c) 2020, Xilinx Inc. and Contributors. All rights reserved.
+#
+# SPDX-License-Identifier: MIT
+##
+
 ##  @systemcontroller.py
 #   This file contains main. Initiates and starts server.
 #
@@ -51,6 +57,13 @@ def unlock_for_next_req(response):
         Logg.log("************* Released lock",Logg.DEBUG)
     return response
 
+def crstring():
+    return '''/*
+* Copyright (c) 2020, Xilinx Inc. and Contributors. All rights reserved.
+*
+* SPDX-License-Identifier: MIT
+*/
+'''
 if __name__ == '__main__':
     if not len(sc_app_path) or not len(SysFactory.exec_cmd("which "+sc_app_path,SysFactory.TERMINAL)):
         Logg.log("Please check sc_app Path",Logg.RELEASE)
@@ -62,6 +75,7 @@ if __name__ == '__main__':
     #   sc tab components
     f = open("./static/js/gen_sc.js", "w")
     p = ParseData()
+    f.write(crstring()) 
     f.write("var listsjson_sc = {\n")
     lisj = app_config["config_sc_list_cmds"]
     for ind,ke in enumerate(lisj):
@@ -85,6 +99,7 @@ if __name__ == '__main__':
     #   bit tab components
     f = open("./static/js/gen_bit.js", "w")
     p = ParseData()
+    f.write(crstring()) 
     f.write("var listsjson_bit = {\n")
     lisj = app_config["config_bit_list_cmds"]
     for ind,ke in enumerate(lisj):
@@ -103,6 +118,7 @@ if __name__ == '__main__':
     f.close()
     #   boot mode list
     f = open("./static/js/gen_bm.js", "w")
+    f.write(crstring()) 
     f.write("var listsjson_bm = {\n")
     lisj = app_config["config_bm_list_cmds"]
     for ind,ke in enumerate(lisj):

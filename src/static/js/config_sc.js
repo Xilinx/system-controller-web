@@ -1,3 +1,8 @@
+/*
+* Copyright (c) 2020, Xilinx Inc. and Contributors. All rights reserved.
+*
+* SPDX-License-Identifier: MIT
+*/
 /**
 *   Spec to create json
 *   top level tab creates left tab.
@@ -213,7 +218,7 @@ function addClockTab(){
             , "headcomponents" : headcompsget
 
             }
-            ,{
+            /*,{
             "subtype":"list"
             ,"name": "Set Clock"
             ,"components": innCompsset
@@ -232,7 +237,7 @@ function addClockTab(){
             ,"name": "Restore Clock"
             ,"components": innCompsreset
             , "headcomponents" : headcompsreset
-            }
+            }*/
             ]
             };
     boardsettingsTab.push(dict);

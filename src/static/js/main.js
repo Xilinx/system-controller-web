@@ -1,3 +1,8 @@
+/*
+* Copyright (c) 2020, Xilinx Inc. and Contributors. All rights reserved.
+*
+* SPDX-License-Identifier: MIT
+*/
 var myVar;
 var pollresp = false;
 /*
@@ -45,7 +50,7 @@ function filleepromdetails(){
             dataType: 'json',
             success: function (res){
                 document.getElementById("db_details_Device").innerHTML = "Device : " + "<b>"+res.data.device+ "</b>"
-                document.getElementById("db_details_silrev").innerHTML = "Silicon Rev : " + "<b>Production"+/*res.data.sil_rev+*/ "</b>"
+                document.getElementById("db_details_silrev").innerHTML = "Silicon Rev : " + "<b>"+res.data.sil_rev+ "</b>"
                 document.getElementById("db_details_boardpn").innerHTML = "Board P/N : " + "<b>"+res.data.board_pn+ "</b>"
                 document.getElementById("db_details_rev").innerHTML = "Rev : " + "<b>"+res.data.rev+ "</b>"
                 document.getElementById("db_details_serno").innerHTML = "Serial Number : " + "<b>"+res.data.serial_number+ "</b>"

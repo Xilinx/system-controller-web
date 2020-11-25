@@ -1,4 +1,9 @@
 #!/bin/bash
+##
+# Copyright (c) 2020, Xilinx Inc. and Contributors. All rights reserved.
+#
+# SPDX-License-Identifier: MIT
+##
 
 while [[ $# -gt 0 ]]
 do
@@ -105,14 +110,15 @@ chip"
         if [ $2 == "eeprom" ]
     then
 echo "Language: 0
-Manufacturing Date: Tue Jun  2 01:33:00 1981
+Silicon Revision: PROD
+Manufacturing Date: Sat Sep 26 14:30:00 2020
 Manufacturer: XILINX
-Product Name: VC-E-A2197
-Board Serial Number: 1281041a005
-Board Part Number: �043123
-Board Reversion: 
-MAC Address 0: ff:ff:ff:ff:ff:ff
-MAC Address 1: ff:ff:ff:ff:ff:ff
+Product Name: VCK190
+Board Serial Number: 80500501b016
+Board Part Number: 043123456
+Board Revision: REV_B01
+MAC Address 0: 0:a:35:7:2d:74
+MAC Address 1: 0:a:35:7:2d:75 
 "
     fi
         if [ $2 == "temperature" ]
