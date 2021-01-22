@@ -12,6 +12,7 @@
 from flask import Flask, render_template, request 
 from flask import Response  ,jsonify
 from flask_restful import Resource, Api , reqparse
+import shutil
 
 from logg import *
 from restserv import *
@@ -96,6 +97,17 @@ if __name__ == '__main__':
 
     f.write("\n}")
     f.close()
+    # check device
+    deviname = p.dashboard_eeprom(Term.exec_cmd(sc_app_path+" -c eeprom\n"))["device"].upper()
+    if ("VCK" in deviname):
+        shutil.copyfile("./static/js/vck190_strings.js","./static/js/beam_strings.js")
+    elif ("VMK" in deviname):
+        shutil.copyfile("./static/js/vmk180_strings.js","./static/js/beam_strings.js")
+    else:
+        shutil.copyfile("./static/js/vck190_strings.js","./static/js/beam_strings.js")
+    
+
+
     #   bit tab components
     f = open("./static/js/gen_bit.js", "w")
     p = ParseData()
