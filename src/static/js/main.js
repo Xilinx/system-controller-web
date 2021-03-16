@@ -208,6 +208,21 @@ var theadcomp = document.createElement("thead");
 //                       em.setAttribute("reqkey",c[elem+"K"]);
                        tdcomp.appendChild(em)
                     break;
+                    case "D":
+                       var em = document.createElement("select");
+//                       em.classList.add("buttons");
+                       //em.setAttribute("type", "text");
+                       em.setAttribute("reqkey", c[elem]);
+//                       em.setAttribute("reqkey",c[elem+"K"]);
+                        jQuery.each(c[elem+"V"], function(j, n){  
+				var g = document.createElement("option");
+	                        g.setAttribute('value',n);
+        	                g.innerHTML = ""+n+" "+c[elem+"N"];
+				em.appendChild(g);
+                        });
+			
+                       tdcomp.appendChild(em)
+                    break;
                     default:
                         console.log("Not Defined  ========= "+ elem);
 
@@ -261,7 +276,9 @@ function rendertabComponentDiv(title, comp){
 
         jQuery.each(comp.components, function(j, c){
             if(c.subtype == 'tab'){
-
+                var ti = title.split(' ').join('_')+c.name.split(' ').join('_');
+                var b = rendertabComponentDiv(ti,c);
+                contentDiv.appendChild(b);
             }
             else{
                 var bodycomp = renderComponentDiv(title.split(' ').join('_') + c.name.split(' ').join('_'), c.components, c.headcomponents )
@@ -362,6 +379,9 @@ function generateBoardSettingsUI(){
             if(cn.getAttribute("reqKey")){
                 if(cn.nodeName.toLowerCase() == "input"){
                     setparams += (setparams.length ? "," : "" )+cn.value
+                }
+                else if(cn.nodeName.toLowerCase() == "select"){
+                    setparams += (setparams.length ? "," : "" )+cn.value;
                 }
             }
             if(cn.nodeName.toLowerCase() == "div"){

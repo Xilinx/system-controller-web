@@ -218,7 +218,7 @@ function addClockTab(){
             , "headcomponents" : headcompsget
 
             }
-            /*,{
+            ,{
             "subtype":"list"
             ,"name": "Set Clock"
             ,"components": innCompsset
@@ -237,7 +237,7 @@ function addClockTab(){
             ,"name": "Restore Clock"
             ,"components": innCompsreset
             , "headcomponents" : headcompsreset
-            }*/
+            }
             ]
             };
     boardsettingsTab.push(dict);
@@ -275,6 +275,95 @@ function addVoltageTab(){
             ,"name": "Get Voltage"
             ,"components": innCompsget
             , "headcomponents" : headcompsget
+
+            }
+            ]
+            };
+    boardsettingsTab.push(dict);
+}
+function addVadjTab(){
+        var innCompsget = [];
+        var getv = {
+            "type":"list"
+            ,"components" : ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"L0": "Get VADJ_FMC"
+            ,"V0": "- V"
+            ,"V0N": "V"
+            ,"V0V": "voltage"
+            ,"B0": "Get"
+            ,"B0A": "/cmdquery"
+            ,"B0sc_cmd":"getvoltage"
+            , "B0target": "VADJ_FMC"
+            , "B0params":""
+        };
+        innCompsget.push(getv);
+
+     var setv = {
+            "type":"list" 
+            ,"components" : ["C,L0,D0,B0"]    // Checkbox, Label, dropdown, info, button, Action
+            ,"L0": "Set VADJ_FMC"
+            ,"D0": "value"
+            ,"D0N": "V"
+            ,"D0V": ["0.0","1.2","1.5"]
+            ,"B0": "Set"
+            ,"B0A": "/cmdquery"
+            ,"B0sc_cmd":"setvoltage"
+            , "B0target": "VADJ_FMC"
+            , "B0params":""
+        };
+        innCompsget.push(setv);
+        var innCompsboot = [];
+
+     var bootv = {
+            "type":"list"
+            ,"components" : ["C,L0,D0,B0"]    // Checkbox, Label, dropdown, info, button, Action
+            ,"L0": "Set On-Boot VADJ"
+            ,"D0": "value"
+            ,"D0N": "V"
+            ,"D0V": ["0.0","1.2","1.5"]
+            ,"B0": "Set"
+            ,"B0A": "/cmdquery"
+            ,"B0sc_cmd":"setbootvoltage"
+            , "B0target": "VADJ_FMC"
+            , "B0params":""
+        };
+        innCompsboot.push(bootv);
+
+    var headcompsset = {
+            "headcomponents":["C,L0,L1,B0"]
+            ,"L0": "Voltage Name"
+            , "L1" : "Volts"
+            , "B0" : "Set All"
+    };
+    var headcompsget = {
+            "headcomponents":["C,L0,L1,B0"]
+            ,"L0": "Voltage Name"
+            , "L1" : "Volts"
+            , "B0" : "Run All"
+    };
+    var dict = {"tab": "FMC"
+    ,"subtype":"tab"
+        ,"components":[
+            {
+            "subtype":"tab"
+            ,"name": "Set VADJ"
+            ,"components": [
+            {
+            "subtype":"list"
+            ,"name": "Current"
+            ,"components": innCompsget
+            , "headcomponents" : headcompsget
+
+            },
+            {
+            "subtype":"list"
+            ,"name": "Boot-up"
+            ,"components": innCompsboot
+            , "headcomponents" : headcompsset
+
+            }
+
+            ]
 
             }
             ]
@@ -699,6 +788,7 @@ function generateBoardSettingsTabJSON(){
     addsfpTab();
     addqsfpTab();
     addEBMTab();
+    addVadjTab();
 }
 
 
