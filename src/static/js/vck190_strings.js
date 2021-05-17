@@ -41,15 +41,15 @@ var app_strings = {
 		
 	},
 	"linuxprompt":{
-		"title":"Obtain Linux Prompts",
+		"title":"Obtain Linux Prompt",
 		"pane":[
 			{
-				"title":"Instructions to obtain Linux prompts from Versal",
+				"title":"Instructions to obtain Linux prompt from Versal",
 				"image":"../static/images/xilinx_banner.png",
 				"text":"",
 				"button_title":"Download",
 				"button_link":"",
-				"learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/XWUC/pages/701136949/Versal+AI+Core+Series+VCK190+-+Using+the+Pre-Built+Linux+Image",
+				"learnmore_link":"https://xilinx.github.io/Embedded-Design-Tutorials/master/docs/index.html",
 			},
 		],
 
@@ -63,16 +63,16 @@ var app_strings = {
 				"text":"",
 				"button_title":"Product Page",
 				"button_link":"https://www.xilinx.com/products/boards-and-kits/vck190.html",
-				"learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/XWUC/pages/748617729/Versal+AI+Core+Series+VCK190+Evaluation+Kit",
+				"learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/748617729/Versal+AI+Core+Series+VCK190+Evaluation+Kit",
 			},
 			{
-				"title":"Power Advantage Demo",
+				"title":"Versal Power Tool",
 				"image":"../static/images/xilinx_banner.png",
 				"text":"",
 				"button_title":"Run",
                                 "button_link_type":1,
 				"button_link": "jnurllink",
-				"learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/XWUC/pages/748617729/Versal+AI+Core+Series+VCK190+Evaluation+Kit",
+				"learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1299251214/Versal+ACAP+Power+Tool+part+1+-+Introduction+to+the+Power+Tool",
 			},
 			{
 				"title":"Target Reference Designs",
@@ -80,7 +80,7 @@ var app_strings = {
 				"text":"",
 				"button_title":"Product Page",
 				"button_link":"https://www.xilinx.com/products/boards-and-kits/vck190.html",
-				"learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/XWUC/pages/748617729/Versal+AI+Core+Series+VCK190+Evaluation+Kit",
+				"learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/748617729/Versal+AI+Core+Series+VCK190+Evaluation+Kit",
 			},
 		],
 
@@ -159,7 +159,7 @@ var app_strings = {
                                 "content_type":0,       // 0: paragraph, 1: bullet points
                                 "content":["The Board Evaluation & Management Tool (BEAM) is the main menu of the System Controller. It primarily serves as a launcher for demos and designs, running the board interface test and to set/change/read board parameters.",
                                            "The purpose of the Board Evaluation & Management Tool is to provide Versal users a much easier and far more intuitive experience with Xilinx Evaluation Board products. The goal is to help users get started faster and have all the available resources at one place for easy access.",
-                                           "The Board Evaluation & Management Tool (BEAM) offers multiple navigation options for users. Depending on the persona type (Hardware, Software or Embedded developer) users can choose to start with either testing the board, use the power advantage demo, download Versal reference designs or learn more above the latest tools and libraries. ",
+                                           "The Board Evaluation & Management Tool (BEAM) offers multiple navigation options for users. Depending on the persona type (Hardware, Software or Embedded developer) users can choose to start with either testing the board, use the Versal power tool, download Versal reference designs or learn more above the latest tools and libraries. ",
                                            "More features will be added in the next releases and existing features will be enhanced for a better out-of-box experience to users."]
                         },
                 ],
