@@ -785,8 +785,12 @@ function generateBoardSettingsTabJSON(){
     addDDRDIMMTab();
     addioexpTab();
     addgpioTab();
-    addsfpTab();
-    addqsfpTab();
+    if(listsjson_sc["listSFP"].length && listsjson_sc["listSFP"][0] != ""){
+        addsfpTab();
+    }
+    if(listsjson_sc["listQSFP"].length && listsjson_sc["listQSFP"][0] != ""){
+        addqsfpTab();
+    }
     addEBMTab();
     addVadjTab();
 }
