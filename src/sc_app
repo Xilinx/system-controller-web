@@ -76,6 +76,12 @@ VCC1V1_LP4"
         echo "zSFP-0
 zSFP-1"
     fi
+    if [ $2 == "listFMC" ]
+    then
+       echo "FMC1 - XILINX FMC-XM119-PMOD
+FMC2 - Samtec FMC+ Loopback"
+    fi
+
     if [ $2 == "listpower" ]
     then
         echo "VCCINT
@@ -121,6 +127,155 @@ MAC Address 0: 0:a:35:7:2d:74
 MAC Address 1: 0:a:35:7:2d:75 
 "
     fi
+    if [ $2 == "getFMC" ]
+    then 
+    if [ $6 == "all" ]
+    then
+    echo "     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00: 00 00 00 01 00 0a 00 f4 01 0c 00 38 67 c1 c6 58
+10: 49 4c 49 4e 58 d0 46 4d 43 2d 58 4d 31 31 39 2d
+20: 50 4d 4f 44 00 00 d0 31 31 34 38 30 33 00 00 00
+30: 00 00 00 00 00 00 00 c9 30 00 00 00 00 00 00 00
+40: 00 01 00 c8 42 00 00 00 00 00 00 00 c1 00 00 bb
+50: 02 02 0d ad 42 00 78 00 78 00 96 00 64 00 05 00
+60: 64 00 02 02 0d 33 bc 01 4a 01 39 01 5b 01 64 00
+70: 0f 00 76 02 02 02 0d 4a a5 02 b0 04 00 00 00 00
+80: 00 00 00 00 00 00 01 02 0d fd f3 03 00 00 00 00
+90: 00 00 00 00 00 00 00 00 01 02 0d fc f4 04 00 00
+a0: 00 00 00 00 00 00 00 00 00 00 01 02 0d fb f5 05
+b0: 00 00 00 00 00 00 00 00 00 00 00 00 fa 82 0b f5
+c0: 84 00 12 a2 00 0c 19 00 00 00 00 32 00 00 00 00
+d0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+f0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+"
+    fi 
+    if [ $6 == "common" ]
+    then
+    echo "0x00 - Version: 00
+0x01 - Internal User Area:      00
+0x02 - Chassis Info Area:       00
+0x03 - Board Area:      01
+0x04 - Product Info Area:       00
+0x05 - Multi Record Area:       0a
+0x06 - Pad and Check sum:       00 f4"
+    fi 
+    if [ $6 == "board" ]
+    then
+    echo "0x08 - Version: 01
+0x09 - Length:  0c
+0x0A - Language Code:   00
+0x0B - Manufacturing Date:      Wed Feb  5 23:52:00 2020
+0x0f - Manufacturer:    XILINX
+0x16 - Product Name:    FMC-XM119-PMOD
+0x27 - Serial Number:   114803
+0x38 - Part Number:     0
+0x41 - FRU ID:  00
+0x44 - Revision:        B
+0x4c - EoR, Pad, Check sum:     c1 0000 bb"
+    fi 
+    if [ $6 == "multirecord" ]
+    then
+    echo "0x50 - Record Type:     02 (DC Load)
+0x51 - Record Format:   02
+0x52 - Length:  0d
+0x53 - Record Check sum:        ad
+0x54 - Header Check sum:        42
+0x55 - Output Number:   00 (Voltage Adjust)
+0x56 - Nominal Voltage: 7800 (1.20V)
+0x58 - Spec'd Min Voltage:      7800 (1.20V)
+0x5a - Spec'd Max Voltage:      9600 (1.50V)
+0x5c - Spec'd Ripple Noise:     6400 (100mV)
+0x5e - Min Current Load:        0500 (5mA)
+0x60 - Max Current Load:        6400 (100mA)
+
+0x62 - Record Type:     02 (DC Load)
+0x63 - Record Format:   02
+0x64 - Length:  0d
+0x65 - Record Check sum:        33
+0x66 - Header Check sum:        bc
+0x67 - Output Number:   01 (Power Rail)
+0x68 - Nominal Voltage: 4a01 (3.30V)
+0x6a - Spec'd Min Voltage:      3901 (3.13V)
+0x6c - Spec'd Max Voltage:      5b01 (3.47V)
+0x6e - Spec'd Ripple Noise:     6400 (100mV)
+0x70 - Min Current Load:        0f00 (15mA)
+0x72 - Max Current Load:        7602 (630mA)
+
+0x74 - Record Type:     02 (DC Load)
+0x75 - Record Format:   02
+0x76 - Length:  0d
+0x77 - Record Check sum:        4a
+0x78 - Header Check sum:        a5
+0x79 - Output Number:   02 (Power Rail)
+0x7a - Nominal Voltage: b004 (12.00V)
+0x7c - Spec'd Min Voltage:      0000 (0.00V)
+0x7e - Spec'd Max Voltage:      0000 (0.00V)
+0x80 - Spec'd Ripple Noise:     0000 (0mV)
+0x82 - Min Current Load:        0000 (0mA)
+0x84 - Max Current Load:        0000 (0mA)
+
+0x86 - Record Type:     01 (DC Output)
+0x87 - Record Format:   02
+0x88 - Length:  0d
+0x89 - Record Check sum:        fd
+0x8a - Header Check sum:        f3
+0x8b - Output Number:   03 (Power Rail)
+0x8c - Nominal Voltage: 0000 (0.00V)
+0x8e - Spec'd Min Voltage:      0000 (0.00V)
+0x90 - Spec'd Max Voltage:      0000 (0.00V)
+0x92 - Spec'd Ripple Noise:     0000 (0mV)
+0x94 - Min Current Load:        0000 (0mA)
+0x96 - Max Current Load:        0000 (0mA)
+
+0x98 - Record Type:     01 (DC Output)
+0x99 - Record Format:   02
+0x9a - Length:  0d
+0x9b - Record Check sum:        fc
+0x9c - Header Check sum:        f4
+0x9d - Output Number:   04 (Power Rail)
+0x9e - Nominal Voltage: 0000 (0.00V)
+0xa0 - Spec'd Min Voltage:      0000 (0.00V)
+0xa2 - Spec'd Max Voltage:      0000 (0.00V)
+0xa4 - Spec'd Ripple Noise:     0000 (0mV)
+0xa6 - Min Current Load:        0000 (0mA)
+0xa8 - Max Current Load:        0000 (0mA)
+
+0xaa - Record Type:     01 (DC Output)
+0xab - Record Format:   02
+0xac - Length:  0d
+0xad - Record Check sum:        fb
+0xae - Header Check sum:        f5
+0xaf - Output Number:   05 (Power Rail)
+0xb0 - Nominal Voltage: 0000 (0.00V)
+0xb2 - Spec'd Min Voltage:      0000 (0.00V)
+0xb4 - Spec'd Max Voltage:      0000 (0.00V)
+0xb6 - Spec'd Ripple Noise:     0000 (0mV)
+0xb8 - Min Current Load:        0000 (0mA)
+0xba - Max Current Load:        0000 (0mA)
+
+0xbc - Record Type:     fa (Vita 57.1)
+0xbd - Record Format:   82
+0xbe - Length:  0b
+0xbf - Record Check sum:        f5
+0xc0 - Header Check sum:        84
+0xc1 - Organizationally Unique Identifier:      0012a2
+0xc4 - Subtype Version: 00
+0xc5 - Connector Type:  0c
+0xc6 - P1 Bank A Number Signals:        19
+0xc7 - P1 Bank B Number Signals:        00
+0xc8 - P2 Bank A Number Signals:        00
+0xc9 - P2 Bank B Number Signals:        00
+0xca - P1 GBT B Number Signals: 00
+0xcb - Max Clock for TCK:       32 (50Mhz)
+"
+    fi 
+    fi
+
+
+
+
+
         if [ $2 == "temperature" ]
         then
         echo "Temperature(C): 32.0"

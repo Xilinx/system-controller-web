@@ -256,7 +256,7 @@ function rendertabComponentDiv(title, comp){
 
     var tabcomp = document.createElement("div");
     tabcomp.classList.add("content-body");
-    tabcomp.id = title.split(' ').join('_')
+    tabcomp.id = title.split(' ').join('_').replace("+","")
     if(comp.subtype == 'tab'){
         var tabdiv = document.createElement("div");
         var navdiv = document.createElement("nav");
@@ -269,7 +269,7 @@ function rendertabComponentDiv(title, comp){
                 if(j == 0){
                     lidiv.classList.add("active");
                 }
-                lidiv.setAttribute('specKey_id',title.split(' ').join('_') + c.name.split(' ').join('_'));
+                lidiv.setAttribute('specKey_id',title.split(' ').join('_') + c.name.split(' ').join('_').replace("+",""));
                 var node = document.createTextNode(c.name);
                 lidiv.appendChild(node);
                 uldiv.appendChild(lidiv);
@@ -282,12 +282,15 @@ function rendertabComponentDiv(title, comp){
 
         jQuery.each(comp.components, function(j, c){
             if(c.subtype == 'tab'){
-                var ti = title.split(' ').join('_')+c.name.split(' ').join('_');
+                var ti = title.split(' ').join('_')+c.name.split(' ').join('_').replace("+","");
                 var b = rendertabComponentDiv(ti,c);
+                if(j){
+                    b.classList.add("hide");
+                }
                 contentDiv.appendChild(b);
             }
             else{
-                var bodycomp = renderComponentDiv(title.split(' ').join('_') + c.name.split(' ').join('_'), c.components, c.headcomponents )
+                var bodycomp = renderComponentDiv(title.split(' ').join('_') + c.name.split(' ').join('_').replace("+",""), c.components, c.headcomponents )
                 if(j){
                     bodycomp.classList.add("hide");
                 }
@@ -299,7 +302,7 @@ function rendertabComponentDiv(title, comp){
     }else{
         jQuery.each(comp, function(j, c){
 
-            var bodycomp = renderComponentDiv(title.split(' ').join('_') + c.name.split(' ').join('_'), c.components, c.headcomponents)
+            var bodycomp = renderComponentDiv(title.split(' ').join('_') + c.name.split(' ').join('_').replace("+",""), c.components, c.headcomponents)
             if(j){
                 bodycomp.classList.add("hide");
             }
@@ -313,8 +316,8 @@ function rendertabComponentDiv(title, comp){
 
 function generateBoardSettingsUI(){
     jQuery.each(boardsettingsTab, function(i, sidetab){
-        $("#boardtestdiv").append('<li class="'+(i == 0 ? "active":"") +'"; specKey_id="'+sidetab.tab.split(' ').join('_')+'">'+sidetab.tab+'</li>')
-        var compDiv = rendertabComponentDiv(sidetab.tab.split(' ').join('_'), sidetab);
+        $("#boardtestdiv").append('<li class="'+(i == 0 ? "active":"") +'"; specKey_id="'+sidetab.tab.split(' ').join('_').replace("+","")+'">'+sidetab.tab+'</li>')
+        var compDiv = rendertabComponentDiv(sidetab.tab.split(' ').join('_').replace("+",""), sidetab);
         if(i){
             compDiv.classList.add("hide");
         }

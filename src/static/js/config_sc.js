@@ -341,6 +341,49 @@ function addVadjTab(){
             , "L1" : "Volts"
             , "B0" : "Run All"
     };
+
+    var headcompsgethspc = {
+            "headcomponents":["C,L0,L1,B0"]
+            ,"L0": "Name"
+            , "L1" : "Info"
+            , "B0" : "Get All"
+    };
+var hspctabs = [];
+jQuery.each(listsjson_sc["listFMC"] , function(j, tag){
+     if (tag.length == 0) { return; }
+     var innCompsgethspc = [];
+     jQuery.each([["All","all"],["Common","common"],["Board","board"],["Multirecord","multirecord"]] , function(i, tds){
+        var eachcomp = {
+            "type":"list"
+            ,"components" : ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"L0": tds[0]
+            ,"V0": "-"
+            ,"V0N": ""
+            ,"V0V": "io"
+            ,"B0": "Get"
+            ,"B0A": "/cmdquery"
+            ,"B0sc_cmd":"getFMC"
+            , "B0target": tag
+            , "B0params":tds[1]
+        };
+        innCompsgethspc.push(eachcomp);
+    });
+    var altb = {
+     "subtype":"list"
+    ,"name": tag
+    ,"components": innCompsgethspc
+    , "headcomponents" : headcompsgethspc
+
+     };
+     hspctabs.push(altb);
+});
+var hspc = 
+            {
+             "subtype":"tab"
+            ,"name": "HSPC"
+            , "components":hspctabs
+            };
+
     var dict = {"tab": "FMC"
     ,"subtype":"tab"
         ,"components":[
@@ -365,9 +408,12 @@ function addVadjTab(){
 
             ]
 
-            }
+            },
             ]
             };
+    if(hspctabs.length){
+        dict.components.push(hspc);
+    }
     boardsettingsTab.push(dict);
 }
 
