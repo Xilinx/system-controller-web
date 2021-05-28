@@ -90,12 +90,18 @@ function jnurllink(){
                 if(res.data[0] == 1){
                     openInNewTab(res.data[1]);
                 }else{
-                    window.alert(res.data[1]);
+                    window.alert("Not able to launch Junpyter notebook. Please check if Jupyter notebook is running.");
                 }
             },
             error: function(){
+                    window.alert("Not able to launch Junpyter notebook. Please check if Jupyter notebook is running.");
             }
     });
+}
+function launchpmtool(){
+    
+    openInNewTab(getlocallinkwithport("50004"));
+
 }
 function hideAllPages(){
     $("#home_screen_com, #home_screen_db, #help_screen, #about_screen, #dnd_screen, #boardseettings_screen, #tools_screen, #testandebug_screen, #linuxprompt_screen, #ttbbackid").addClass('hide');
