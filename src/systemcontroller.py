@@ -94,7 +94,21 @@ if __name__ == '__main__':
     vers1 = "" + app_config["major_version"]+"."+app_config["minor_version"]
     vers2 = "" + p.parse_cmd_resp(Term.exec_cmd(sc_app_path+" -c version"),"version")["version"] 
     f.write(',\n"version":"'+vers1+'/'+vers2+'"')    
+    tcsfiles = ""
+    txtfiles = ''
+    for c in os.listdir(app_config["8A34001_clk_files_path"]):
+        if c.endswith(".tcs"):
+            if len(tcsfiles):
+                tcsfiles = tcsfiles + ","
+            tcsfiles = tcsfiles + '"' + c + '"'
+        if c.endswith(".txt"):
+            if len(txtfiles):
+                txtfiles = txtfiles + ","
+            txtfiles = txtfiles + '"' + c + '"'
 
+
+    f.write(',\n"8A34001_clk_tcs_files":['+tcsfiles+']')
+    f.write(',\n"8A34001_clk_txt_files":['+txtfiles+']')
     f.write("\n}")
     f.close()
     # check device

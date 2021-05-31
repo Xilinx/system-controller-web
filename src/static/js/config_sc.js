@@ -123,6 +123,23 @@ var headcomps = {
 function addClockTab(){
         var innCompsget = [];
         jQuery.each(listsjson_sc["listclock"] , function(i, tds){
+        if(tds.localeCompare("8A34001 FMC2") == 0) {
+        var eachcomp = {
+            "type":"list"
+            ,"components" : ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"L0": tds
+            ,"V0": "-"
+            ,"V0N": ""
+            ,"V0V": "frequency"
+            ,"B0": "Get"
+            ,"B0A": "/cmdquery"
+            ,"B0sc_cmd":"getclock"
+            , "B0target": tds
+            , "B0params":""
+        };
+        innCompsget.push(eachcomp);
+
+        }else{
         var eachcomp = {
             "type":"list"
             ,"components" : ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
@@ -137,9 +154,27 @@ function addClockTab(){
             , "B0params":""
         };
         innCompsget.push(eachcomp);
+        }
     });
      var innCompsset = [];
         jQuery.each(listsjson_sc["listclock"] , function(i, tds){
+        if(tds.localeCompare("8A34001 FMC2") == 0) {
+        var eachcomp = {
+            "type":"list"
+            ,"components" : ["C,L0,F0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"L0": tds
+            ,"F0": "value"
+            ,"F0N": ""
+            ,"F0V": [listsjson_sc["8A34001_clk_tcs_files"],listsjson_sc["8A34001_clk_txt_files"]]
+            ,"B0": "Set"
+            ,"B0A": "/cmdquery"
+            ,"B0sc_cmd":"setclock"
+            , "B0target": tds
+            , "B0params":""
+        };
+        innCompsset.push(eachcomp);
+
+        }else{
         var eachcomp = {
             "type":"list"
             ,"components" : ["C,L0,E0,B0"]    // Checkbox, Label, editfield, info, button, Action
@@ -153,9 +188,27 @@ function addClockTab(){
             , "B0params":""
         };
         innCompsset.push(eachcomp);
+        }
     });
      var innCompssetboot = [];
         jQuery.each(listsjson_sc["listclock"] , function(i, tds){
+        if(tds.localeCompare("8A34001 FMC2") == 0) {
+        var eachcomp = {
+            "type":"list"
+            ,"components" : ["C,L0,F0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"L0": tds
+            ,"F0": "value"
+            ,"F0N": ""
+            ,"F0V": [listsjson_sc["8A34001_clk_tcs_files"],listsjson_sc["8A34001_clk_txt_files"]]
+            ,"B0": "Set"
+            ,"B0A": "/cmdquery"
+            ,"B0sc_cmd":"setbootclock"
+            , "B0target": tds
+            , "B0params":""
+        };
+        innCompssetboot.push(eachcomp);
+
+        }else{
         var eachcomp = {
             "type":"list"
             ,"components" : ["C,L0,E0,B0"]    // Checkbox, Label, editfield, info, button, Action
@@ -169,6 +222,7 @@ function addClockTab(){
             , "B0params":""
         };
         innCompssetboot.push(eachcomp);
+        }
     });
 
      var innCompsreset = [];

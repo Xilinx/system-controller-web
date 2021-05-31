@@ -343,6 +343,7 @@ Power(mW):       237"
     then
         echo "zSFP Si570
 User1 FMC1 Si570
+8A34001 FMC2
 Versal Sys Clk Si570
 Dimm1 Si570
 LPDDR4 CLK1 Si570

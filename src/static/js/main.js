@@ -214,6 +214,21 @@ var theadcomp = document.createElement("thead");
 //                       em.setAttribute("reqkey",c[elem+"K"]);
                        tdcomp.appendChild(em)
                     break;
+                    case "F":
+                       jQuery.each(c[elem+"V"],function(l, m){
+                       var em = document.createElement("select");
+                       em.setAttribute("reqkey", c[elem]);
+                  
+                        jQuery.each(m, function(j, n){  
+				var g = document.createElement("option");
+	                        g.setAttribute('value',n);
+        	                g.innerHTML = ""+n+" "+c[elem+"N"];
+				em.appendChild(g);
+                        });
+			
+                       tdcomp.appendChild(em)
+                        });
+                    break;
                     case "D":
                        var em = document.createElement("select");
 //                       em.classList.add("buttons");
@@ -383,14 +398,15 @@ function generateBoardSettingsUI(){
         // Read value from html and create api and send to server.
       var setparams = "";
       jQuery.each(eles, function(i, tds){
-        var cn = this.childNodes[0];
+        var cnd = this.childNodes;
+        jQuery.each(cnd, function(k, cn){
         try{
             if(cn.getAttribute("reqKey")){
                 if(cn.nodeName.toLowerCase() == "input"){
                     setparams += (setparams.length ? "," : "" )+cn.value
                 }
                 else if(cn.nodeName.toLowerCase() == "select"){
-                    setparams += (setparams.length ? "," : "" )+cn.value;
+                    setparams += (setparams.length ? " " : "" )+cn.value;
                 }
             }
             if(cn.nodeName.toLowerCase() == "div"){
@@ -401,12 +417,15 @@ function generateBoardSettingsUI(){
         }catch (err){
             //console.log("Error handled"+err);
         }
+       });
       });
       // Ajax request
       // Adding prerequired parameters if any.
-      setparams += (setparams.length ? "," : "" )+e.target.getAttribute("params")
-
-
+      setparams += (setparams.length ? " " : "" )+e.target.getAttribute("params")
+      setparams = setparams.trim(); 
+      if(setparams.indexOf(' ') >= 0){
+          setparams = "'"+setparams.trim()+"'";
+      }
     $.ajax({
             url: tar,
             type: 'GET',
