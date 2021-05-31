@@ -1,5 +1,5 @@
 ##
-# Copyright (c) 2020, Xilinx Inc. and Contributors. All rights reserved.
+# Copyright (c) 2020 - 2021 Xilinx, Inc. and Contributors. All rights reserved.
 #
 # SPDX-License-Identifier: MIT
 ##
@@ -60,7 +60,7 @@ def unlock_for_next_req(response):
 
 def crstring():
     return '''/*
-* Copyright (c) 2020, Xilinx Inc. and Contributors. All rights reserved.
+* Copyright (c) 2020 - 2021 Xilinx, Inc. and Contributors. All rights reserved.
 *
 * SPDX-License-Identifier: MIT
 */
