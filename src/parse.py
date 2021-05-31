@@ -24,7 +24,8 @@ class Parse:
         elif(component == "getgpio"):
             return self.parsegpio(data)
         elif(component == "getioexp" or component == "getpwmSFP" or component == "getSFP" or component == "getQSFP"
-or component == "getpwmQSFP" or component == "getpwmoQSFP" or component == "getEBM" or component == "getFMC"):
+or component == "getpwmQSFP" or component == "getpwmoQSFP" or component == "getEBM" or component == "getFMC"
+or component == "geteeprom"):
             return self.parseioexp(data)
         else:
             return ""

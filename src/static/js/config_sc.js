@@ -604,6 +604,44 @@ function addDDRDIMMTab(){
             };
     boardsettingsTab.push(dict);
 }
+function addEEPROMDataTab(){
+        var innCompsget = [];
+     jQuery.each([["All","all"],["Common","common"],["Board","board"],["Multirecord","multirecord"]] , function(i, tds){
+        var eachcomp = {
+            "type":"list"
+            ,"components" : ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"L0": tds[0]
+            ,"V0": "-"
+            ,"V0N": ""
+            ,"V0V": "io"
+            ,"B0": "Get"
+            ,"B0A": "/cmdquery"
+            ,"B0sc_cmd":"geteeprom"
+            , "B0target": tds[1]
+            , "B0params":""
+        };
+        innCompsget.push(eachcomp);
+    });
+    var headcompsget = {
+            "headcomponents":["C,L0,L1,B0"]
+            ,"L0": "Name"
+            , "L1" : "Info"
+            , "B0" : "Get All"
+    };
+    var dict = {"tab": "EEPROM Data"
+    ,"subtype":"tab"
+        ,"components":[
+            {
+            "subtype":"list"
+            ,"name": "Get EEPROM"
+            ,"components": innCompsget
+            , "headcomponents" : headcompsget
+
+            }
+            ]
+            };
+    boardsettingsTab.push(dict);
+}
 function addEBMTab(){
         var innCompsget = [];
      jQuery.each([["All","all"],["Common","common"],["Board","board"],["Multirecord","multirecord"]] , function(i, tds){
@@ -893,6 +931,7 @@ function generateBoardSettingsTabJSON(){
     }
     addEBMTab();
     addVadjTab();
+    addEEPROMDataTab();
 }
 
 

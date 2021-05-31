@@ -127,6 +127,81 @@ MAC Address 0: 0:a:35:7:2d:74
 MAC Address 1: 0:a:35:7:2d:75 
 "
     fi
+    if [ $2 == "geteeprom" ]
+    then 
+    if [ $4 == "all" ]
+    then
+    echo "00: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+10: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+20: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+30: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+40: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+50: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+60: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+70: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+90: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+a0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+b0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+c0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+d0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+e0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+f0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff"
+    fi
+    if [ $4 == "common" ]
+    then
+    echo "0x00 - Version: 01
+0x01 - Internal User Area: 00
+0x02 - Chassis Info Area: 00
+0x03 - Board Area: 01
+0x04 - Product Info Area: 00
+0x05 - Multi Record Area: 0a
+0x06 - Pad and Check sum: 00 f4
+"
+    fi
+    if [ $4 == "board" ]
+    then
+    echo "0x08 - Version: 01
+0x09 - Length: 0c
+0x0A - Language Code: 00
+0x0B - Manufacturing Date: Mon Nov 16 23:02:00 2020
+0x0F - Manufacturer: XILINX
+0x16 - Product Name: VMK180
+0x27 - Serial Number: 812044124725
+0x38 - Part Number: 043123456
+0x42 - FRU ID: 00
+0x44 - Revision: REV_B01
+0x4D - PCIe Info: 10ee000000000000
+0x56 - UUID: 9f7072b1-c104-4601-81e1-95f0e7876e93
+0x66 - EoR and Check sum: c1 73
+"
+    fi
+    if [ $4 == "multirecord" ]
+    then
+    echo "0x68 - Record Type: d2 (Mac ID)
+0x69 - Record Format: 02
+0x6a - Length: 0a
+0x6b - Record Check sum: b7
+0x6c - Header Check sum: 6b
+0x6d - Xilinx IANA ID: da1000
+0x70 - Version Number: 11 (SC Mac ID)
+0x71 - Mac ID 0: 00:0a:35:07:31:d7
+
+0x77 - Record Type: d2 (Mac ID)
+0x78 - Record Format: 82
+0x79 - Length: 10
+0x7a - Record Check sum: 46
+0x7b - Header Check sum: 56
+0x7c - Xilinx IANA ID: da1000
+0x7f - Version Number: 31 (Veral Mac ID)
+0x80 - Mac ID 0: 00:0a:35:07:31:d8
+0x86 - Mac ID 1: 00:0a:35:07:31:d9
+"
+    fi
+
+
+    fi
+
     if [ $2 == "getFMC" ]
     then 
     if [ $6 == "all" ]
