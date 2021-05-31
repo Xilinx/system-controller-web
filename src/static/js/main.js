@@ -98,6 +98,11 @@ function jnurllink(){
             }
     });
 }
+function launchacap(){
+    
+    openInNewTab(getlocallink());
+
+}
 function launchpmtool(){
     
     openInNewTab(getlocallinkwithport("50004"));

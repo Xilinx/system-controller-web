@@ -83,6 +83,15 @@ var app_strings = {
 				"learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/748617729/Versal+AI+Core+Series+VCK190+Evaluation+Kit",
 			},
 			{
+                                "title":"ACAP Cockpit",
+                                "image":"../static/images/xilinx_banner.png",
+                                "text":"",
+                                "button_title":"Run",
+                                "button_link_type":1,
+                                "button_link": "launchacap",
+                                "learnmore_link":"",
+                        },
+			{
                                 "title":"Power Management Tool",
                                 "image":"../static/images/xilinx_banner.png",
                                 "text":"",
