@@ -82,6 +82,16 @@ var app_strings = {
 				"button_link":"https://www.xilinx.com/products/boards-and-kits/vck190.html",
 				"learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/748617729/Versal+AI+Core+Series+VCK190+Evaluation+Kit",
 			},
+			{
+                                "title":"Power Management Tool",
+                                "image":"../static/images/xilinx_banner.png",
+                                "text":"",
+                                "button_title":"Run",
+                                "button_link_type":1,
+                                "button_link": "launchpmtool",
+                                "learnmore_link":"",
+                        },
+
 		],
 
 	},

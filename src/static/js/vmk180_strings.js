@@ -82,6 +82,16 @@ var app_strings = {
 				"button_link":"https://www.xilinx.com/products/boards-and-kits/vmk180.html",
 				"learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/973013034/Versal+Prime+Series+VMK180+Evaluation+Kit",
 			},
+                        {
+                                "title":"Power Management Tool",
+                                "image":"../static/images/xilinx_banner.png",
+                                "text":"",
+                                "button_title":"Run",
+                                "button_link_type":1,
+                                "button_link": "launchpmtool",
+                                "learnmore_link":"",
+                        },
+
 		],
 
 	},
