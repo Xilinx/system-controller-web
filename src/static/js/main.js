@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2020, Xilinx Inc. and Contributors. All rights reserved.
+* Copyright (c) 2020 - 2021 Xilinx, Inc. and Contributors. All rights reserved.
 *
 * SPDX-License-Identifier: MIT
 */
@@ -90,12 +90,23 @@ function jnurllink(){
                 if(res.data[0] == 1){
                     openInNewTab(res.data[1]);
                 }else{
-                    window.alert(res.data[1]);
+                    window.alert("Not able to launch Junpyter notebook. Please check if Jupyter notebook is running.");
                 }
             },
             error: function(){
+                    window.alert("Not able to launch Junpyter notebook. Please check if Jupyter notebook is running.");
             }
     });
+}
+function launchacap(){
+    
+    openInNewTab(getlocallink());
+
+}
+function launchpmtool(){
+    
+    openInNewTab(getlocallinkwithport("50004"));
+
 }
 function hideAllPages(){
     $("#home_screen_com, #home_screen_db, #help_screen, #about_screen, #dnd_screen, #boardseettings_screen, #tools_screen, #testandebug_screen, #linuxprompt_screen, #ttbbackid").addClass('hide');
@@ -208,6 +219,21 @@ var theadcomp = document.createElement("thead");
 //                       em.setAttribute("reqkey",c[elem+"K"]);
                        tdcomp.appendChild(em)
                     break;
+                    case "F":
+                       jQuery.each(c[elem+"V"],function(l, m){
+                       var em = document.createElement("select");
+                       em.setAttribute("reqkey", c[elem]);
+                  
+                        jQuery.each(m, function(j, n){  
+				var g = document.createElement("option");
+	                        g.setAttribute('value',n);
+        	                g.innerHTML = ""+n+" "+c[elem+"N"];
+				em.appendChild(g);
+                        });
+			
+                       tdcomp.appendChild(em)
+                        });
+                    break;
                     case "D":
                        var em = document.createElement("select");
 //                       em.classList.add("buttons");
@@ -250,7 +276,7 @@ function rendertabComponentDiv(title, comp){
 
     var tabcomp = document.createElement("div");
     tabcomp.classList.add("content-body");
-    tabcomp.id = title.split(' ').join('_')
+    tabcomp.id = title.split(' ').join('_').replace("+","")
     if(comp.subtype == 'tab'){
         var tabdiv = document.createElement("div");
         var navdiv = document.createElement("nav");
@@ -263,7 +289,7 @@ function rendertabComponentDiv(title, comp){
                 if(j == 0){
                     lidiv.classList.add("active");
                 }
-                lidiv.setAttribute('specKey_id',title.split(' ').join('_') + c.name.split(' ').join('_'));
+                lidiv.setAttribute('specKey_id',title.split(' ').join('_') + c.name.split(' ').join('_').replace("+",""));
                 var node = document.createTextNode(c.name);
                 lidiv.appendChild(node);
                 uldiv.appendChild(lidiv);
@@ -276,12 +302,15 @@ function rendertabComponentDiv(title, comp){
 
         jQuery.each(comp.components, function(j, c){
             if(c.subtype == 'tab'){
-                var ti = title.split(' ').join('_')+c.name.split(' ').join('_');
+                var ti = title.split(' ').join('_')+c.name.split(' ').join('_').replace("+","");
                 var b = rendertabComponentDiv(ti,c);
+                if(j){
+                    b.classList.add("hide");
+                }
                 contentDiv.appendChild(b);
             }
             else{
-                var bodycomp = renderComponentDiv(title.split(' ').join('_') + c.name.split(' ').join('_'), c.components, c.headcomponents )
+                var bodycomp = renderComponentDiv(title.split(' ').join('_') + c.name.split(' ').join('_').replace("+",""), c.components, c.headcomponents )
                 if(j){
                     bodycomp.classList.add("hide");
                 }
@@ -293,7 +322,7 @@ function rendertabComponentDiv(title, comp){
     }else{
         jQuery.each(comp, function(j, c){
 
-            var bodycomp = renderComponentDiv(title.split(' ').join('_') + c.name.split(' ').join('_'), c.components, c.headcomponents)
+            var bodycomp = renderComponentDiv(title.split(' ').join('_') + c.name.split(' ').join('_').replace("+",""), c.components, c.headcomponents)
             if(j){
                 bodycomp.classList.add("hide");
             }
@@ -307,8 +336,8 @@ function rendertabComponentDiv(title, comp){
 
 function generateBoardSettingsUI(){
     jQuery.each(boardsettingsTab, function(i, sidetab){
-        $("#boardtestdiv").append('<li class="'+(i == 0 ? "active":"") +'"; specKey_id="'+sidetab.tab.split(' ').join('_')+'">'+sidetab.tab+'</li>')
-        var compDiv = rendertabComponentDiv(sidetab.tab.split(' ').join('_'), sidetab);
+        $("#boardtestdiv").append('<li class="'+(i == 0 ? "active":"") +'"; specKey_id="'+sidetab.tab.split(' ').join('_').replace("+","")+'">'+sidetab.tab+'</li>')
+        var compDiv = rendertabComponentDiv(sidetab.tab.split(' ').join('_').replace("+",""), sidetab);
         if(i){
             compDiv.classList.add("hide");
         }
@@ -374,14 +403,15 @@ function generateBoardSettingsUI(){
         // Read value from html and create api and send to server.
       var setparams = "";
       jQuery.each(eles, function(i, tds){
-        var cn = this.childNodes[0];
+        var cnd = this.childNodes;
+        jQuery.each(cnd, function(k, cn){
         try{
             if(cn.getAttribute("reqKey")){
                 if(cn.nodeName.toLowerCase() == "input"){
                     setparams += (setparams.length ? "," : "" )+cn.value
                 }
                 else if(cn.nodeName.toLowerCase() == "select"){
-                    setparams += (setparams.length ? "," : "" )+cn.value;
+                    setparams += (setparams.length ? " " : "" )+cn.value;
                 }
             }
             if(cn.nodeName.toLowerCase() == "div"){
@@ -392,12 +422,15 @@ function generateBoardSettingsUI(){
         }catch (err){
             //console.log("Error handled"+err);
         }
+       });
       });
       // Ajax request
       // Adding prerequired parameters if any.
-      setparams += (setparams.length ? "," : "" )+e.target.getAttribute("params")
-
-
+      setparams += (setparams.length ? " " : "" )+e.target.getAttribute("params")
+      setparams = setparams.trim(); 
+      if(setparams.indexOf(' ') >= 0){
+          setparams = "'"+setparams.trim()+"'";
+      }
     $.ajax({
             url: tar,
             type: 'GET',

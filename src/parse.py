@@ -1,12 +1,12 @@
 ##
-# Copyright (c) 2020, Xilinx Inc. and Contributors. All rights reserved.
+# Copyright (c) 2020 - 2021 Xilinx, Inc. and Contributors. All rights reserved.
 #
 # SPDX-License-Identifier: MIT
 ##
 from config_app import *
 
 class Parse:
-    def parse_cmd_resp(self, data, component):
+    def parse_cmd_resp(self, data, component,targ=""):
         if(component == "getpower"):
             return self.parseGetPower(data)
         elif(component.startswith("list")):
@@ -14,7 +14,7 @@ class Parse:
         elif(component == "getvoltage" or component == "powerdomain"):
             return self.parseGetVoltage(data)
         elif(component == "getclock"):
-            return self.parseGetClock(data)
+            return self.parseGetClock(data,targ)
         elif(component == "BIT"):
             return self.parseBit(data)
         elif(component == "ddr"):
@@ -24,7 +24,8 @@ class Parse:
         elif(component == "getgpio"):
             return self.parsegpio(data)
         elif(component == "getioexp" or component == "getpwmSFP" or component == "getSFP" or component == "getQSFP"
-or component == "getpwmQSFP" or component == "getpwmoQSFP" or component == "getEBM"):
+or component == "getpwmQSFP" or component == "getpwmoQSFP" or component == "getEBM" or component == "getFMC"
+or component == "geteeprom"):
             return self.parseioexp(data)
         else:
             return ""
@@ -120,10 +121,13 @@ class ParseData(Parse):
         res = {}
         res["voltage"] = resar[1]
         return res
-    def parseGetClock(self,data):
-        resar = data.strip().split(":")
+    def parseGetClock(self,data,targ):
         res = {}
-        res["frequency"] = resar[1]
+        if targ == '8A34001 FMC2':
+            res["frequency"] = data.replace("\n","</br>")
+        else:
+            resar = data.strip().split(":")
+            res["frequency"] = resar[1]
         return res
     def parsegpio(self,data):
         resar = data.strip().split("(")

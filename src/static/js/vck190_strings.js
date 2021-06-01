@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2020, Xilinx Inc. and Contributors. All rights reserved.
+* Copyright (c) 2020 - 2021 Xilinx, Inc. and Contributors. All rights reserved.
 *
 * SPDX-License-Identifier: MIT
 */
@@ -82,6 +82,25 @@ var app_strings = {
 				"button_link":"https://www.xilinx.com/products/boards-and-kits/vck190.html",
 				"learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/748617729/Versal+AI+Core+Series+VCK190+Evaluation+Kit",
 			},
+			{
+                                "title":"ACAP Cockpit",
+                                "image":"../static/images/xilinx_banner.png",
+                                "text":"",
+                                "button_title":"Run",
+                                "button_link_type":1,
+                                "button_link": "launchacap",
+                                "learnmore_link":"",
+                        },
+			{
+                                "title":"Power Management Tool",
+                                "image":"../static/images/xilinx_banner.png",
+                                "text":"",
+                                "button_title":"Run",
+                                "button_link_type":1,
+                                "button_link": "launchpmtool",
+                                "learnmore_link":"",
+                        },
+
 		],
 
 	},

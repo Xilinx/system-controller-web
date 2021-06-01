@@ -1,5 +1,5 @@
 ##
-# Copyright (c) 2020, Xilinx Inc. and Contributors. All rights reserved.
+# Copyright (c) 2020 - 2021 Xilinx, Inc. and Contributors. All rights reserved.
 #
 # SPDX-License-Identifier: MIT
 ##
@@ -146,7 +146,7 @@ class CmdQuery(Resource):
                 response = Term.exec_cmd(cmd_gen)
             except Exception as d:
                 print(d)
-            result = parse.parse_cmd_resp(response, req);
+            result = parse.parse_cmd_resp(response, req, tar);
             if response.startswith("ERROR") or "ERROR" in response:
                 resp_json = {
                     "status":"error"
