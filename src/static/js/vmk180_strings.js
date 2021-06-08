@@ -83,7 +83,7 @@ var app_strings = {
 				"learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/973013034/Versal+Prime+Series+VMK180+Evaluation+Kit",
 			},
                         {
-                                "title":"Power Management Tool",
+                                "title":"Power Management Dashboard",
                                 "image":"../static/images/xilinx_banner.png",
                                 "text":"",
                                 "button_title":"Run",

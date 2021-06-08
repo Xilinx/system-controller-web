@@ -92,7 +92,7 @@ var app_strings = {
                                 "learnmore_link":"",
                         },
 			{
-                                "title":"Power Management Tool",
+                                "title":"Power Management Dashboard",
                                 "image":"../static/images/xilinx_banner.png",
                                 "text":"",
                                 "button_title":"Run",
