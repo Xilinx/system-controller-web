@@ -89,7 +89,7 @@ var app_strings = {
                                 "button_title":"Run",
                                 "button_link_type":1,
                                 "button_link": "launchacap",
-                                "learnmore_link":"",
+                                "learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1544192059/ACAP+Cockpit",
                         },
 			{
                                 "title":"Power Management Dashboard",
