@@ -98,7 +98,7 @@ var app_strings = {
                                 "button_title":"Run",
                                 "button_link_type":1,
                                 "button_link": "launchpmtool",
-                                "learnmore_link":"",
+                                "learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1887862954/Power+Management+Dashboard",
                         },
 
 		],
