@@ -156,6 +156,7 @@ var app_strings = {
                                 "content":["Logout from jupyter notebook before exiting. Failing doing so may show login screen for next notebook launch.",
 					"Run jupyter notebook command in linux prompt to use from Board Evaluation & Management Tool if \"no jupyter notebook is running\" error message is shown.",
 					"Jupyter notebook and BITs/SCUI tabs cannot be run at a time. Shut down any jupyter notebook kernels to use BIT or SCUI tabs components.",
+					"Run jupyter notebook command in system controller prompt to start jupyter notebook server if system controller is set with static ip and notebook web page is not launching from BEAM Tool.",
 				]
                         },
                 ],
