@@ -1,7 +1,3 @@
 # SystemController
-SystemController GUI Landing Page
-Development:
-  Adds Reset in home screen
-  Adds DDR DIMM tab in scui tab
-  Adds Voltage tab in scui tab
-  Alpha release
+The Board Evaluation & Management Tool (BEAM) is the main menu of the System Controller. It primarily serves as a launcher for demos and designs, running the board interface test and to set/change/read board parameters.
+The purpose of the Board Evaluation & Management Tool is to provide Versal users a much easier and far more intuitive experience with Xilinx Evaluation Board products. The goal is to help users get started faster and have all the available resources at one place for easy access.
