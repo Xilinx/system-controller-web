@@ -82,16 +82,24 @@ var app_strings = {
 				"button_link":"https://www.xilinx.com/products/boards-and-kits/vmk180.html",
 				"learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/973013034/Versal+Prime+Series+VMK180+Evaluation+Kit",
 			},
-                        /*{
+			{
+                                "title":"ACAP Cockpit",
+                                "image":"../static/images/xilinx_banner.png",
+                                "text":"",
+                                "button_title":"Run",
+                                "button_link_type":1,
+                                "button_link": "launchacap",
+                                "learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1544192059/ACAP+Cockpit",
+                        },
+			{
                                 "title":"Power Management Dashboard",
                                 "image":"../static/images/xilinx_banner.png",
                                 "text":"",
                                 "button_title":"Run",
                                 "button_link_type":1,
                                 "button_link": "launchpmtool",
-                                "learnmore_link":"",
-                        },*/
-
+                                "learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1887862954/Power+Management+Dashboard",
+                        },
 		],
 
 	},
