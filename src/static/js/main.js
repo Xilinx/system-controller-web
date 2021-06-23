@@ -100,7 +100,7 @@ function jnurllink(){
 }
 function launchacap(){
     
-    openInNewTab(getlocallink());
+    openInNewTab(getlocallinkwithport("49995"));
 
 }
 function launchpmtool(){
