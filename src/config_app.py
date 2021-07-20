@@ -10,7 +10,7 @@ app_config = {
     ,"major_version":"β"
     ,"minor_version" : "3"
     ,"dev_for_major_ver" : "β_3"
-    ,"dev_minor_ver" : "015"
+    ,"dev_minor_ver" : "016"
     ,"sc_app_path":"sc_app"
     ,"config_sc_list_cmds":["listpower","listclock","listvoltage","listgpio","listSFP","listpowerdomain","listQSFP","listFMC"]
     ,"config_bit_list_cmds":["listBIT"]
