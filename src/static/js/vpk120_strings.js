@@ -24,10 +24,10 @@ var app_strings = {
 			}
 		],
 		"center_pane":{
-			"image":"../static/images/VCK190_home.png",
+			"image":"../static/images/VPK120_home.png",
 			"text":"",
-			"button_title":"Visit Product Page",
-			"button_link":"https://www.xilinx.com/products/boards-and-kits/vpk120.html",
+			"button_title":"",
+			"button_link":"",
 		},
 	},
 	"test_board":{
@@ -35,22 +35,22 @@ var app_strings = {
 		"center_pane":{
 			"image":"../static/images/vpk120.jpg",
 			"text":"For more information regarding Hardware, Documentation, Tools & IP and Training & Support",
-			"button_title":"Visit Product Page",
-			"button_link":"https://www.xilinx.com/products/boards-and-kits/vpk120.html",
+			"button_title":"",
+			"button_link":"",
 		},
 		
 	},
 	"linuxprompt":{
 		"title":"Obtain Linux Prompt",
 		"pane":[
-			{
+			/*{
 				"title":"Instructions to obtain Linux prompt from Versal",
 				"image":"../static/images/xilinx_banner.png",
 				"text":"",
 				"button_title":"Download",
 				"button_link":"",
 				"learnmore_link":"https://xilinx.github.io/Embedded-Design-Tutorials/master/docs/index.html",
-			},
+			},*/
 		],
 
 	},
@@ -60,10 +60,10 @@ var app_strings = {
 			{
 				"title":"Petalinux BSP Designs",
 				"image":"../static/images/xilinx_banner.png",
-				"text":"",
-				"button_title":"Product Page",
-				"button_link":"https://www.xilinx.com/products/boards-and-kits/vpk120.html",
-				"learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/973013034/Versal+Premium+Series+VPK120+Evaluation+Kit",
+				"text":"Refer to VP120 EA Lounge",
+				"button_title":"",
+				"button_link":"",
+				"learnmore_link":"",
 			},
 			{
 				"title":"Versal Power Tool",
@@ -77,10 +77,10 @@ var app_strings = {
 			{
 				"title":"Target Reference Designs",
 				"image":"../static/images/xilinx_banner.png",
-				"text":"",
-				"button_title":"Product Page",
-				"button_link":"https://www.xilinx.com/products/boards-and-kits/vpk120.html",
-				"learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/973013034/Versal+Premium+Series+VPK120+Evaluation+Kit",
+				"text":"Refer to VP120 EA Lounge",
+				"button_title":"",
+				"button_link":"",
+				"learnmore_link":"",
 			},
 			/*{
                                 "title":"ACAP Cockpit",
