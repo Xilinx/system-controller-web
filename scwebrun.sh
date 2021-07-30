@@ -1,4 +1,9 @@
 #!/bin/sh
+##
+# Copyright (c) 2020 - 2021 Xilinx, Inc. and Contributors. All rights reserved.
+#
+# SPDX-License-Identifier: MIT
+##
 
 cd /usr/share/scweb/
 python3 systemcontroller.py >/dev/null 2>&1 &
