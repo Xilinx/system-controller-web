@@ -914,24 +914,32 @@ function addsfpTab(){
     boardsettingsTab.push(dict);
 
 }
+function isSupported(tabname){
+    if(listsjson_sc["listfeature"].indexOf(tabname) == -1){
+        return false;
+    }
+    return true;
+}
 function generateBoardSettingsTabJSON(){
 
-    addClockTab();
-    addVoltageTab();
-    addPowerTab();
+    console.log(isSupported("listvoltage"))
+
+    if(isSupported("listclock"))    addClockTab();
+    if(isSupported("listvoltage"))    addVoltageTab();
+    if(isSupported("listpower"))    addPowerTab();
 //    addPowerDomainTab();
-    addDDRDIMMTab();
-    addioexpTab();
-    addgpioTab();
-    if(listsjson_sc["listSFP"].length && listsjson_sc["listSFP"][0] != ""){
+    if(isSupported("listddr"))    addDDRDIMMTab();
+    if(isSupported("listioexp"))    addioexpTab();
+    if(isSupported("listgpio"))    addgpioTab();
+    if(isSupported("listSFP") && listsjson_sc["listSFP"].length && listsjson_sc["listSFP"][0] != ""){
         addsfpTab();
     }
-    if(listsjson_sc["listQSFP"].length && listsjson_sc["listQSFP"][0] != ""){
+    if(isSupported("listQSFP") && listsjson_sc["listQSFP"].length && listsjson_sc["listQSFP"][0] != ""){
         addqsfpTab();
     }
-    addEBMTab();
-    addVadjTab();
-    addEEPROMDataTab();
+    if(isSupported("listEBM"))    addEBMTab();
+    if(isSupported("listFMC"))    addVadjTab();
+    if(isSupported("listeeprom"))    addEEPROMDataTab();
 }
 
 

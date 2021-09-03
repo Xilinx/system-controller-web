@@ -21,6 +21,25 @@ case $key in
 Linux:          5.4.0 (Compatible)
 BSP:            v2020.1 (Compatible)"
     fi
+    if [ $2 == "listfeature" ]
+    then
+      echo "eeprom
+temp
+bootmode
+clock
+voltage
+power
+powerdomain
+BIT
+ddr
+gpio
+ioexp
+SFP
+QSFP
+EBM
+FMC
+      "
+    fi
     if [ $2 == "listvoltage" ]
     then
         echo "VCCINT

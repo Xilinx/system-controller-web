@@ -78,8 +78,17 @@ if __name__ == '__main__':
     p = ParseData()
     f.write(crstring()) 
     f.write("var listsjson_sc = {\n")
+    listfeature = p.parse_cmd_resp(Term.exec_cmd(sc_app_path+" -c listfeature\n"), "listfeature")
+    finStr = ""
+    for k in listfeature:
+        if len(finStr):
+            finStr = finStr + ","
+        finStr = finStr + '"list' + k + '"'
+    f.write('"listfeature":[' + finStr + "],\n");
+
     lisj = app_config["config_sc_list_cmds"]
-    for ind,ke in enumerate(lisj):
+    for ind,k in enumerate(listfeature):
+        ke = "list"+k
         if ind > 0:
             f.write(",\n")
         response = Term.exec_cmd(sc_app_path+" -c "+ke+"\n")
