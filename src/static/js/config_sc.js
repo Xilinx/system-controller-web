@@ -279,13 +279,13 @@ function addClockTab(){
             , "headcomponents" : headcompsset
 
             }
-            ,{
+            /*,{
             "subtype":"list"
             ,"name": "Set Boot Clock"
             ,"components": innCompssetboot
             , "headcomponents" : headcompssetboot
 
-            }
+            }*/
             ,{
             "subtype":"list"
             ,"name": "Restore Clock"
@@ -452,13 +452,13 @@ var hspc =
             , "headcomponents" : headcompsget
 
             },
-            {
+            /*{
             "subtype":"list"
             ,"name": "Boot-up"
             ,"components": innCompsboot
             , "headcomponents" : headcompsset
 
-            }
+            }*/
 
             ]
 
