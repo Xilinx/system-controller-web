@@ -112,11 +112,13 @@ if __name__ == '__main__':
     f.write("\n}")
     f.close()
     # check device
-    deviname = p.dashboard_eeprom(Term.exec_cmd(sc_app_path+" -c eeprom\n"))["device"].upper()
+    deviname = Term.exec_cmd("more "+app_config["board_file_path"])
     if ("VCK" in deviname):
         shutil.copyfile("./static/js/vck190_strings.js","./static/js/beam_strings.js")
     elif ("VMK" in deviname):
         shutil.copyfile("./static/js/vmk180_strings.js","./static/js/beam_strings.js")
+    elif ("VPK120" in deviname):
+        shutil.copyfile("./static/js/vpk120_strings.js","./static/js/beam_strings.js")
     else:
         shutil.copyfile("./static/js/vck190_strings.js","./static/js/beam_strings.js")
     

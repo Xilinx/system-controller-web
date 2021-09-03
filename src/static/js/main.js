@@ -886,7 +886,9 @@ function layoutDesigns(){
         em4.setAttribute("value", app_strings.home_tab.center_pane.button_title);
         em4.onclick = function (e){ openInNewTab(e.target.attributes.linkv.value);};
         em3.append(em4)
-        $("#railcolumn_com2").append(em3);
+        if(app_strings.home_tab.center_pane.button_link.length != 0){
+            $("#railcolumn_com2").append(em3);
+        }
    }
 /*	Help Screen */
    {
@@ -971,7 +973,9 @@ function layoutDesigns(){
         em4.setAttribute("value", app_strings.test_board.center_pane.button_title);
         em4.onclick = function (e){ openInNewTab(e.target.attributes.linkv.value);};
         em3.append(em4)
-        $("#testboard_home").append(em3);
+        if(app_strings.test_board.center_pane.button_title.length != 0){
+            $("#testboard_home").append(em3);
+        }
    }
 /*      Obtain Linux Prompts  */
    {

@@ -17,6 +17,7 @@ app_config = {
     ,"config_bm_list_cmds":["listbootmode"]
     ,"jnlocalrundir":"/.local/share/jupyter/runtime/"
     ,"8A34001_clk_files_path":"/usr/share/system-controller-app/BIT/clock_files/"
+    ,"board_file_path":"/home/root/.sc_app/board"
 
 }
 
