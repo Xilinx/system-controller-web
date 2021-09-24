@@ -531,7 +531,8 @@ IDCODE Check
 EFUSE Check
 X-EBM EEPROM Check
 DIMM EEPROM Check
-Check Voltages"
+Check Voltages
+PL UART Test - Manual Test"
     fi
         if [ $2 == "getpwmSFP" ]
     then

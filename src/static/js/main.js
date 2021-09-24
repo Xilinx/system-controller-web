@@ -516,6 +516,11 @@ function generateBITUI(){
         tdcomp.appendChild(em)
         trcomp.appendChild(tdcomp);
         tdcomp = document.createElement("td");
+        var man_test = false;
+        if(c.includes('- Manual Test')){
+                man_test = true;
+		c=c.replace(' - Manual Test','');
+	}
         em = document.createTextNode(c);
         tdcomp.appendChild(em);
         trcomp.appendChild(tdcomp);
@@ -535,6 +540,7 @@ function generateBITUI(){
         em.setAttribute("value", "Run");
         em.setAttribute("request",c["url"]);
         em.setAttribute("target_s",c);
+        em.setAttribute("test_type",man_test);
         tdcomp.appendChild(em)
         trcomp.appendChild(tdcomp);
 
@@ -610,23 +616,44 @@ function generateBITUI(){
 					success: function (res){
 						inprg.className="";
 						inprg.classList.add("progress_inprogress_bar");
-						if(res.status === 'success' && res.data.state.indexOf("PASS") >= 0){
-							cn.childNodes[0].innerHTML = res.data.message+restime();
-							cn.className = '';
-							cn.classList.add("ministatussuccess");
-							cn.classList.add("tooltip");
-							setTimeout(()=>{inprg.innerHTML = "Success";inprg.classList.add("inprogress_bar_state_success"); },10);
-						}
-						else{
-                                                        if(res.data.hasOwnProperty('message')){
-				    			    cn.childNodes[0].innerHTML = res.data.message.replace("\n","</br>")+restime();
-                                                        }else{
-				    			    cn.childNodes[0].innerHTML = res.data.replace("\n","</br>")+restime();
+						if(e.target.getAttribute("test_type") == "true"){
+    
+								var result = confirm(res.data.message+"\n\nIf you see above output, press \"Ok\". Otherwise, press \"Cancel\"");
+								if (result) {
+									cn.childNodes[0].innerHTML = res.data.message+restime();
+									cn.className = '';
+									cn.classList.add("ministatussuccess");
+									cn.classList.add("tooltip");
+									setTimeout(()=>{inprg.innerHTML = "Success";inprg.classList.add("inprogress_bar_state_success"); },10);
+								}else{
+
+									cn.childNodes[0].innerHTML = res.data.message+restime();
+									cn.className = '';
+									cn.classList.add("ministatusfail");
+									cn.classList.add("tooltip");
+									setTimeout(()=>{inprg.innerHTML = "Fail";inprg.classList.add("inprogress_bar_state_fail"); },10);
+
+								}
+						}				
+						else{		
+							if(res.status === 'success' && res.data.state.indexOf("PASS") >= 0){
+								cn.childNodes[0].innerHTML = res.data.message+restime();
+								cn.className = '';
+								cn.classList.add("ministatussuccess");
+								cn.classList.add("tooltip");
+								setTimeout(()=>{inprg.innerHTML = "Success";inprg.classList.add("inprogress_bar_state_success"); },10);
 							}
-							cn.className = '';
-							cn.classList.add("ministatusfail");
-							cn.classList.add("tooltip");
-							setTimeout(()=>{inprg.innerHTML = "Fail";inprg.classList.add("inprogress_bar_state_fail"); },10);
+							else{
+								if(res.data.hasOwnProperty('message')){
+								    cn.childNodes[0].innerHTML = res.data.message.replace("\n","</br>")+restime();
+								}else{
+								    cn.childNodes[0].innerHTML = res.data.replace("\n","</br>")+restime();
+								}
+								cn.className = '';
+								cn.classList.add("ministatusfail");
+								cn.classList.add("tooltip");
+								setTimeout(()=>{inprg.innerHTML = "Fail";inprg.classList.add("inprogress_bar_state_fail"); },10);
+							}
 						}
 					},
 					error: function(){
