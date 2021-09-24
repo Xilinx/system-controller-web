@@ -880,6 +880,7 @@ function generateBootModeblock(){
 }
 function navClick(tid){
     console.log(tid);
+    if (tid === "testtheboard") {if(listsjson_sc.listfeature.length == 1 && listsjson_sc.listfeature[0].length == 4){alert("This Feature is not supported.");return;}}
     hideAllPages();
     if (tid === "testtheboard") {$("#home_screen_db").removeClass('hide');}
     if (tid === "boardsettings") {$("#boardseettings_screen").removeClass('hide'); $("#ttbbackid").removeClass('hide');}
