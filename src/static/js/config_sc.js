@@ -698,12 +698,12 @@ function addioexpTab(){
             ,"B0": "Get"
             ,"B0A": "/cmdquery"
             ,"B0sc_cmd":"getioexp"
-            , "B0target": tds[1]
-            , "B0params":""
+            , "B0target": listsjson_sc.listioexp[0]
+            , "B0params":""+tds[1]
         };
         innCompsget.push(eachcomp);
     });
-     jQuery.each([["Direction","direction"],["Output","output"]] , function(i, tds){
+     jQuery.each([["Direction","direction","setdirioexp"],["Output","output","setoutioexp"]] , function(i, tds){
         var eachcomp = {
             "type":"list"
             ,"components" : ["C,L0,E0,B0"]    // Checkbox, Label, editfield, info, button, Action
@@ -712,8 +712,8 @@ function addioexpTab(){
             ,"E0K": "-"
             ,"B0": "Set"
             ,"B0A": "/cmdquery"
-            ,"B0sc_cmd":"setioexp"
-            , "B0target": tds[1]
+            ,"B0sc_cmd":""+tds[2]
+            , "B0target": listsjson_sc.listioexp[0]
             , "B0params":""
         };
         innCompsset.push(eachcomp);
@@ -725,7 +725,7 @@ function addioexpTab(){
             ,"B0": "Restore"
             ,"B0A": "/cmdquery"
             ,"B0sc_cmd":"restoreioexp"
-            , "B0target": ""
+            , "B0target": ""+listsjson_sc.listioexp[0]
             , "B0params":""
         };
         innCompsreset.push(eachcomp);
