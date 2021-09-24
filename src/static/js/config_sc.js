@@ -298,6 +298,9 @@ function addClockTab(){
 }
 function addVoltageTab(){
         var innCompsget = [];
+        var innCompsset = [];
+        var innCompsreset = [];
+        var innCompssetboot = [];
         jQuery.each(listsjson_sc["listvoltage"] , function(i, tds){
         var eachcomp = {
             "type":"list"
@@ -313,6 +316,43 @@ function addVoltageTab(){
             , "B0params":""
         };
         innCompsget.push(eachcomp);
+        var eachcomp = {
+            "type":"list"
+            ,"components" : ["C,L0,E0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"L0": tds
+            ,"E0": "value"
+            ,"E0K": "-V"
+            ,"B0": "Set"
+            ,"B0A": "/cmdquery"
+            ,"B0sc_cmd":"setvoltage"
+            , "B0target": tds
+            , "B0params":""
+        };
+        innCompsset.push(eachcomp);
+        var eachcomp = {
+            "type":"list"
+            ,"components" : ["C,L0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"L0": tds
+            ,"B0": "Restore"
+            ,"B0A": "/cmdquery"
+            ,"B0sc_cmd":"restorevoltage"
+            , "B0target": tds
+            , "B0params":""
+        };
+        innCompsreset.push(eachcomp);
+        var eachcomp = {
+            "type":"list"
+            ,"components" : ["C,L0,E0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"L0": tds
+            ,"E0": "value"
+            ,"E0K": "-V"
+            ,"B0": "Set"
+            ,"B0A": "/cmdquery"
+            ,"B0sc_cmd":"setbootvoltage"
+            , "B0target": tds
+            , "B0params":""
+        };
+        innCompssetboot.push(eachcomp);
     });
 
     var headcompsget = {
@@ -320,6 +360,24 @@ function addVoltageTab(){
             ,"L0": "Voltage Name"
             , "L1" : "Volts"
             , "B0" : "Get All"
+    };
+    var headcompsset = {
+            "headcomponents":["C,L0,L1,B0"]
+            ,"L0": "Voltage Name"
+            , "L1" : "Volts"
+            , "B0" : "Set All"
+    };
+    var headcompsreset = {
+            "headcomponents":["C,L0,B0"]
+            ,"L0": "Voltage Name"
+            , "L1" : "Volts"
+            , "B0" : "Restore All"
+    };
+    var headcompssetboot = {
+            "headcomponents":["C,L0,L1,B0"]
+            ,"L0": "Voltage Name"
+            , "L1" : "Volts"
+            , "B0" : "Set All"
     };
     var dict = {"tab": "Voltage"
     ,"subtype":"tab"
@@ -330,7 +388,28 @@ function addVoltageTab(){
             ,"components": innCompsget
             , "headcomponents" : headcompsget
 
+            }/*
+            ,{
+            "subtype":"list"
+            ,"name": "Set Voltage"
+            ,"components": innCompsset
+            , "headcomponents" : headcompsset
+
             }
+            ,{
+            "subtype":"list"
+            ,"name": "Restore Voltage"
+            ,"components": innCompsreset
+            , "headcomponents" : headcompsreset
+
+            }
+            ,{
+            "subtype":"list"
+            ,"name": "Set Boot Voltage"
+            ,"components": innCompssetboot
+            , "headcomponents" : headcompssetboot
+
+            }*/
             ]
             };
     boardsettingsTab.push(dict);
