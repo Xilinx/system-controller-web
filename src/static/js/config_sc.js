@@ -564,9 +564,9 @@ function addDDRDIMMTab(){
             ,"V0V": "info"
             ,"B0": "Get"
             ,"B0A": "/cmdquery"
-            ,"B0sc_cmd":"ddr"
-            , "B0target": "spd"
-            , "B0params":""
+            ,"B0sc_cmd":"getddr"
+            , "B0target": ""+listsjson_sc.listddr[0]
+            , "B0params":"spd"
         };
         innCompsget.push(eachcomp);
         eachcomp = {
@@ -578,9 +578,9 @@ function addDDRDIMMTab(){
             ,"V0V": "temp"
             ,"B0": "Get"
             ,"B0A": "/cmdquery"
-            ,"B0sc_cmd":"ddr"
-            , "B0target": "temp"
-            , "B0params":""
+            ,"B0sc_cmd":"getddr"
+            , "B0target": ""+listsjson_sc.listddr[0]
+            , "B0params":"temp"
         };
         innCompsget.push(eachcomp);
 

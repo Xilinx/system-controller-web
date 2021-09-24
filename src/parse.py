@@ -17,7 +17,7 @@ class Parse:
             return self.parseGetClock(data,targ)
         elif(component == "BIT"):
             return self.parseBit(data)
-        elif(component == "ddr"):
+        elif(component == "getddr"):
             return self.parseDDR(data)
         elif(component == "version"):
             return self.parseversion(data)

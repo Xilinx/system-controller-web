@@ -21,6 +21,10 @@ case $key in
 Linux:          5.4.0 (Compatible)
 BSP:            v2020.1 (Compatible)"
     fi
+    if [ $2 == "listddr" ]
+    then
+        echo "DIMM1"
+    fi
     if [ $2 == "listtemp" ]
     then
         echo "MDIO"
@@ -387,13 +391,16 @@ f0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
     then
         echo "ERROR: power domain operation is not supported"
     fi
-        if [ $2 == "ddr" ]
+        if [ $2 == "getddr" ]
     then
-	if [ $4 == "spd" ]
+	if [ $6 == "spd" ]
         then
-        echo "ERROR: ddr operation is not supported"
+        echo "DDR4 SDRAM?	Yes
+Size(Gb):	8
+Temp. Sensor?	Yes
+"
         fi
-	if [ $4 == "temp" ]
+	if [ $6 == "temp" ]
         then
         echo "Temperature(C): 32.44"
         fi
