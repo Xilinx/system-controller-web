@@ -21,6 +21,10 @@ case $key in
 Linux:          5.4.0 (Compatible)
 BSP:            v2020.1 (Compatible)"
     fi
+    if [ $2 == "listEBM" ]
+    then
+        echo "X-EBM"
+    fi
     if [ $2 == "listddr" ]
     then
         echo "DIMM1"
@@ -441,11 +445,27 @@ LPDDR4 Clk3 Si570
 
         if [ $2 == "getEBM" ]
         then
-        if [ $4 == "all" ]
+        if [ $6 == "all" ]
         then
-            echo "ERROR: no EBM target" 
+            echo "     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f 
+00: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+10: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+20: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+30: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+40: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+50: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+60: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+70: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+90: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+a0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+b0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+c0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+d0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+e0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+f0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff " 
         fi
-        if [ $4 == "common" ]
+        if [ $6 == "common" ]
         then
             echo "0x00 - Version: a
 0x01 - Internal User Area:  b
@@ -455,7 +475,7 @@ LPDDR4 Clk3 Si570
 0x05 - Multi Record Area:   ff
 0x06 - Pad, Check Sum:  ff ff"
         fi
-        if [ $4 == "board" ]
+        if [ $6 == "board" ]
         then
             echo "0x08 - Version: ff
 0x09 - Length:  ff
