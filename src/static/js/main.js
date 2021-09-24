@@ -770,6 +770,7 @@ function generateBootModeblock(){
 
     });
     $('#setbootmodebuttonid').click(function (e) {
+    document.getElementById("bootsetstatus").innerHTML = "";
     document.getElementById("setbootloaddivid").className = "";
     document.getElementById("setbootloaddivid").classList.add("ministatusloading");
 
@@ -782,25 +783,26 @@ function generateBootModeblock(){
 
 		document.getElementById("setbootloaddivid").className = "";
                 if (res.status === 'error'){
-		    document.getElementById("setbootloaddivid").classList.add("ministatusfail");
-			 document.getElementById("setbootloaddivid").classList.add("tooltip");
-		     document.getElementById("bootsetstatus").innerHTML = "Network Error";
+			document.getElementById("setbootloaddivid").classList.add("tooltip");
+			document.getElementById("bootsetstatus").innerHTML = res.data;
+		    	document.getElementById("setbootloaddivid").classList.add("ministatusfail");
                 }else{
-		    document.getElementById("setbootloaddivid").classList.add("ministatussuccess");
-			 document.getElementById("setbootloaddivid").classList.add("tooltip");
-		    document.getElementById("bootsetstatus").innerHTML = "success";
+			document.getElementById("setbootloaddivid").classList.add("tooltip");
+			document.getElementById("bootsetstatus").innerHTML = "Success";
+		   	document.getElementById("setbootloaddivid").classList.add("ministatussuccess");
                 }
 	},
         error: function(){
-		document.getElementById("setbootloaddivid").className = "";
-		document.getElementById("setbootloaddivid").classList.add("ministatusfail");
-		 document.getElementById("setbootloaddivid").classList.add("tooltip");
-		     document.getElementById("bootsetstatus").innerHTML = "Network Error";
+			document.getElementById("setbootloaddivid").className = "";
+			document.getElementById("setbootloaddivid").classList.add("ministatusfail");
+			document.getElementById("setbootloaddivid").classList.add("tooltip");
+			document.getElementById("bootsetstatus").innerHTML = "Network Error";
 	}
     });
     });
 
     $('#resetbootmodebuttonid').click(function (e) {
+    document.getElementById("bootresetstatus").innerHTML = "";
     document.getElementById("resetbootloaddivid").className = "";
     document.getElementById("resetbootloaddivid").classList.add("ministatusloading");
 
@@ -812,20 +814,20 @@ function generateBootModeblock(){
         success: function (res){
 		document.getElementById("resetbootloaddivid").className = "";
                 if (res.status === 'error'){
-		    document.getElementById("resetbootloaddivid").classList.add("ministatusfail");
-			 document.getElementById("resetbootloaddivid").classList.add("tooltip");
-		     document.getElementById("bootresetstatus").innerHTML = "Network Error";
+			document.getElementById("resetbootloaddivid").classList.add("tooltip");
+			document.getElementById("bootresetstatus").innerHTML = res.data;
+			document.getElementById("resetbootloaddivid").classList.add("ministatusfail");
                 }else{
-		    document.getElementById("resetbootloaddivid").classList.add("ministatussuccess");
-			 document.getElementById("resetbootloaddivid").classList.add("tooltip");
-		     document.getElementById("bootresetstatus").innerHTML = "success";
+			document.getElementById("resetbootloaddivid").classList.add("tooltip");
+			document.getElementById("bootresetstatus").innerHTML = "Success";
+			document.getElementById("resetbootloaddivid").classList.add("ministatussuccess");
                 }
 	},
         error: function(){
-		document.getElementById("resetbootloaddivid").className = "";
-		document.getElementById("resetbootloaddivid").classList.add("ministatusfail");
-		 document.getElementById("resetbootloaddivid").classList.add("tooltip");
-		     document.getElementById("bootresetstatus").innerHTML = "Network Error";
+			document.getElementById("resetbootloaddivid").className = "";
+			document.getElementById("resetbootloaddivid").classList.add("ministatusfail");
+			document.getElementById("resetbootloaddivid").classList.add("tooltip");
+			document.getElementById("bootresetstatus").innerHTML = "Network Error";
 	}
     });
     });

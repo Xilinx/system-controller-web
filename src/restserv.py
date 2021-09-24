@@ -25,7 +25,18 @@ class BootMode:
     def setBootMode(mode):
         BootMode.active_bootmode = mode
         SysFactory.exec_cmd(sc_app_path +" -c setbootmode -t "+mode,SysFactory.TERMINAL)            
-        SysFactory.exec_cmd(sc_app_path +" -c reset",SysFactory.TERMINAL)            
+        res = SysFactory.exec_cmd(sc_app_path +" -c reset",SysFactory.TERMINAL)           
+        if res.startswith("ERROR") or "ERROR" in res:
+            resp_json = {
+                "status":"error"
+                ,"data":res
+            }
+        else :
+            resp_json = {
+                "status":"success"
+                ,"data":res
+            } 
+        return resp_json
 class ReqFunctions:
     global sc_app_path
     @staticmethod
@@ -51,8 +62,8 @@ class ReqFunctions:
             }
             return resp_json,500
     def bootmode_set(mode):
-        BootMode.setBootMode(mode);
-        return {"status":"success","data":""},200
+        res = BootMode.setBootMode(mode);
+        return res,200
     def jnlink():
         jnu = jnurl()
         return {"status":"success","data":jnu},200

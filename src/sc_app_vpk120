@@ -66,6 +66,11 @@ UTIL_2V5
 VCC1V2_DDR4
 VCC1V1_LP4"
     fi
+    if [ $2 == "reset" ]
+    then 
+        echo "
+"
+    fi
     if [ $2 == "listgpio" ]
     then 
         echo "ERROR: gpio operation is not supported"
