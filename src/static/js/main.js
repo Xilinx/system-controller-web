@@ -22,7 +22,7 @@ function loadRefreshData(){
     $.ajax({
             url: "/funcreq",
             type: 'GET',
-            data:{"func":"poll","params":""},
+            data:{"func":"poll","params":""+listsjson_sc.listtemp},
             dataType: 'json',
             success: function (res){
                 var el = document.getElementById("home_board_temp_id");
@@ -33,6 +33,7 @@ function loadRefreshData(){
                 if(res.data.temp < 70) el.style.setProperty("--showc","green");
                 else if(res.data.temp < 90) el.style.setProperty("--showc","orange");
                 else el.style.setProperty("--showc","red");
+                if(tval == '-'){el.style.setProperty("--showc","gray");}
                 document.getElementById("home_board_temp_id").innerHTML = res.data.temp +" °C";
                 document.getElementById("active_bootmode").innerHTML = "Active:<b>"+res.data.active_bootmode+"</b>"
  		pollresp = true;

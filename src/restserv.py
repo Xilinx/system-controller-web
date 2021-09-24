@@ -29,11 +29,14 @@ class BootMode:
 class ReqFunctions:
     global sc_app_path
     @staticmethod
-    def polls():
+    def polls(params):
+        gtemp_targ = ""
+        if len(params) > 0:
+            gtemp_targ = params[0]
         try:
             result = ""
             if checkJNK() == 0:
-                response = Term.exec_cmd(sc_app_path+" -c temperature")
+                response = Term.exec_cmd(sc_app_path+" -c gettemp -t "+gtemp_targ)
                 result = parse.temperature(response)
             result["active_bootmode"] = BootMode.getActiveBootMode()
             resp_json = {
@@ -62,7 +65,8 @@ class FuncReq(Resource):
         params = params_req.split(",")
         
         if req.startswith('poll'):
-            return ReqFunctions.polls()
+            
+            return ReqFunctions.polls(params)
         if req.startswith('jnlink'):
             return ReqFunctions.jnlink()
         if req.startswith('setbootmode'):
@@ -89,7 +93,7 @@ class Poll(Resource):
                     ,"data": {"error":"Notebook kernel is running. Please stop running kernel."}
                 }                       
                 return resp_json,200
-            response = Term.exec_cmd(sc_app_path+" -c temperature")
+            response = Term.exec_cmd(sc_app_path+" -c gettemp -t MDIO")
             result = parse.temperature(response)
             result["active_bootmode"] = "jtag"
             resp_json = {

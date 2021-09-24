@@ -21,6 +21,11 @@ case $key in
 Linux:          5.4.0 (Compatible)
 BSP:            v2020.1 (Compatible)"
     fi
+    if [ $2 == "listtemp" ]
+    then
+        echo "MDIO"
+    fi
+
     if [ $2 == "listfeature" ]
     then
       echo "eeprom
@@ -333,9 +338,9 @@ f0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 
 
 
-        if [ $2 == "temperature" ]
+        if [ $2 == "gettemp" ]
         then
-        echo "ERROR: temperature operation is not supported"
+        echo "Temperature(C):	46.0"
     fi
         if [ $2 == "getioexp" ]
     then
