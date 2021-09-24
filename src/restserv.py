@@ -161,7 +161,7 @@ class CmdQuery(Resource):
                 response = Term.exec_cmd(cmd_gen)
             except Exception as d:
                 print(d)
-            result = parse.parse_cmd_resp(response, req, tar);
+            result = parse.parse_cmd_resp(response, req, tar, params);
             if response.startswith("ERROR") or "ERROR" in response:
                 resp_json = {
                     "status":"error"

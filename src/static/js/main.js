@@ -45,9 +45,12 @@ function loadRefreshData(){
     });
 }
 function filleepromdetails(){
+    targ = ""
+    if("listeeprom" in listsjson_sc && listsjson_sc.listeeprom.length > 0) targ = listsjson_sc.listeeprom[0];
     $.ajax({
-            url: "/eeprom_details",
+            url: "/cmdquery",
             type: 'GET',
+            data:{"sc_cmd":"geteeprom", "target":""+targ, "params":"summary"},
             dataType: 'json',
             success: function (res){
                 document.getElementById("db_details_Device").innerHTML = "Device : " + "<b>"+res.data.device+ "</b>"

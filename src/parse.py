@@ -6,7 +6,7 @@
 from config_app import *
 
 class Parse:
-    def parse_cmd_resp(self, data, component,targ=""):
+    def parse_cmd_resp(self, data, component,targ="",params = ""):
         if(component == "getpower"):
             return self.parseGetPower(data)
         elif(component.startswith("list")):
@@ -23,6 +23,8 @@ class Parse:
             return self.parseversion(data)
         elif(component == "getgpio"):
             return self.parsegpio(data)
+        elif(component == "geteeprom" and 'summary' in params):
+            return self.dashboard_eeprom(data)
         elif(component == "getioexp" or component == "getpwmSFP" or component == "getSFP" or component == "getQSFP"
 or component == "getpwmQSFP" or component == "getpwmoQSFP" or component == "getEBM" or component == "getFMC"
 or component == "geteeprom"):

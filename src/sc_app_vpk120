@@ -140,6 +140,19 @@ d0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
 e0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
 f0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff"
     fi
+    if [ $4 == "summary" ]
+    then
+    echo "Language: 20
+Silicon Revision: ES1
+Manufacturing Date: Mon Nov 16 16:21:00 1998
+Manufacturer:  Xilinx
+Product Name: 23456789:;<=>?@ABCDEFGHI
+Board Serial Number: 
+Board Part Number: 5Hc
+Board Revision: 
+MAC Address 0: ff:ff:ff:ff:ff:ff
+MAC Address 1: ff:ff:ff:ff:ff:ff"
+    fi
     if [ $4 == "common" ]
     then
     echo "0x00 - Version: 01
