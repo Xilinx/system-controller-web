@@ -617,8 +617,8 @@ function addEEPROMDataTab(){
             ,"B0": "Get"
             ,"B0A": "/cmdquery"
             ,"B0sc_cmd":"geteeprom"
-            , "B0target": tds[1]
-            , "B0params":""
+            , "B0target": listsjson_sc.listeeprom[0]
+            , "B0params":""+tds[1]
         };
         innCompsget.push(eachcomp);
     });
