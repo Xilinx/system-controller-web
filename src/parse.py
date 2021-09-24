@@ -11,7 +11,7 @@ class Parse:
             return self.parseGetPower(data)
         elif(component.startswith("list")):
             return self.parseList(data)
-        elif(component == "getvoltage" or component == "powerdomain"):
+        elif((component == "getvoltage" or component == "powerdomain") and ("all" not in params)):
             return self.parseGetVoltage(data)
         elif(component == "getclock"):
             return self.parseGetClock(data,targ)
@@ -27,7 +27,7 @@ class Parse:
             return self.dashboard_eeprom(data)
         elif(component == "getioexp" or component == "getpwmSFP" or component == "getSFP" or component == "getQSFP"
 or component == "getpwmQSFP" or component == "getpwmoQSFP" or component == "getEBM" or component == "getFMC"
-or component == "geteeprom"):
+or component == "geteeprom" or component == "getvoltage"):
             return self.parseioexp(data)
         else:
             return ""

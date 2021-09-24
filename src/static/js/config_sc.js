@@ -430,6 +430,20 @@ function addVadjTab(){
             , "B0params":""
         };
         innCompsget.push(getv);
+        var getv2 = {
+            "type":"list"
+            ,"components" : ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"L0": "Get VADJ_FMC All"
+            ,"V0": "- V"
+            ,"V0N": "V"
+            ,"V0V": "io"
+            ,"B0": "Get"
+            ,"B0A": "/cmdquery"
+            ,"B0sc_cmd":"getvoltage"
+            , "B0target": "VADJ_FMC"
+            , "B0params":"all"
+        };
+        innCompsget.push(getv2);
 
      var setv = {
             "type":"list" 
