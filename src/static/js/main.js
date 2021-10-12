@@ -500,7 +500,76 @@ function generateBoardSettingsUI(){
 
     });
 }
+function displaypopup(title, message){
+//    document.getElementById("popform").innerHTML = "";
+    var bodycomp = document.createElement("div");
+    bodycomp.classList.add("popup-content");
 
+    var headcomp = document.createElement("div");
+    headcomp.classList.add("popup-header");
+    bodycomp.append(headcomp);
+    var heading = document.createElement("h2");
+    heading.setAttribute("style","text-align: center;");
+    heading.setAttribute("popupid","1");
+    heading.setAttribute("id","popupheadingid");
+    heading.innerHTML = title;
+    headcomp.append(heading);
+
+    var tablecomp = document.createElement("table");
+    tablecomp.classList.add("boardsettings_table");
+
+    var tbodycomp = document.createElement("tbody");
+    tbodycomp.classList.add("table_body");
+    tbodycomp.setAttribute("id", "popuptbody");
+    var trcomp = document.createElement("tr");
+    var tdcomp = document.createElement("td");
+    trcomp.appendChild(tdcomp);
+    var em0 = document.createTextNode(message);
+    tdcomp.appendChild(em0);
+        tbodycomp.appendChild(trcomp);
+    tablecomp.appendChild(tbodycomp);
+    bodycomp.appendChild(tablecomp);
+
+    // cancel and apply button.
+    var d = document.createElement("div");
+    d.classList.add("popup-footer");
+    heading = document.createElement("a");
+    heading.setAttribute("id", "popupErrorMsg");
+    heading.setAttribute("class", "popuperrormsg");
+    var sp = document.createElement("span");
+
+    var em = document.createElement("input");
+    em.setAttribute("type", "button");
+    em.setAttribute("value", "Fail");
+    em.classList.add("popupbuttons");
+    em.onclick = function(e){
+       e.target.parentNode.parentNode.parentNode.remove();
+       if (document.getElementById("popform").innerHTML.length == 0){
+	   document.getElementById("popform").style.display = "none";
+       }
+    };
+    sp.appendChild(em)
+    em = document.createElement("input");
+    em.setAttribute("type", "button");
+    em.setAttribute("value", "Pass");
+    em.onclick = function(e){
+       e.target.parentNode.parentNode.parentNode.remove();
+       if (document.getElementById("popform").innerHTML.length == 0){
+	   document.getElementById("popform").style.display = "none";
+       }
+    };
+    em.classList.add("popupbuttons");
+    sp.appendChild(em)
+    d.append(sp);
+    d.append(heading);
+
+    bodycomp.append(d);
+    $("#popform").append(bodycomp);
+    b = document.getElementById("popform")
+    b.style.display = "block";
+    document.getElementById("apiloadingdiv").style.display = "none";
+
+}
 function manualTest(e,cn,inprg,count){
      $.ajax({
 	url: "/cmdquery",
@@ -511,7 +580,7 @@ function manualTest(e,cn,inprg,count){
 		if(parseInt(e.target.getAttribute("test_type")) > 0){
 
 				if (res.status === 'success' && res.data.state.indexOf("PASS") >= 0) {
-					var result = confirm(res.data.message+"\n\nIf you see above output, press \"Ok\". Otherwise, press \"Cancel\"");
+					var result = confirm(res.data.message+"");
                                         if(result){
                                         if(count != parseInt(e.target.getAttribute("test_type"))){
 						manualTest(e,cn,inprg,count+1);
