@@ -53,6 +53,9 @@ function filleepromdetails(){
             data:{"sc_cmd":"geteeprom", "target":""+targ, "params":"summary"},
             dataType: 'json',
             success: function (res){
+                if(res.status == "error" ){
+			return;
+		}
                 document.getElementById("db_details_Device").innerHTML = "Device : " + "<b>"+res.data.device+ "</b>"
                 document.getElementById("db_details_silrev").innerHTML = "Silicon Rev : " + "<b>"+res.data.sil_rev+ "</b>"
                 document.getElementById("db_details_boardpn").innerHTML = "Board P/N : " + "<b>"+res.data.board_pn+ "</b>"
@@ -797,7 +800,7 @@ function generateBootModeblock(){
     smload4.append(resetmode);
     $('#bootmodeselctOption').change(function (e) {
 		document.getElementById("setbootloaddivid").className = "";
-
+		document.getElementById("bootsetstatus").innerHTML = "";
     });
     $('#setbootmodebuttonid').click(function (e) {
     document.getElementById("bootsetstatus").innerHTML = "";
