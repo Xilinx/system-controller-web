@@ -1030,7 +1030,9 @@ function generateBoardSettingsTabJSON(){
     if(isSupported("listQSFP") && listsjson_sc["listQSFP"].length && listsjson_sc["listQSFP"][0] != ""){
         addqsfpTab();
     }
-    if(isSupported("listEBM"))    addEBMTab();
+    if(isSupported("listEBM") && listsjson_sc["listEBM"].length && listsjson_sc["listEBM"][0] != ""){
+    	addEBMTab();
+    }
     if(isSupported("listFMC"))    addVadjTab();
     if(isSupported("listeeprom"))    addEEPROMDataTab();
 }
