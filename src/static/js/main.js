@@ -500,6 +500,70 @@ function generateBoardSettingsUI(){
 
     });
 }
+
+function manualTest(e,cn,inprg,count){
+     $.ajax({
+	url: "/cmdquery",
+	type: 'GET',
+	dataType: 'json',
+	data:{"sc_cmd":"BIT", "target": e.target.getAttribute("target_s"), "params":""+count },
+	success: function (res){
+		if(parseInt(e.target.getAttribute("test_type")) > 0){
+
+				if (res.status === 'success' && res.data.state.indexOf("PASS") >= 0) {
+					var result = confirm(res.data.message+"\n\nIf you see above output, press \"Ok\". Otherwise, press \"Cancel\"");
+                                        if(result){
+                                        if(count != parseInt(e.target.getAttribute("test_type"))){
+						manualTest(e,cn,inprg,count+1);
+					}else{ 
+					inprg.className="";
+					inprg.classList.add("progress_inprogress_bar");
+					cn.childNodes[0].innerHTML = res.data.message+restime();
+					cn.className = '';
+					cn.classList.add("ministatussuccess");
+					cn.classList.add("tooltip");
+					setTimeout(()=>{inprg.innerHTML = "Success";inprg.classList.add("inprogress_bar_state_success"); },10);
+                                        }
+                                        }else{
+					inprg.className="";
+					inprg.classList.add("progress_inprogress_bar");
+
+					cn.childNodes[0].innerHTML = res.data.message+restime();
+					cn.className = '';
+					cn.classList.add("ministatusfail");
+					cn.classList.add("tooltip");
+					setTimeout(()=>{inprg.innerHTML = "Fail";inprg.classList.add("inprogress_bar_state_fail"); },10);
+
+                                        }
+				}else{
+					inprg.className="";
+					inprg.classList.add("progress_inprogress_bar");
+
+					cn.childNodes[0].innerHTML = res.data+restime();
+					cn.className = '';
+					cn.classList.add("ministatusfail");
+					cn.classList.add("tooltip");
+					setTimeout(()=>{inprg.innerHTML = "Fail";inprg.classList.add("inprogress_bar_state_fail"); },10);
+
+				}
+		}
+          },
+	  error: function(){
+		inprg.className="";
+		inprg.classList.add("progress_inprogress_bar");
+		cn.childNodes[0].innerHTML = 'Network Issue'+restime();
+		cn.className = '';
+		cn.classList.add("ministatusfail");
+		cn.classList.add("tooltip");
+		inprg.className="";
+		inprg.classList.add("progress_inprogress_bar");
+		setTimeout(()=>{inprg.innerHTML = "Fail";inprg.classList.add("inprogress_bar_state_fail"); },10);
+          } 
+         
+     });				
+
+}
+
 function restime(){
     return "";//"</br>"+(new Date()).toLocaleTimeString();
 }
@@ -519,10 +583,10 @@ function generateBITUI(){
         tdcomp.appendChild(em)
         trcomp.appendChild(tdcomp);
         tdcomp = document.createElement("td");
-        var man_test = false;
+        var man_test = 0;
         if(c.includes('- Manual Test')){
-                man_test = true;
-		c=c.replace(' - Manual Test','');
+                man_test = c.split(')')[0].split('(')[1]
+		c=c.split(' - Manual Test')[0];
 	}
         em = document.createTextNode(c);
         tdcomp.appendChild(em);
@@ -610,7 +674,9 @@ function generateBITUI(){
 				cn.className = '';
 				cn.classList.add("ministatusloading");
 				cn.childNodes[0].innerHTML = "";
-
+				if(parseInt(e.target.getAttribute("test_type")) > 0){
+					manualTest(e,cn,inprg,1);
+				}else{
 				     $.ajax({
 					url: "/cmdquery",
 					type: 'GET',
@@ -669,7 +735,7 @@ function generateBITUI(){
 						setTimeout(()=>{inprg.innerHTML = "Fail";inprg.classList.add("inprogress_bar_state_fail"); },10);
 					}
 				    });
-
+				}
 
                                // });
                             //}

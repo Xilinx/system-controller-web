@@ -55,7 +55,7 @@ SFP
 QSFP
 EBM
 FMC
-      "
+"
     fi
     if [ $2 == "listvoltage" ]
     then
@@ -532,7 +532,10 @@ EFUSE Check
 X-EBM EEPROM Check
 DIMM EEPROM Check
 Check Voltages
-PL UART Test - Manual Test"
+RTC Clock Test - Manual Test(1) 
+PL UART Test - Manual Test(1)
+Program QSPI - Manual Test(1)
+QSPI Test - Manual Test(7)"
     fi
         if [ $2 == "getpwmSFP" ]
     then
