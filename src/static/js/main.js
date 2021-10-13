@@ -500,7 +500,7 @@ function generateBoardSettingsUI(){
 
     });
 }
-function displaypopup(title, message){
+function displaypopup(title, message,res,e,cn,inprg,count){
 //    document.getElementById("popform").innerHTML = "";
     var bodycomp = document.createElement("div");
     bodycomp.classList.add("popup-content");
@@ -512,21 +512,22 @@ function displaypopup(title, message){
     heading.setAttribute("style","text-align: center;");
     heading.setAttribute("popupid","1");
     heading.setAttribute("id","popupheadingid");
-    heading.innerHTML = title;
+    heading.innerHTML = e.target.getAttribute("target_s");
     headcomp.append(heading);
 
     var tablecomp = document.createElement("table");
     tablecomp.classList.add("boardsettings_table");
 
     var tbodycomp = document.createElement("tbody");
-    tbodycomp.classList.add("table_body");
+    tbodycomp.classList.add("table_body_pop");
     tbodycomp.setAttribute("id", "popuptbody");
     var trcomp = document.createElement("tr");
     var tdcomp = document.createElement("td");
     trcomp.appendChild(tdcomp);
-    var em0 = document.createTextNode(message);
-    tdcomp.appendChild(em0);
-        tbodycomp.appendChild(trcomp);
+    //var em0 = document.createTextNode(res.data.message.replaceAll('\n',br));
+    //tdcomp.appendChild(em0);
+    tdcomp.innerHTML = res.data.message.replaceAll('\n','<br>');
+    tbodycomp.appendChild(trcomp);
     tablecomp.appendChild(tbodycomp);
     bodycomp.appendChild(tablecomp);
 
@@ -542,21 +543,23 @@ function displaypopup(title, message){
     em.setAttribute("type", "button");
     em.setAttribute("value", "Fail");
     em.classList.add("popupbuttons");
-    em.onclick = function(e){
-       e.target.parentNode.parentNode.parentNode.remove();
+    em.onclick = function(ev){
+       ev.target.parentNode.parentNode.parentNode.remove();
        if (document.getElementById("popform").innerHTML.length == 0){
 	   document.getElementById("popform").style.display = "none";
        }
+       manualtestresult(false,res,e,cn,inprg,count);
     };
     sp.appendChild(em)
     em = document.createElement("input");
     em.setAttribute("type", "button");
     em.setAttribute("value", "Pass");
-    em.onclick = function(e){
-       e.target.parentNode.parentNode.parentNode.remove();
+    em.onclick = function(ev){
+       ev.target.parentNode.parentNode.parentNode.remove();
        if (document.getElementById("popform").innerHTML.length == 0){
 	   document.getElementById("popform").style.display = "none";
        }
+       manualtestresult(true,res,e,cn,inprg,count);
     };
     em.classList.add("popupbuttons");
     sp.appendChild(em)
@@ -568,19 +571,9 @@ function displaypopup(title, message){
     b = document.getElementById("popform")
     b.style.display = "block";
     document.getElementById("apiloadingdiv").style.display = "none";
-
+    
 }
-function manualTest(e,cn,inprg,count){
-     $.ajax({
-	url: "/cmdquery",
-	type: 'GET',
-	dataType: 'json',
-	data:{"sc_cmd":"BIT", "target": e.target.getAttribute("target_s"), "params":""+count },
-	success: function (res){
-		if(parseInt(e.target.getAttribute("test_type")) > 0){
-
-				if (res.status === 'success' && res.data.state.indexOf("PASS") >= 0) {
-					var result = confirm(res.data.message+"");
+function manualtestresult(result,res, e,cn,inprg,count){
                                         if(result){
                                         if(count != parseInt(e.target.getAttribute("test_type"))){
 						manualTest(e,cn,inprg,count+1);
@@ -593,6 +586,7 @@ function manualTest(e,cn,inprg,count){
 					cn.classList.add("tooltip");
 					setTimeout(()=>{inprg.innerHTML = "Success";inprg.classList.add("inprogress_bar_state_success"); },10);
                                         }
+
                                         }else{
 					inprg.className="";
 					inprg.classList.add("progress_inprogress_bar");
@@ -604,18 +598,37 @@ function manualTest(e,cn,inprg,count){
 					setTimeout(()=>{inprg.innerHTML = "Fail";inprg.classList.add("inprogress_bar_state_fail"); },10);
 
                                         }
+}
+function manTestResAnalysis(res,e,cn,inprg,count){
+		if(parseInt(e.target.getAttribute("test_type")) > 0){
+
+				if (res.status === 'success' && res.data.state.indexOf("PASS") >= 0) {
+					var result = displaypopup(res.data.message+"","",res,e,cn,inprg,count);
 				}else{
 					inprg.className="";
 					inprg.classList.add("progress_inprogress_bar");
-
-					cn.childNodes[0].innerHTML = res.data+restime();
+                                        var val = res.data;
+                                        if(res.data.message !== undefined) val = res.data.message;
+					cn.childNodes[0].innerHTML = val+restime();
 					cn.className = '';
 					cn.classList.add("ministatusfail");
 					cn.classList.add("tooltip");
 					setTimeout(()=>{inprg.innerHTML = "Fail";inprg.classList.add("inprogress_bar_state_fail"); },10);
 
 				}
-		}
+                  }
+		
+}
+function manualTest(e,cn,inprg,count){
+     $.ajax({
+	url: "/cmdquery",
+	type: 'GET',
+	dataType: 'json',
+	data:{"sc_cmd":"BIT", "target": e.target.getAttribute("target_s"), "params":""+count },
+	success: function (res){
+                if(res) {
+			manTestResAnalysis(res,e,cn,inprg,count)
+ 		}
           },
 	  error: function(){
 		inprg.className="";
@@ -1331,6 +1344,7 @@ function layoutDesigns(){
 
 }
 $(document).ready(function () {
+    
     layoutDesigns();
     generateBoardSettingsTabJSON();
     generateBoardSettingsUI();
