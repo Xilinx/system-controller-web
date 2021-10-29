@@ -88,6 +88,29 @@ function addPowerTab(){
         };
         innComps.push(eachcomp);
     });
+        var innCompscus = [];
+        jQuery.each(listsjson_sc["listpower"] , function(i, tds){
+        var eachcomp = {
+            "type":"list"
+            ,"components" : ["C,L0,V0,V1,V2,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"L0": tds
+            ,"V0": "- W"
+            ,"V0N": "W"
+            ,"V0V": "power"
+            ,"V1" : "- V"
+            ,"V1N": "V"
+            ,"V1V": "voltage"
+            ,"V2": "- A"
+            ,"V2N": "A"
+            ,"V2V": "current"
+            ,"B0": "Get"
+            ,"B0A": "/cmdquery"
+            ,"B0sc_cmd":"getcalpower"
+            , "B0target": tds
+            , "B0params":""
+        };
+        innCompscus.push(eachcomp);
+    });
 var headcomps = {
             "headcomponents":["C,L0,L1,L2,L3,B0"]
             ,"L0": "Rail Name"
@@ -108,13 +131,12 @@ var headcomps = {
 
             }
             // Power :: get "use custom configuration"
-//            ,{
-//            "subtype":"list",
-//            "name": "Use Custom Calibration",
-//            "components": [
-//
-//            ]
-//            }
+            ,{
+            "subtype":"list",
+            "name": "Use Custom Calibration",
+            "components": innCompscus
+           ,"headcomponents":headcomps
+            }
             ]
             };
     boardsettingsTab.push(dict);

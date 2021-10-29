@@ -417,6 +417,12 @@ Temp. Sensor?	Yes
         echo "Temperature(C): 32.44"
         fi
     fi
+        if [ $2 == "getcalpower" ]
+    then
+        echo "Voltage(V):     0.7950
+Current(A):     0.0410
+Power(W):       0.0326"
+    fi
         if [ $2 == "getpower" ]
     then
         echo "Voltage(V):     0.7950

@@ -7,7 +7,7 @@ from config_app import *
 
 class Parse:
     def parse_cmd_resp(self, data, component,targ="",params = ""):
-        if(component == "getpower"):
+        if(component == "getpower" or component == "getcalpower"):
             return self.parseGetPower(data)
         elif(component.startswith("list")):
             return self.parseList(data)
