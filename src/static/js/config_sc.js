@@ -205,7 +205,9 @@ var headcompsgetina = {
 
 function addClockTab(){
         var innCompsget = [];
-        jQuery.each(listsjson_sc["listclock"] , function(i, tds){
+        jQuery.each(listsjson_sc["listclock"] , function(i, tds1){
+        tdsary = tds1.split(" - (");
+        tds = tdsary[0];
         if(tds.localeCompare("8A34001 FMC2") == 0) {
         var eachcomp = {
             "type":"list"
@@ -240,12 +242,17 @@ function addClockTab(){
         }
     });
      var innCompsset = [];
-        jQuery.each(listsjson_sc["listclock"] , function(i, tds){
+        jQuery.each(listsjson_sc["listclock"] , function(i, tds1){
+        tdsary = tds1.split(" - (");
+        tds = tdsary[0];
+        tds2 = "-";
+        if(tdsary.length > 1) tds2 = "("+tdsary[1];
         if(tds.localeCompare("8A34001 FMC2") == 0) {
         var eachcomp = {
             "type":"list"
-            ,"components" : ["C,L0,F0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"components" : ["C,L0,L1,F0,B0"]    // Checkbox, Label, editfield, info, button, Action
             ,"L0": tds
+            ,"L1":"-"
             ,"F0": "value"
             ,"F0N": ""
             ,"F0V": [listsjson_sc["8A34001_clk_tcs_files"],listsjson_sc["8A34001_clk_txt_files"]]
@@ -260,8 +267,9 @@ function addClockTab(){
         }else{
         var eachcomp = {
             "type":"list"
-            ,"components" : ["C,L0,E0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"components" : ["C,L0,L1,E0,B0"]    // Checkbox, Label, editfield, info, button, Action
             ,"L0": tds
+	    ,"L1": tds2
             ,"E0": "value"
             ,"E0K": "-v"
             ,"B0": "Set"
@@ -274,12 +282,17 @@ function addClockTab(){
         }
     });
      var innCompssetboot = [];
-        jQuery.each(listsjson_sc["listclock"] , function(i, tds){
+        jQuery.each(listsjson_sc["listclock"] , function(i, tds1){
+        tdsary = tds1.split(" - (");
+        tds = tdsary[0];
+        tds2 = "-";
+        if(tdsary.length > 1) tds2 = "("+tdsary[1];
         if(tds.localeCompare("8A34001 FMC2") == 0) {
         var eachcomp = {
             "type":"list"
-            ,"components" : ["C,L0,F0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"components" : ["C,L0,L2,F0,B0"]    // Checkbox, Label, editfield, info, button, Action
             ,"L0": tds
+            ,"L1": "-"
             ,"F0": "value"
             ,"F0N": ""
             ,"F0V": [listsjson_sc["8A34001_clk_tcs_files"],listsjson_sc["8A34001_clk_txt_files"]]
@@ -294,8 +307,9 @@ function addClockTab(){
         }else{
         var eachcomp = {
             "type":"list"
-            ,"components" : ["C,L0,E0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"components" : ["C,L0,L1,E0,B0"]    // Checkbox, Label, editfield, info, button, Action
             ,"L0": tds
+            ,"L1": tds2
             ,"E0": "value"
             ,"E0K": "-v"
             ,"B0": "Set"
@@ -309,7 +323,9 @@ function addClockTab(){
     });
 
      var innCompsreset = [];
-        jQuery.each(listsjson_sc["listclock"] , function(i, tds){
+        jQuery.each(listsjson_sc["listclock"] , function(i, tds1){
+        tdsary = tds1.split(" - (");
+        tds = tdsary[0];
         var eachcomp = {
             "type":"list"
             ,"components" : ["C,L0,B0"]    // Checkbox, Label, editfield, info, button, Action
@@ -329,14 +345,16 @@ function addClockTab(){
             , "B0" : "Get All"
     };
     var headcompsset = {
-            "headcomponents":["C,L0,L1,B0"]
+            "headcomponents":["C,L0,L3,L1,B0"]
             ,"L0": "Clock Name"
+            ,"L3": "Range"
             , "L1" : "Frequency"
             , "B0" : "Set All"
     };
     var headcompssetboot = {
-            "headcomponents":["C,L0,L1,B0"]
+            "headcomponents":["C,L0,L3,L1,B0"]
             ,"L0": "Clock Name"
+            ,"L3": "Range"
             , "L1" : "Frequency"
             , "B0" : "Set All"
     };
