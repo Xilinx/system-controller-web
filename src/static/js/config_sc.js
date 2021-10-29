@@ -208,7 +208,7 @@ function addClockTab(){
         jQuery.each(listsjson_sc["listclock"] , function(i, tds1){
         tdsary = tds1.split(" - (");
         tds = tdsary[0];
-        if(tds.localeCompare("8A34001 FMC2") == 0) {
+        if(tds.startsWith("8A34001 FMC") == true) {
         var eachcomp = {
             "type":"list"
             ,"components" : ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
@@ -247,7 +247,7 @@ function addClockTab(){
         tds = tdsary[0];
         tds2 = "-";
         if(tdsary.length > 1) tds2 = "("+tdsary[1];
-        if(tds.localeCompare("8A34001 FMC2") == 0) {
+        if(tds.startsWith("8A34001 FMC") == true) {
         var eachcomp = {
             "type":"list"
             ,"components" : ["C,L0,L1,F0,B0"]    // Checkbox, Label, editfield, info, button, Action
@@ -287,7 +287,7 @@ function addClockTab(){
         tds = tdsary[0];
         tds2 = "-";
         if(tdsary.length > 1) tds2 = "("+tdsary[1];
-        if(tds.localeCompare("8A34001 FMC2") == 0) {
+        if(tds.startsWith("8A34001 FMC") == true) {
         var eachcomp = {
             "type":"list"
             ,"components" : ["C,L0,L2,F0,B0"]    // Checkbox, Label, editfield, info, button, Action
