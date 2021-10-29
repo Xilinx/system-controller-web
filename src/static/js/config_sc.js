@@ -111,12 +111,67 @@ function addPowerTab(){
         };
         innCompscus.push(eachcomp);
     });
+        var innCompsgetINA = [];
+        jQuery.each(listsjson_sc["listpower"] , function(i, tds){
+        var eachcomp = {
+            "type":"list"
+            ,"components" : ["C,L0,V0,V1,V2,V3,V4,V5,V6,V7,V8,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"L0": tds
+            ,"V0": ""
+            ,"V0N": ""
+            ,"V0V": "Configuration"
+            ,"V1" : ""
+            ,"V1N": ""
+            ,"V1V": "Shunt_Voltage"
+            ,"V2": ""
+            ,"V2N": ""
+            ,"V2V": "Bus_Voltage"
+            ,"V3": ""
+            ,"V3N": ""
+            ,"V3V": "Power"
+            ,"V4": ""
+            ,"V4N": ""
+            ,"V4V": "Current"
+            ,"V5": ""
+            ,"V5N": ""
+            ,"V5V": "Calibration"
+            ,"V6": ""
+            ,"V6N": ""
+            ,"V6V": "Mask_Enable"
+            ,"V7": ""
+            ,"V7N": ""
+            ,"V7V": "Alert_Limit"
+            ,"V8": ""
+            ,"V8N": ""
+            ,"V8V": "Die_ID"
+            ,"B0": "Get"
+            ,"B0A": "/cmdquery"
+            ,"B0sc_cmd":"getINA226"
+            , "B0target": tds
+            , "B0params":""
+        };
+        innCompsgetINA.push(eachcomp);
+    });
 var headcomps = {
             "headcomponents":["C,L0,L1,L2,L3,B0"]
             ,"L0": "Rail Name"
             , "L1" : "Power"
             , "L2" : "Voltage"
             , "L3" : "Current"
+            , "B0" : "Get All"
+    }
+var headcompsgetina = {
+            "headcomponents":["C,L9,L0,L1,L2,L3,L4,L5,L6,L7,L8,B0"]
+            ,"L9": "Rail Name"
+            ,"L0": "Configuration"
+            , "L1" : "Shunt Voltage"
+            , "L2" : "Bus Voltage"
+            , "L3" : "Power"
+            , "L4" : "Current"
+            , "L5" : "Calibration"
+            , "L6" : "Mask/Enable"
+            , "L7" : "Alert Limit"
+            , "L8" : "Die ID"
             , "B0" : "Get All"
     }
     var dict = {"tab": "Power"
@@ -136,6 +191,12 @@ var headcomps = {
             "name": "Use Custom Calibration",
             "components": innCompscus
            ,"headcomponents":headcomps
+            }
+            ,{
+            "subtype":"list",
+            "name": "Get INA226 Registers",
+            "components": innCompsgetINA
+           ,"headcomponents":headcompsgetina
             }
             ]
             };

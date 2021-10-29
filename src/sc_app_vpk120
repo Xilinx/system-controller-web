@@ -51,7 +51,7 @@ BIT
 ddr
 gpio
 ioexp
-SFP
+FP
 QSFP
 EBM
 FMC
@@ -428,6 +428,18 @@ Power(W):       0.0326"
         echo "Voltage(V):     0.7950
 Current(A):     0.0410
 Power(W):       0.0326"
+    fi
+        if [ $2 == "getINA226" ]
+    then
+        echo "Configuration:  0x4327
+Shunt Voltage:  0x44a
+Bus Voltage:    0x280
+Power:          0x160
+Current:        0x2ae4
+Calibration:    0x5000
+Mask/Enable:    0x8
+Alert Limit:    0
+Die ID:         0x2260"
     fi
 
         if [ $2 == "listclock" ]
