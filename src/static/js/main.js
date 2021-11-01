@@ -602,7 +602,7 @@ function manualtestresult(result,res, e,cn,inprg,count){
 function manTestResAnalysis(res,e,cn,inprg,count){
 		if(parseInt(e.target.getAttribute("test_type")) > 0){
 
-				if (res.status === 'success' && res.data.state.indexOf("PASS") >= 0) {
+				if (res.status === 'success') {
 					var result = displaypopup(res.data.message+"","",res,e,cn,inprg,count);
 				}else{
 					inprg.className="";
