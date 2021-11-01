@@ -135,7 +135,10 @@ class ParseData(Parse):
     def parseBit(self,data):
         resar = data.strip().split(":")
         res = {}
-        res["state"] = resar[1]
+        if len(resar) > 1:
+            res["state"] = resar[1]
+        else:
+            res["state"] = resar[0]
         res["message"] = data.strip()
         return res
     def parseDDR(self,data):
