@@ -418,7 +418,7 @@ function generateBoardSettingsUI(){
                     setparams += (setparams.length ? "," : "" )+cn.value
                 }
                 else if(cn.nodeName.toLowerCase() == "select"){
-                    setparams += (setparams.length ? " " : "" )+cn.value;
+                    setparams += (setparams.length ? "," : "" )+cn.value;
                 }
             }
             if(cn.nodeName.toLowerCase() == "div"){

@@ -111,6 +111,28 @@ function addPowerTab(){
         };
         innCompscus.push(eachcomp);
     });
+        var innCompssetINA = [];
+        jQuery.each(listsjson_sc["listpower"] , function(i, tds){
+        var eachcomp = {
+            "type":"list"
+            ,"components" : ["C,L0,E0,E1,E2,E3,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"L0": tds
+            ,"E0": "V"
+            ,"E0K": "V"
+            ,"E1": "V"
+            ,"E1K": "vV"
+            ,"E2": "V"
+            ,"E2K": "VVV"
+            ,"E3": "V"
+            ,"E3K": "VVVV"
+            ,"B0": "Set"
+            ,"B0A": "/cmdquery"
+            ,"B0sc_cmd":"setINA226"
+            , "B0target": tds
+            , "B0params":""
+        };
+        innCompssetINA.push(eachcomp);
+    });
         var innCompsgetINA = [];
         jQuery.each(listsjson_sc["listpower"] , function(i, tds){
         var eachcomp = {
@@ -160,6 +182,15 @@ var headcomps = {
             , "L3" : "Current"
             , "B0" : "Get All"
     }
+var headcompssetina = {
+            "headcomponents":["C,L0,L1,L2,L3,L4,B0"]
+            ,"L0": "Rail Name"
+            , "L1" : "Configuration"
+            , "L2" : "Calibration"
+            , "L3" : "Mask/Enable"
+            , "L4" : "Alert Limit"
+            , "B0" : "Set All"
+    }
 var headcompsgetina = {
             "headcomponents":["C,L9,L0,L1,L2,L3,L4,L5,L6,L7,L8,B0"]
             ,"L9": "Rail Name"
@@ -197,6 +228,12 @@ var headcompsgetina = {
             "name": "Get INA226 Registers",
             "components": innCompsgetINA
            ,"headcomponents":headcompsgetina
+            }
+            ,{
+            "subtype":"list",
+            "name": "Set INA226 Registers",
+            "components": innCompssetINA
+           ,"headcomponents":headcompssetina
             }
             ]
             };

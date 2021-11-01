@@ -154,12 +154,14 @@ class CmdQuery(Resource):
             tar = request.args.get('target')
             params_req = request.args.get('params')
             params = params_req.split(",")
+            paramStr = params_req.replace(","," ")
+            
             try:
                 cmd_gen = sc_app_path+" -c " + req
                 if len(tar):
                     cmd_gen = cmd_gen + " -t '" + tar + "'"
                 if len(params) and len(params[0]):
-                    cmd_gen = cmd_gen + " -v " + params[0]
+                    cmd_gen = cmd_gen + " -v '" + paramStr + "'"
                 response = Term.exec_cmd(cmd_gen)
             except Exception as d:
                 print(d)
