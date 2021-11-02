@@ -165,7 +165,7 @@ class ParseData(Parse):
         return res
     def parseGetClock(self,data,targ):
         res = {}
-        if targ == '8A34001 FMC2':
+        if targ.startswith('8A34001'):
             res["frequency"] = data.replace("\n","</br>")
         else:
             resar = data.strip().split(":")

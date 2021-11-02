@@ -245,7 +245,7 @@ function addClockTab(){
         jQuery.each(listsjson_sc["listclock"] , function(i, tds1){
         tdsary = tds1.split(" - (");
         tds = tdsary[0];
-        if(tds.startsWith("8A34001 FMC") == true) {
+        if(tds.startsWith("8A34001") == true) {
         var eachcomp = {
             "type":"list"
             ,"components" : ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
