@@ -239,6 +239,8 @@ var theadcomp = document.createElement("thead");
                         });
 			
                        tdcomp.appendChild(em)
+			var g = document.createElement("br");
+                       tdcomp.appendChild(g)
                         });
                     break;
                     case "D":
