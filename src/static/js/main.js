@@ -216,6 +216,8 @@ var theadcomp = document.createElement("thead");
                        em.setAttribute("sc_cmd",c[elem+"sc_cmd"]);
                        em.setAttribute("target",c[elem+"target"]);
                        em.setAttribute("params",c[elem+"params"]);
+                       if(c[elem+"dontcare"])
+                       em.setAttribute("dontcare",c[elem+"dontcare"]);
                        tdcomp.appendChild(em)
                     break;
                     case "E":
@@ -417,6 +419,9 @@ function generateBoardSettingsUI(){
         try{
             if(cn.getAttribute("reqKey")){
                 if(cn.nodeName.toLowerCase() == "input"){
+                    if(e.target.getAttribute("dontcare") && cn.value.length == 0 )
+                    setparams += (setparams.length ? "," : "" )+e.target.getAttribute("dontcare");
+                    else
                     setparams += (setparams.length ? "," : "" )+cn.value
                 }
                 else if(cn.nodeName.toLowerCase() == "select"){

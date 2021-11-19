@@ -130,6 +130,7 @@ function addPowerTab(){
             ,"B0sc_cmd":"setINA226"
             , "B0target": tds
             , "B0params":""
+            ,"B0dontcare":"X"
         };
         innCompssetINA.push(eachcomp);
     });
