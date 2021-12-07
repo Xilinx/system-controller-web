@@ -1269,7 +1269,7 @@ function layoutDesigns(){
         em2.append(em3)
         em1.append(em2)
         var em11 = document.createElement("p");
-        em11.classList.add("link_key");
+        em11.classList.add("link_key_bottom");
         em11.textContent = app_strings.run_demos.pane[i].text;
         if (app_strings.run_demos.pane[i].text.length) em1.append(em11)
 

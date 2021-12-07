@@ -885,6 +885,15 @@ font-size: 20px;
 padding-left: 10px;
 padding-right: 10px;
 }
+.link_key_bottom{
+text-align: center;
+color: white;
+margin-top: 15px;
+margin-bottom: 45px;
+font-size: 20px;
+padding-left: 10px;
+padding-right: 10px;
+}
 .clock_value{
 text-align: center;
 color: white;

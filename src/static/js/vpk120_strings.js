@@ -82,7 +82,7 @@ var app_strings = {
 				"button_link":"",
 				"learnmore_link":"",
 			},
-			/*{
+			{
                                 "title":"ACAP Cockpit",
                                 "image":"../static/images/xilinx_banner.png",
                                 "text":"",
@@ -91,7 +91,7 @@ var app_strings = {
                                 "button_link": "launchacap",
                                 "learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1544192059/ACAP+Cockpit",
                         },
-			{
+			/*{
                                 "title":"Power Management Dashboard",
                                 "image":"../static/images/xilinx_banner.png",
                                 "text":"",
