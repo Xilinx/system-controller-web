@@ -1012,7 +1012,7 @@ function addqsfpTab(){
         var innCompsget = [];
         var innCompsset = [];
         jQuery.each(listsjson_sc["listQSFP"] , function(i, tds){
-        jQuery.each([["QSFP","getQSFP"],["PWM QSFP","getpwmQSFP"],["PWMO QSFP","getpwmoQSFP"]] , function(j, tdsd){
+        jQuery.each([["QSFP","getQSFP"]/*,["PWM QSFP","getpwmQSFP"],["PWMO QSFP","getpwmoQSFP"]*/] , function(j, tdsd){
         var eachcomp = {
             "type":"list"
             ,"components" : ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
@@ -1029,7 +1029,7 @@ function addqsfpTab(){
         innCompsget.push(eachcomp);
     });
     });
-        jQuery.each(listsjson_sc["listQSFP"] , function(i, tds){
+        /*jQuery.each(listsjson_sc["listQSFP"] , function(i, tds){
         jQuery.each([["PWM QSFP","setpwmQSFP"],["PWMO QSFP","setpwmoQSFP"]] , function(j, tdsd){
         var eachcomp = {
             "type":"list"
@@ -1045,7 +1045,7 @@ function addqsfpTab(){
         };
         innCompsset.push(eachcomp);
     });
-    });
+    });*/
     var headcompsget = {
             "headcomponents":["C,L0,L1,B0"]
             ,"L0": "Name"
@@ -1058,7 +1058,7 @@ function addqsfpTab(){
             , "L1" : "Value"
             , "B0" : "Set All"
     };
-    var dict = {"tab": "zQSFP Data"
+    var dict = {"tab": "QSFP Data"
     ,"subtype":"tab"
         ,"components":[
             {
@@ -1067,12 +1067,12 @@ function addqsfpTab(){
             ,"components": innCompsget
             , "headcomponents" : headcompsget
             }
-            ,{
+            /*,{
             "subtype":"list"
             ,"name": "Set QSFP"
             ,"components": innCompsset
             , "headcomponents" : headcompsset
-            }
+            }*/
             ]
             };
     boardsettingsTab.push(dict);
@@ -1082,7 +1082,7 @@ function addsfpTab(){
         var innCompsget = [];
         var innCompsset = [];
         jQuery.each(listsjson_sc["listSFP"] , function(i, tds){
-        jQuery.each([["SFP","getSFP"],["PWM SFP","getpwmSFP"]] , function(j, tdsd){
+        jQuery.each([["SFP","getSFP"]/*,["PWM SFP","getpwmSFP"]*/] , function(j, tdsd){
         var eachcomp = {
             "type":"list"
             ,"components" : ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
@@ -1126,7 +1126,7 @@ function addsfpTab(){
             , "L1" : "Value"
             , "B0" : "Set All"
     };
-    var dict = {"tab": "zSFP Data"
+    var dict = {"tab": "SFP Data"
     ,"subtype":"tab"
         ,"components":[
             {
@@ -1135,12 +1135,12 @@ function addsfpTab(){
             ,"components": innCompsget
             , "headcomponents" : headcompsget
             }
-            ,{
+            /*,{
             "subtype":"list"
             ,"name": "Set SFP"
             ,"components": innCompsset
             , "headcomponents" : headcompsset
-            }
+            }*/
             ]
             };
     boardsettingsTab.push(dict);
