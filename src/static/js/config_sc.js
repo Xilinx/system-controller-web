@@ -1174,6 +1174,7 @@ function generateBoardSettingsTabJSON(){
     }
     if(isSupported("listFMC"))    addVadjTab();
     if(isSupported("listeeprom"))    addEEPROMDataTab();
+    if(!isSupported("listtemp")){document.getElementsByClassName('clock_dashboard')[0].style.display = "none"};
 }
 
 
