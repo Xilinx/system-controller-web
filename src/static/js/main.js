@@ -34,7 +34,11 @@ function loadRefreshData(){
                 else if(res.data.temp < 90) el.style.setProperty("--showc","orange");
                 else el.style.setProperty("--showc","red");
                 if(tval == '-'){el.style.setProperty("--showc","gray");}
+                if("listtemp" in listsjson_sc){
                 document.getElementById("home_board_temp_id").innerHTML = res.data.temp +" °C";
+                } else {
+                document.getElementById("home_board_temp_id").innerHTML = "NA";
+		}
                 document.getElementById("active_bootmode").innerHTML = "Active:<b>"+res.data.active_bootmode+"</b>"
  		pollresp = true;
             },

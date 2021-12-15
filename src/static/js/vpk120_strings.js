@@ -60,7 +60,7 @@ var app_strings = {
 			{
 				"title":"Petalinux BSP Designs",
 				"image":"../static/images/xilinx_banner.png",
-				"text":"Refer to VP120 EA Lounge",
+				"text":"Refer to VPK120 EA Lounge",
 				"button_title":"",
 				"button_link":"",
 				"learnmore_link":"",
@@ -77,7 +77,7 @@ var app_strings = {
 			{
 				"title":"Target Reference Designs",
 				"image":"../static/images/xilinx_banner.png",
-				"text":"Refer to VP120 EA Lounge",
+				"text":"Refer to VPK120 EA Lounge",
 				"button_title":"",
 				"button_link":"",
 				"learnmore_link":"",
