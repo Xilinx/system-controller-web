@@ -7,8 +7,10 @@ from config_app import *
 
 class Parse:
     def parse_cmd_resp(self, data, component,targ="",params = ""):
-        if(component == "getpower"):
+        if(component == "getpower" or component == "getcalpower"):
             return self.parseGetPower(data)
+        elif(component == "getINA226"):
+            return self.parseGetINA226(data)
         elif(component.startswith("list")):
             return self.parseList(data)
         elif((component == "getvoltage" or component == "powerdomain") and ("all" not in params)):
@@ -49,6 +51,41 @@ class ParseData(Parse):
         else:
             return {"temp":obj[1]}
 
+    def parseGetINA226(self,data):
+        # Parse eeprom data for details
+        resar = data.rstrip().split("\n")
+        res = {"Configuration":"-"
+               ,"Shunt_Voltage":"-"
+               ,"Bus_Voltage":"-"
+               ,"Power":"-"
+               ,"Current":"-"
+               ,"Calibration":"-"
+               ,"Mask_Enable":"-"
+               ,"Alert_Limit": "-"
+               ,"Die_ID":"-"
+                }
+        for re in resar:
+            ary = re.split(":")
+            print(ary)
+            if ary[0].startswith('Configuration'):
+                res['Configuration']=ary[1].strip()
+            if ary[0].startswith('Shunt Voltage'):
+                res["Shunt_Voltage"]=ary[1].strip()
+            if ary[0].startswith('Bus Voltage'):
+                res["Bus_Voltage"]=ary[1].strip()
+            if ary[0].startswith('Power'):
+                res["Power"]=ary[1].strip()
+            if ary[0].startswith('Current'):
+                res["Current"]=ary[1].strip()
+            if ary[0].startswith('Calibration'):
+                res["Calibration"]=ary[1].strip()
+            if ary[0].startswith('Mask/Enable'):
+                res["Mask_Enable"]=ary[1].strip()
+            if ary[0].startswith('Alert Limit'):
+                res["Alert_Limit"]=ary[1].strip()
+            if ary[0].startswith('Die ID'):
+                res["Die_ID"]=ary[1].strip()
+        return res
     def dashboard_eeprom(self,data):
         # Parse eeprom data for details
         ver = "" + app_config["major_version"]+"."+app_config["minor_version"]
@@ -98,7 +135,10 @@ class ParseData(Parse):
     def parseBit(self,data):
         resar = data.strip().split(":")
         res = {}
-        res["state"] = resar[1]
+        if len(resar) > 1:
+            res["state"] = resar[1]
+        else:
+            res["state"] = resar[0]
         res["message"] = data.strip()
         return res
     def parseDDR(self,data):
@@ -125,7 +165,7 @@ class ParseData(Parse):
         return res
     def parseGetClock(self,data,targ):
         res = {}
-        if targ == '8A34001 FMC2':
+        if targ.startswith('8A34001'):
             res["frequency"] = data.replace("\n","</br>")
         else:
             resar = data.strip().split(":")

@@ -34,7 +34,11 @@ function loadRefreshData(){
                 else if(res.data.temp < 90) el.style.setProperty("--showc","orange");
                 else el.style.setProperty("--showc","red");
                 if(tval == '-'){el.style.setProperty("--showc","gray");}
+                if("listtemp" in listsjson_sc){
                 document.getElementById("home_board_temp_id").innerHTML = res.data.temp +" °C";
+                } else {
+                document.getElementById("home_board_temp_id").innerHTML = "NA";
+		}
                 document.getElementById("active_bootmode").innerHTML = "Active:<b>"+res.data.active_bootmode+"</b>"
  		pollresp = true;
             },
@@ -53,6 +57,9 @@ function filleepromdetails(){
             data:{"sc_cmd":"geteeprom", "target":""+targ, "params":"summary"},
             dataType: 'json',
             success: function (res){
+                if(res.status == "error" ){
+			return;
+		}
                 document.getElementById("db_details_Device").innerHTML = "Device : " + "<b>"+res.data.device+ "</b>"
                 document.getElementById("db_details_silrev").innerHTML = "Silicon Rev : " + "<b>"+res.data.sil_rev+ "</b>"
                 document.getElementById("db_details_boardpn").innerHTML = "Board P/N : " + "<b>"+res.data.board_pn+ "</b>"
@@ -213,6 +220,8 @@ var theadcomp = document.createElement("thead");
                        em.setAttribute("sc_cmd",c[elem+"sc_cmd"]);
                        em.setAttribute("target",c[elem+"target"]);
                        em.setAttribute("params",c[elem+"params"]);
+                       if(c[elem+"dontcare"])
+                       em.setAttribute("dontcare",c[elem+"dontcare"]);
                        tdcomp.appendChild(em)
                     break;
                     case "E":
@@ -236,6 +245,8 @@ var theadcomp = document.createElement("thead");
                         });
 			
                        tdcomp.appendChild(em)
+			var g = document.createElement("br");
+                       tdcomp.appendChild(g)
                         });
                     break;
                     case "D":
@@ -412,10 +423,13 @@ function generateBoardSettingsUI(){
         try{
             if(cn.getAttribute("reqKey")){
                 if(cn.nodeName.toLowerCase() == "input"){
+                    if(e.target.getAttribute("dontcare") && cn.value.length == 0 )
+                    setparams += (setparams.length ? "," : "" )+e.target.getAttribute("dontcare");
+                    else
                     setparams += (setparams.length ? "," : "" )+cn.value
                 }
                 else if(cn.nodeName.toLowerCase() == "select"){
-                    setparams += (setparams.length ? " " : "" )+cn.value;
+                    setparams += (setparams.length ? "," : "" )+cn.value;
                 }
             }
             if(cn.nodeName.toLowerCase() == "div"){
@@ -497,6 +511,152 @@ function generateBoardSettingsUI(){
 
     });
 }
+function displaypopup(title, message,res,e,cn,inprg,count){
+//    document.getElementById("popform").innerHTML = "";
+    var bodycomp = document.createElement("div");
+    bodycomp.classList.add("popup-content");
+
+    var headcomp = document.createElement("div");
+    headcomp.classList.add("popup-header");
+    bodycomp.append(headcomp);
+    var heading = document.createElement("h2");
+    heading.setAttribute("style","text-align: center;");
+    heading.setAttribute("popupid","1");
+    heading.setAttribute("id","popupheadingid");
+    heading.innerHTML = e.target.getAttribute("target_s");
+    headcomp.append(heading);
+
+    var tablecomp = document.createElement("table");
+    tablecomp.classList.add("boardsettings_table");
+
+    var tbodycomp = document.createElement("tbody");
+    tbodycomp.classList.add("table_body_pop");
+    tbodycomp.setAttribute("id", "popuptbody");
+    var trcomp = document.createElement("tr");
+    var tdcomp = document.createElement("td");
+    trcomp.appendChild(tdcomp);
+    //var em0 = document.createTextNode(res.data.message.replaceAll('\n',br));
+    //tdcomp.appendChild(em0);
+    tdcomp.innerHTML = res.data.message.replaceAll('\n','<br>');
+    tbodycomp.appendChild(trcomp);
+    tablecomp.appendChild(tbodycomp);
+    bodycomp.appendChild(tablecomp);
+
+    // cancel and apply button.
+    var d = document.createElement("div");
+    d.classList.add("popup-footer");
+    heading = document.createElement("a");
+    heading.setAttribute("id", "popupErrorMsg");
+    heading.setAttribute("class", "popuperrormsg");
+    var sp = document.createElement("span");
+
+    var em = document.createElement("input");
+    em.setAttribute("type", "button");
+    em.setAttribute("value", "Fail");
+    em.classList.add("popupbuttons");
+    em.onclick = function(ev){
+       ev.target.parentNode.parentNode.parentNode.remove();
+       if (document.getElementById("popform").innerHTML.length == 0){
+	   document.getElementById("popform").style.display = "none";
+       }
+       manualtestresult(false,res,e,cn,inprg,count);
+    };
+    sp.appendChild(em)
+    em = document.createElement("input");
+    em.setAttribute("type", "button");
+    em.setAttribute("value", "Pass");
+    em.onclick = function(ev){
+       ev.target.parentNode.parentNode.parentNode.remove();
+       if (document.getElementById("popform").innerHTML.length == 0){
+	   document.getElementById("popform").style.display = "none";
+       }
+       manualtestresult(true,res,e,cn,inprg,count);
+    };
+    em.classList.add("popupbuttons");
+    sp.appendChild(em)
+    d.append(sp);
+    d.append(heading);
+
+    bodycomp.append(d);
+    $("#popform").append(bodycomp);
+    b = document.getElementById("popform")
+    b.style.display = "block";
+    document.getElementById("apiloadingdiv").style.display = "none";
+    
+}
+function manualtestresult(result,res, e,cn,inprg,count){
+                                        if(result){
+                                        if(count != parseInt(e.target.getAttribute("test_type"))){
+						manualTest(e,cn,inprg,count+1);
+					}else{ 
+					inprg.className="";
+					inprg.classList.add("progress_inprogress_bar");
+					cn.childNodes[0].innerHTML = res.data.message+restime();
+					cn.className = '';
+					cn.classList.add("ministatussuccess");
+					cn.classList.add("tooltip");
+					setTimeout(()=>{inprg.innerHTML = "Success";inprg.classList.add("inprogress_bar_state_success"); },10);
+                                        }
+
+                                        }else{
+					inprg.className="";
+					inprg.classList.add("progress_inprogress_bar");
+
+					cn.childNodes[0].innerHTML = res.data.message+restime();
+					cn.className = '';
+					cn.classList.add("ministatusfail");
+					cn.classList.add("tooltip");
+					setTimeout(()=>{inprg.innerHTML = "Fail";inprg.classList.add("inprogress_bar_state_fail"); },10);
+
+                                        }
+}
+function manTestResAnalysis(res,e,cn,inprg,count){
+		if(parseInt(e.target.getAttribute("test_type")) > 0){
+
+				if (res.status === 'success') {
+					var result = displaypopup(res.data.message+"","",res,e,cn,inprg,count);
+				}else{
+					inprg.className="";
+					inprg.classList.add("progress_inprogress_bar");
+                                        var val = res.data;
+                                        if(res.data.message !== undefined) val = res.data.message;
+					cn.childNodes[0].innerHTML = val+restime();
+					cn.className = '';
+					cn.classList.add("ministatusfail");
+					cn.classList.add("tooltip");
+					setTimeout(()=>{inprg.innerHTML = "Fail";inprg.classList.add("inprogress_bar_state_fail"); },10);
+
+				}
+                  }
+		
+}
+function manualTest(e,cn,inprg,count){
+     $.ajax({
+	url: "/cmdquery",
+	type: 'GET',
+	dataType: 'json',
+	data:{"sc_cmd":"BIT", "target": e.target.getAttribute("target_s"), "params":""+count },
+	success: function (res){
+                if(res) {
+			manTestResAnalysis(res,e,cn,inprg,count)
+ 		}
+          },
+	  error: function(){
+		inprg.className="";
+		inprg.classList.add("progress_inprogress_bar");
+		cn.childNodes[0].innerHTML = 'Network Issue'+restime();
+		cn.className = '';
+		cn.classList.add("ministatusfail");
+		cn.classList.add("tooltip");
+		inprg.className="";
+		inprg.classList.add("progress_inprogress_bar");
+		setTimeout(()=>{inprg.innerHTML = "Fail";inprg.classList.add("inprogress_bar_state_fail"); },10);
+          } 
+         
+     });				
+
+}
+
 function restime(){
     return "";//"</br>"+(new Date()).toLocaleTimeString();
 }
@@ -516,10 +676,10 @@ function generateBITUI(){
         tdcomp.appendChild(em)
         trcomp.appendChild(tdcomp);
         tdcomp = document.createElement("td");
-        var man_test = false;
+        var man_test = 0;
         if(c.includes('- Manual Test')){
-                man_test = true;
-		c=c.replace(' - Manual Test','');
+                man_test = c.split(')')[0].split('(')[1]
+		c=c.split(' - Manual Test')[0];
 	}
         em = document.createTextNode(c);
         tdcomp.appendChild(em);
@@ -607,7 +767,9 @@ function generateBITUI(){
 				cn.className = '';
 				cn.classList.add("ministatusloading");
 				cn.childNodes[0].innerHTML = "";
-
+				if(parseInt(e.target.getAttribute("test_type")) > 0){
+					manualTest(e,cn,inprg,1);
+				}else{
 				     $.ajax({
 					url: "/cmdquery",
 					type: 'GET',
@@ -666,7 +828,7 @@ function generateBITUI(){
 						setTimeout(()=>{inprg.innerHTML = "Fail";inprg.classList.add("inprogress_bar_state_fail"); },10);
 					}
 				    });
-
+				}
 
                                // });
                             //}
@@ -797,7 +959,7 @@ function generateBootModeblock(){
     smload4.append(resetmode);
     $('#bootmodeselctOption').change(function (e) {
 		document.getElementById("setbootloaddivid").className = "";
-
+		document.getElementById("bootsetstatus").innerHTML = "";
     });
     $('#setbootmodebuttonid').click(function (e) {
     document.getElementById("bootsetstatus").innerHTML = "";
@@ -1111,7 +1273,7 @@ function layoutDesigns(){
         em2.append(em3)
         em1.append(em2)
         var em11 = document.createElement("p");
-        em11.classList.add("link_key");
+        em11.classList.add("link_key_bottom");
         em11.textContent = app_strings.run_demos.pane[i].text;
         if (app_strings.run_demos.pane[i].text.length) em1.append(em11)
 
@@ -1193,6 +1355,7 @@ function layoutDesigns(){
 
 }
 $(document).ready(function () {
+    
     layoutDesigns();
     generateBoardSettingsTabJSON();
     generateBoardSettingsUI();

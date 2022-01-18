@@ -60,7 +60,7 @@ var app_strings = {
 			{
 				"title":"Petalinux BSP Designs",
 				"image":"../static/images/xilinx_banner.png",
-				"text":"Refer to VP120 EA Lounge",
+				"text":"Refer to VPK120 EA Lounge",
 				"button_title":"",
 				"button_link":"",
 				"learnmore_link":"",
@@ -77,12 +77,12 @@ var app_strings = {
 			{
 				"title":"Target Reference Designs",
 				"image":"../static/images/xilinx_banner.png",
-				"text":"Refer to VP120 EA Lounge",
+				"text":"Refer to VPK120 EA Lounge",
 				"button_title":"",
 				"button_link":"",
 				"learnmore_link":"",
 			},
-			/*{
+			{
                                 "title":"ACAP Cockpit",
                                 "image":"../static/images/xilinx_banner.png",
                                 "text":"",
@@ -91,7 +91,7 @@ var app_strings = {
                                 "button_link": "launchacap",
                                 "learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1544192059/ACAP+Cockpit",
                         },
-			{
+			/*{
                                 "title":"Power Management Dashboard",
                                 "image":"../static/images/xilinx_banner.png",
                                 "text":"",

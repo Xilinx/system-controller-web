@@ -45,13 +45,15 @@ class ReqFunctions:
         if len(params) > 0:
             gtemp_targ = params[0]
         try:
-            result = ""
+            result = {"temp":"-"}
+            stat = "error"
             if checkJNK() == 0:
+                stat = "success"
                 response = Term.exec_cmd(sc_app_path+" -c gettemp -t "+gtemp_targ)
                 result = parse.temperature(response)
             result["active_bootmode"] = BootMode.getActiveBootMode()
             resp_json = {
-                "status":"success"
+                "status":stat
                 ,"data":result
             }
             return resp_json,200
@@ -84,7 +86,7 @@ class FuncReq(Resource):
             if checkJNK() >= 1: 
                 resp_json = { 
                     "status":"error"
-                    ,"data": {"error":"Notebook kernel is running. Please stop running kernel."}
+                    ,"data": "Notebook kernel is running. Please stop running kernel."
                 }                       
                 return resp_json,200
 
@@ -101,7 +103,7 @@ class Poll(Resource):
             if checkJNK() >= 1: 
                 resp_json = { 
                     "status":"error"
-                    ,"data": {"error":"Notebook kernel is running. Please stop running kernel."}
+                    ,"data": "Notebook kernel is running. Please stop running kernel."
                 }                       
                 return resp_json,200
             response = Term.exec_cmd(sc_app_path+" -c gettemp -t MDIO")
@@ -152,22 +154,24 @@ class CmdQuery(Resource):
             tar = request.args.get('target')
             params_req = request.args.get('params')
             params = params_req.split(",")
+            paramStr = params_req.replace(","," ")
+            
             try:
                 cmd_gen = sc_app_path+" -c " + req
                 if len(tar):
                     cmd_gen = cmd_gen + " -t '" + tar + "'"
                 if len(params) and len(params[0]):
-                    cmd_gen = cmd_gen + " -v " + params[0]
+                    cmd_gen = cmd_gen + " -v '" + paramStr + "'"
                 response = Term.exec_cmd(cmd_gen)
             except Exception as d:
                 print(d)
-            result = parse.parse_cmd_resp(response, req, tar, params);
-            if response.startswith("ERROR") or "ERROR" in response:
+            if response.startswith("ERROR:") or "ERROR:" in response:
                 resp_json = {
                     "status":"error"
                     ,"data":response
                 }
             else : 
+                result = parse.parse_cmd_resp(response, req, tar, params);
                 resp_json = {
                     "status":"success"
                     ,"data":result

@@ -88,12 +88,122 @@ function addPowerTab(){
         };
         innComps.push(eachcomp);
     });
+        var innCompscus = [];
+        jQuery.each(listsjson_sc["listpower"] , function(i, tds){
+        var eachcomp = {
+            "type":"list"
+            ,"components" : ["C,L0,V0,V1,V2,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"L0": tds
+            ,"V0": "- W"
+            ,"V0N": "W"
+            ,"V0V": "power"
+            ,"V1" : "- V"
+            ,"V1N": "V"
+            ,"V1V": "voltage"
+            ,"V2": "- A"
+            ,"V2N": "A"
+            ,"V2V": "current"
+            ,"B0": "Get"
+            ,"B0A": "/cmdquery"
+            ,"B0sc_cmd":"getcalpower"
+            , "B0target": tds
+            , "B0params":""
+        };
+        innCompscus.push(eachcomp);
+    });
+        var innCompssetINA = [];
+        jQuery.each(listsjson_sc["listpower"] , function(i, tds){
+        var eachcomp = {
+            "type":"list"
+            ,"components" : ["C,L0,E0,E1,E2,E3,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"L0": tds
+            ,"E0": "V"
+            ,"E0K": "V"
+            ,"E1": "V"
+            ,"E1K": "vV"
+            ,"E2": "V"
+            ,"E2K": "VVV"
+            ,"E3": "V"
+            ,"E3K": "VVVV"
+            ,"B0": "Set"
+            ,"B0A": "/cmdquery"
+            ,"B0sc_cmd":"setINA226"
+            , "B0target": tds
+            , "B0params":""
+            ,"B0dontcare":"X"
+        };
+        innCompssetINA.push(eachcomp);
+    });
+        var innCompsgetINA = [];
+        jQuery.each(listsjson_sc["listpower"] , function(i, tds){
+        var eachcomp = {
+            "type":"list"
+            ,"components" : ["C,L0,V0,V1,V2,V3,V4,V5,V6,V7,V8,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"L0": tds
+            ,"V0": ""
+            ,"V0N": ""
+            ,"V0V": "Configuration"
+            ,"V1" : ""
+            ,"V1N": ""
+            ,"V1V": "Shunt_Voltage"
+            ,"V2": ""
+            ,"V2N": ""
+            ,"V2V": "Bus_Voltage"
+            ,"V3": ""
+            ,"V3N": ""
+            ,"V3V": "Power"
+            ,"V4": ""
+            ,"V4N": ""
+            ,"V4V": "Current"
+            ,"V5": ""
+            ,"V5N": ""
+            ,"V5V": "Calibration"
+            ,"V6": ""
+            ,"V6N": ""
+            ,"V6V": "Mask_Enable"
+            ,"V7": ""
+            ,"V7N": ""
+            ,"V7V": "Alert_Limit"
+            ,"V8": ""
+            ,"V8N": ""
+            ,"V8V": "Die_ID"
+            ,"B0": "Get"
+            ,"B0A": "/cmdquery"
+            ,"B0sc_cmd":"getINA226"
+            , "B0target": tds
+            , "B0params":""
+        };
+        innCompsgetINA.push(eachcomp);
+    });
 var headcomps = {
             "headcomponents":["C,L0,L1,L2,L3,B0"]
             ,"L0": "Rail Name"
             , "L1" : "Power"
             , "L2" : "Voltage"
             , "L3" : "Current"
+            , "B0" : "Get All"
+    }
+var headcompssetina = {
+            "headcomponents":["C,L0,L1,L2,L3,L4,B0"]
+            ,"L0": "Rail Name"
+            , "L1" : "Configuration"
+            , "L2" : "Calibration"
+            , "L3" : "Mask/Enable"
+            , "L4" : "Alert Limit"
+            , "B0" : "Set All"
+    }
+var headcompsgetina = {
+            "headcomponents":["C,L9,L0,L1,L2,L3,L4,L5,L6,L7,L8,B0"]
+            ,"L9": "Rail Name"
+            ,"L0": "Configuration"
+            , "L1" : "Shunt Voltage"
+            , "L2" : "Bus Voltage"
+            , "L3" : "Power"
+            , "L4" : "Current"
+            , "L5" : "Calibration"
+            , "L6" : "Mask/Enable"
+            , "L7" : "Alert Limit"
+            , "L8" : "Die ID"
             , "B0" : "Get All"
     }
     var dict = {"tab": "Power"
@@ -108,13 +218,24 @@ var headcomps = {
 
             }
             // Power :: get "use custom configuration"
-//            ,{
-//            "subtype":"list",
-//            "name": "Use Custom Calibration",
-//            "components": [
-//
-//            ]
-//            }
+            ,{
+            "subtype":"list",
+            "name": "Use Custom Calibration",
+            "components": innCompscus
+           ,"headcomponents":headcomps
+            }
+            ,{
+            "subtype":"list",
+            "name": "Get INA226 Registers",
+            "components": innCompsgetINA
+           ,"headcomponents":headcompsgetina
+            }
+            ,{
+            "subtype":"list",
+            "name": "Set INA226 Registers",
+            "components": innCompssetINA
+           ,"headcomponents":headcompssetina
+            }
             ]
             };
     boardsettingsTab.push(dict);
@@ -122,8 +243,10 @@ var headcomps = {
 
 function addClockTab(){
         var innCompsget = [];
-        jQuery.each(listsjson_sc["listclock"] , function(i, tds){
-        if(tds.localeCompare("8A34001 FMC2") == 0) {
+        jQuery.each(listsjson_sc["listclock"] , function(i, tds1){
+        tdsary = tds1.split(" - (");
+        tds = tdsary[0];
+        if(tds.startsWith("8A34001") == true) {
         var eachcomp = {
             "type":"list"
             ,"components" : ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
@@ -157,12 +280,17 @@ function addClockTab(){
         }
     });
      var innCompsset = [];
-        jQuery.each(listsjson_sc["listclock"] , function(i, tds){
-        if(tds.localeCompare("8A34001 FMC2") == 0) {
+        jQuery.each(listsjson_sc["listclock"] , function(i, tds1){
+        tdsary = tds1.split(" - (");
+        tds = tdsary[0];
+        tds2 = "-";
+        if(tdsary.length > 1) tds2 = "("+tdsary[1];
+        if(tds.startsWith("8A34001 FMC") == true) {
         var eachcomp = {
             "type":"list"
-            ,"components" : ["C,L0,F0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"components" : ["C,L0,L1,F0,B0"]    // Checkbox, Label, editfield, info, button, Action
             ,"L0": tds
+            ,"L1":"-"
             ,"F0": "value"
             ,"F0N": ""
             ,"F0V": [listsjson_sc["8A34001_clk_tcs_files"],listsjson_sc["8A34001_clk_txt_files"]]
@@ -177,8 +305,9 @@ function addClockTab(){
         }else{
         var eachcomp = {
             "type":"list"
-            ,"components" : ["C,L0,E0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"components" : ["C,L0,L1,E0,B0"]    // Checkbox, Label, editfield, info, button, Action
             ,"L0": tds
+	    ,"L1": tds2
             ,"E0": "value"
             ,"E0K": "-v"
             ,"B0": "Set"
@@ -191,12 +320,17 @@ function addClockTab(){
         }
     });
      var innCompssetboot = [];
-        jQuery.each(listsjson_sc["listclock"] , function(i, tds){
-        if(tds.localeCompare("8A34001 FMC2") == 0) {
+        jQuery.each(listsjson_sc["listclock"] , function(i, tds1){
+        tdsary = tds1.split(" - (");
+        tds = tdsary[0];
+        tds2 = "-";
+        if(tdsary.length > 1) tds2 = "("+tdsary[1];
+        if(tds.startsWith("8A34001 FMC") == true) {
         var eachcomp = {
             "type":"list"
-            ,"components" : ["C,L0,F0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"components" : ["C,L0,L2,F0,B0"]    // Checkbox, Label, editfield, info, button, Action
             ,"L0": tds
+            ,"L1": "-"
             ,"F0": "value"
             ,"F0N": ""
             ,"F0V": [listsjson_sc["8A34001_clk_tcs_files"],listsjson_sc["8A34001_clk_txt_files"]]
@@ -211,8 +345,9 @@ function addClockTab(){
         }else{
         var eachcomp = {
             "type":"list"
-            ,"components" : ["C,L0,E0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"components" : ["C,L0,L1,E0,B0"]    // Checkbox, Label, editfield, info, button, Action
             ,"L0": tds
+            ,"L1": tds2
             ,"E0": "value"
             ,"E0K": "-v"
             ,"B0": "Set"
@@ -226,7 +361,9 @@ function addClockTab(){
     });
 
      var innCompsreset = [];
-        jQuery.each(listsjson_sc["listclock"] , function(i, tds){
+        jQuery.each(listsjson_sc["listclock"] , function(i, tds1){
+        tdsary = tds1.split(" - (");
+        tds = tdsary[0];
         var eachcomp = {
             "type":"list"
             ,"components" : ["C,L0,B0"]    // Checkbox, Label, editfield, info, button, Action
@@ -246,14 +383,16 @@ function addClockTab(){
             , "B0" : "Get All"
     };
     var headcompsset = {
-            "headcomponents":["C,L0,L1,B0"]
+            "headcomponents":["C,L0,L3,L1,B0"]
             ,"L0": "Clock Name"
+            ,"L3": "Range"
             , "L1" : "Frequency"
             , "B0" : "Set All"
     };
     var headcompssetboot = {
-            "headcomponents":["C,L0,L1,B0"]
+            "headcomponents":["C,L0,L3,L1,B0"]
             ,"L0": "Clock Name"
+            ,"L3": "Range"
             , "L1" : "Frequency"
             , "B0" : "Set All"
     };
@@ -873,7 +1012,7 @@ function addqsfpTab(){
         var innCompsget = [];
         var innCompsset = [];
         jQuery.each(listsjson_sc["listQSFP"] , function(i, tds){
-        jQuery.each([["QSFP","getQSFP"],["PWM QSFP","getpwmQSFP"],["PWMO QSFP","getpwmoQSFP"]] , function(j, tdsd){
+        jQuery.each([["QSFP","getQSFP"]/*,["PWM QSFP","getpwmQSFP"],["PWMO QSFP","getpwmoQSFP"]*/] , function(j, tdsd){
         var eachcomp = {
             "type":"list"
             ,"components" : ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
@@ -890,7 +1029,7 @@ function addqsfpTab(){
         innCompsget.push(eachcomp);
     });
     });
-        jQuery.each(listsjson_sc["listQSFP"] , function(i, tds){
+        /*jQuery.each(listsjson_sc["listQSFP"] , function(i, tds){
         jQuery.each([["PWM QSFP","setpwmQSFP"],["PWMO QSFP","setpwmoQSFP"]] , function(j, tdsd){
         var eachcomp = {
             "type":"list"
@@ -906,7 +1045,7 @@ function addqsfpTab(){
         };
         innCompsset.push(eachcomp);
     });
-    });
+    });*/
     var headcompsget = {
             "headcomponents":["C,L0,L1,B0"]
             ,"L0": "Name"
@@ -919,7 +1058,7 @@ function addqsfpTab(){
             , "L1" : "Value"
             , "B0" : "Set All"
     };
-    var dict = {"tab": "zQSFP Data"
+    var dict = {"tab": "QSFP Data"
     ,"subtype":"tab"
         ,"components":[
             {
@@ -928,12 +1067,12 @@ function addqsfpTab(){
             ,"components": innCompsget
             , "headcomponents" : headcompsget
             }
-            ,{
+            /*,{
             "subtype":"list"
             ,"name": "Set QSFP"
             ,"components": innCompsset
             , "headcomponents" : headcompsset
-            }
+            }*/
             ]
             };
     boardsettingsTab.push(dict);
@@ -943,7 +1082,7 @@ function addsfpTab(){
         var innCompsget = [];
         var innCompsset = [];
         jQuery.each(listsjson_sc["listSFP"] , function(i, tds){
-        jQuery.each([["SFP","getSFP"],["PWM SFP","getpwmSFP"]] , function(j, tdsd){
+        jQuery.each([["SFP","getSFP"]/*,["PWM SFP","getpwmSFP"]*/] , function(j, tdsd){
         var eachcomp = {
             "type":"list"
             ,"components" : ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
@@ -987,7 +1126,7 @@ function addsfpTab(){
             , "L1" : "Value"
             , "B0" : "Set All"
     };
-    var dict = {"tab": "zSFP Data"
+    var dict = {"tab": "SFP Data"
     ,"subtype":"tab"
         ,"components":[
             {
@@ -996,12 +1135,12 @@ function addsfpTab(){
             ,"components": innCompsget
             , "headcomponents" : headcompsget
             }
-            ,{
+            /*,{
             "subtype":"list"
             ,"name": "Set SFP"
             ,"components": innCompsset
             , "headcomponents" : headcompsset
-            }
+            }*/
             ]
             };
     boardsettingsTab.push(dict);
@@ -1030,9 +1169,12 @@ function generateBoardSettingsTabJSON(){
     if(isSupported("listQSFP") && listsjson_sc["listQSFP"].length && listsjson_sc["listQSFP"][0] != ""){
         addqsfpTab();
     }
-    if(isSupported("listEBM"))    addEBMTab();
+    if(isSupported("listEBM") && listsjson_sc["listEBM"].length && listsjson_sc["listEBM"][0] != ""){
+    	addEBMTab();
+    }
     if(isSupported("listFMC"))    addVadjTab();
     if(isSupported("listeeprom"))    addEEPROMDataTab();
+//    if(!isSupported("listtemp")){document.getElementsByClassName('clock_dashboard')[0].style.display = "none"};
 }
 
 
