@@ -121,7 +121,7 @@ if __name__ == '__main__':
     f.write("\n}")
     f.close()
     # check device
-    deviname = Term.exec_cmd("more "+app_config["board_file_path"])
+    deviname = Term.exec_cmd(sc_app_path+" -c board\n")
     if ("VCK" in deviname):
         shutil.copyfile("./static/js/vck190_strings.js","./static/js/beam_strings.js")
     elif ("VMK" in deviname):
