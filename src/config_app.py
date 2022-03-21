@@ -15,7 +15,7 @@ app_config = {
     ,"config_sc_list_cmds":["listpower","listclock","listvoltage","listgpio","listSFP","listpowerdomain","listQSFP","listFMC"]
     ,"config_bit_list_cmds":["listBIT"]
     ,"config_bm_list_cmds":["listbootmode"]
-    ,"jnlocalrundir":"/.local/share/jupyter/runtime/"
+    ,"jnlocalrundir":"/home/petalinux/.local/share/jupyter/runtime/"
     ,"8A34001_clk_files_path":"/usr/share/system-controller-app/BIT/clock_files/"
     ,"board_file_path":"/home/root/.sc_app/board"
 
