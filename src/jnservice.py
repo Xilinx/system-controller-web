@@ -27,7 +27,12 @@ def jnurl():
     jnlst = os.listdir(app_config["jnlocalrundir"])
     ur = ""
     nbfiles = [app_config["jnlocalrundir"]+"/"+f for f in jnlst if "nbserver" in f and ".json" in f]
-    latfile = max(nbfiles, key=os.path.getctime)
+    
+    latfile = ""
+    try:
+        latfile = max(nbfiles, key=os.path.getctime)
+    except:
+        latfile = ""
 
     if len(latfile) == 0 or checkJNS() == 0:
         return (0, "No Active Jupyter notebook session available")
