@@ -10,6 +10,8 @@ cd /usr/share/scweb/
 python3 systemcontroller.py >/dev/null 2>&1 &
 
 ## Run jupyter notebook with non root user
+HOME=`(cd ~petalinux && pwd) || echo 'none'`
+rm ${HOME}/.local/share/jupyter/runtime/*
 sudo su - petalinux -c "systemctl --user enable jupyter-setup.service"
 
 ## print ip on console
