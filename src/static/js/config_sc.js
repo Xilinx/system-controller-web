@@ -285,7 +285,7 @@ function addClockTab(){
         tds = tdsary[0];
         tds2 = "-";
         if(tdsary.length > 1) tds2 = "("+tdsary[1];
-        if(tds.startsWith("8A34001 FMC") == true) {
+        if(tds.startsWith("8A34001") == true) {
         var eachcomp = {
             "type":"list"
             ,"components" : ["C,L0,L1,F0,B0"]    // Checkbox, Label, editfield, info, button, Action
@@ -325,7 +325,7 @@ function addClockTab(){
         tds = tdsary[0];
         tds2 = "-";
         if(tdsary.length > 1) tds2 = "("+tdsary[1];
-        if(tds.startsWith("8A34001 FMC") == true) {
+        if(tds.startsWith("8A34001") == true) {
         var eachcomp = {
             "type":"list"
             ,"components" : ["C,L0,L2,F0,B0"]    // Checkbox, Label, editfield, info, button, Action
