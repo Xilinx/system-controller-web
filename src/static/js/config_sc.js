@@ -328,7 +328,7 @@ function addClockTab(){
         if(tds.startsWith("8A34001") == true) {
         var eachcomp = {
             "type":"list"
-            ,"components" : ["C,L0,L2,F0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"components" : ["C,L0,L1,F0,B0"]    // Checkbox, Label, editfield, info, button, Action
             ,"L0": tds
             ,"L1": "-"
             ,"F0": "value"
