@@ -8,7 +8,7 @@ var app_strings = {
 	"app_title":"Board Evaluation & Management Tool (BEAM)",
 	"xilinx_icon":"../images/icon.png",
 	"home_tab":{
-		"title":"Welcome & Get Started with Versal Premium Series VHK158 Evaluation Kit",
+		"title":"Welcome & Get Started with Versal HBM Series VHK158 Evaluation Kit",
 		"left_pane":[
 			{
 				"image":"../static/images/VersalSilicon.png",
@@ -17,10 +17,10 @@ var app_strings = {
 				"button_link":"https://www.xilinx.com/products/silicon-devices/acap/versal.html",
 			},
 			{
-				"image":"../static/images/premium.png",
+				"image":"../static/images/hbm.png",
 				"text":"",
 				"button_title":"Product Table",
-				"button_link":"https://www.xilinx.com/products/silicon-devices/acap/versal-premium.html#productTable",
+				"button_link":"https://www.xilinx.com/products/silicon-devices/acap/versal-hbm.html#productTable",
 			}
 		],
 		"center_pane":{
