@@ -7,8 +7,8 @@
 
 app_config = {
     "deployment":"RELEASE"              # RELEASE, DEBUG
-    ,"major_version":"β"
-    ,"minor_version" : "4"
+    ,"major_version":"1"
+    ,"minor_version" : "0"
     ,"dev_for_major_ver" : "β_3"
     ,"dev_minor_ver" : "019"
     ,"sc_app_path":"sc_app"

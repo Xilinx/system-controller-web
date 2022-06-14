@@ -151,7 +151,7 @@ var app_strings = {
                         {
                                 "heading":"",
                                 "content_type":0,	// 0: paragraph, 1: bullet points
-                                "content":["The Board Evaluation & Management Tool (BEAM) is currently in Beta version ("+listsjson_sc.version+")"]
+                                "content":["The Board Evaluation & Management Tool (BEAM) is currently in production ("+listsjson_sc.version+")"]
                         },
                         {
                                 "heading":"known issues and bugs",

@@ -8,7 +8,7 @@ var app_strings = {
 	"app_title":"Board Evaluation & Management Tool (BEAM)",
 	"xilinx_icon":"../images/icon.png",
 	"home_tab":{
-		"title":"Welcome & Get Started with Versal Premium Series VEK280 Evaluation Kit",
+		"title":"Welcome & Get Started with Versal AI Edge VEK280 Evaluation Kit",
 		"left_pane":[
 			{
 				"image":"../static/images/VersalSilicon.png",
@@ -17,10 +17,10 @@ var app_strings = {
 				"button_link":"https://www.xilinx.com/products/silicon-devices/acap/versal.html",
 			},
 			{
-				"image":"../static/images/premium.png",
+				"image":"../static/images/AIEdge.jpg",
 				"text":"",
 				"button_title":"Product Table",
-				"button_link":"https://www.xilinx.com/products/silicon-devices/acap/versal-premium.html#productTable",
+				"button_link":"https://www.xilinx.com/products/silicon-devices/acap/versal-ai-edge.html#productTable",
 			}
 		],
 		"center_pane":{
@@ -60,7 +60,7 @@ var app_strings = {
 			{
 				"title":"Petalinux BSP Designs",
 				"image":"../static/images/xilinx_banner.png",
-				"text":"Refer to vek280 EA Lounge",
+				"text":"Refer to VEK280 EA Lounge",
 				"button_title":"",
 				"button_link":"",
 				"learnmore_link":"",
