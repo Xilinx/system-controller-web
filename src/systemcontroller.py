@@ -132,6 +132,8 @@ if __name__ == '__main__':
         shutil.copyfile("./static/js/vpk180_strings.js","./static/js/beam_strings.js")
     elif ("VHK158" in deviname):
         shutil.copyfile("./static/js/vhk158_strings.js", "./static/js/beam_strings.js")
+    elif ("VEK280" in deviname):
+        shutil.copyfile("./static/js/vek280_strings.js", "./static/js/beam_strings.js")
     else:
         shutil.copyfile("./static/js/vck190_strings.js","./static/js/beam_strings.js")
     
