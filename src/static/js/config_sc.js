@@ -786,36 +786,38 @@ function addgpioTab(){
 }
 
 function addDDRDIMMTab(){
+        jQuery.each(listsjson_sc["listddr"] , function(i, tds){
+        var j=i+1
         var innCompsget = [];
         var eachcomp = {
             "type":"list"
             ,"components" : ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
-            ,"L0": "DIMM Slot 1"
+            ,"L0": "DIMM Slot "+j
             ,"V0": "-"  		//"DDR4 SDRAM? -Size(Gb): -Temp. Sensor? -"
             ,"V0N": ""
             ,"V0V": "info"
             ,"B0": "Get"
             ,"B0A": "/cmdquery"
             ,"B0sc_cmd":"getddr"
-            , "B0target": ""+listsjson_sc.listddr[0]
+            , "B0target": ""+listsjson_sc.listddr[i]
             , "B0params":"spd"
         };
         innCompsget.push(eachcomp);
         eachcomp = {
             "type":"list"
             ,"components" : ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
-            ,"L0": "DDR4 Temp 1"
+            ,"L0": "DDR4 Temp "+j
             ,"V0": "-°C"
             ,"V0N":  " °C"
             ,"V0V": "temp"
             ,"B0": "Get"
             ,"B0A": "/cmdquery"
             ,"B0sc_cmd":"getddr"
-            , "B0target": ""+listsjson_sc.listddr[0]
+            , "B0target": ""+listsjson_sc.listddr[i]
             , "B0params":"temp"
         };
         innCompsget.push(eachcomp);
-
+});
     var headcompsget = {
             "headcomponents":["C,L0,L1,B0"]
             ,"L0": "Name"
