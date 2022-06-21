@@ -65,7 +65,7 @@ var app_strings = {
 				"button_link":"",
 				"learnmore_link":"",
 			},
-			{
+			/*{
 				"title":"Versal Power Tool",
 				"image":"../static/images/xilinx_banner.png",
 				"text":"",
@@ -73,7 +73,7 @@ var app_strings = {
                                 "button_link_type":1,
 				"button_link": "jnurllink",
 				"learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1299251214/Versal+ACAP+Power+Tool+part+1+-+Introduction+to+the+Power+Tool",
-			},
+			},*/
 			{
 				"title":"Target Reference Designs",
 				"image":"../static/images/xilinx_banner.png",
@@ -91,7 +91,7 @@ var app_strings = {
                                 "button_link": "launchacap",
                                 "learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1544192059/ACAP+Cockpit",
                         },
-			/*{
+			{
                                 "title":"Power Management Dashboard",
                                 "image":"../static/images/xilinx_banner.png",
                                 "text":"",
@@ -99,7 +99,7 @@ var app_strings = {
                                 "button_link_type":1,
                                 "button_link": "launchpmtool",
                                 "learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1887862954/Power+Management+Dashboard",
-                        },*/
+                        },
 		],
 
 	},
@@ -158,7 +158,7 @@ var app_strings = {
                                 "content_type":1,
                                 "content":["Some webpage links may be broken or non-functional. This may happen because the webpage may not exist or is moved to a different location/address. These links will be fixed in subsequent release of the Board Evaluation & Management Tool (BEAM).","The Board Evaluation & Management Tool (BEAM) can execute one particular action/task only at a time. For example, you cannot run the Board Settings and Board Interface Test at the same time. Please wait till a particular task is complete and then proceed."]
                         },
-                        {
+                       /* {
                                 "heading":"Jupyter Notebook",
                                 "content_type":1,
                                 "content":["Logout from jupyter notebook before exiting. Failing doing so may show login screen for next notebook launch.",
@@ -166,7 +166,7 @@ var app_strings = {
 					"Jupyter notebook and BITs/SCUI tabs cannot be run at a time. Shut down any jupyter notebook kernels to use BIT or SCUI tabs components.",
 					"Run jupyter notebook command in system controller prompt to start jupyter notebook server if system controller is set with static ip and notebook web page is not launching from BEAM Tool.",
 				]
-                        },
+                        },*/
                 ],
 
         },

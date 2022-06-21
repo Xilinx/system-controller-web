@@ -197,6 +197,14 @@ border-width: 5px 20px;
 cursor: pointer;
 
 }
+.prod_page_btn_disble{
+margin: 15px 5px 20px 5px;
+color: white;
+background: transparent;
+border-color: transparent;
+font-size: 16px;
+border-width: 5px 20px;
+}
 .navopt_btn{
 margin: 10px 0 0 0;
 color: white;
