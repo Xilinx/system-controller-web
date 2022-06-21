@@ -786,9 +786,9 @@ function addgpioTab(){
 }
 
 function addDDRDIMMTab(){
+        var innCompsget = [];
         jQuery.each(listsjson_sc["listddr"] , function(i, tds){
         var j=i+1
-        var innCompsget = [];
         var eachcomp = {
             "type":"list"
             ,"components" : ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
