@@ -16,6 +16,7 @@ app_config = {
     ,"config_bit_list_cmds":["listBIT"]
     ,"config_bm_list_cmds":["listbootmode"]
     ,"jnlocalrundir":"/home/petalinux/.local/share/jupyter/runtime/"
+    ,"jnlocalrundirroot":"/home/root/.local/share/jupyter/runtime/"
     ,"8A34001_clk_files_path":"/usr/share/system-controller-app/BIT/clock_files/"
     ,"board_file_path":"/home/root/.sc_app/board"
 

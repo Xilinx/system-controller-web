@@ -9,10 +9,21 @@
 cd /usr/share/scweb/
 python3 systemcontroller.py >/dev/null 2>&1 &
 
-## Run jupyter notebook with non root user
-HOME=`(cd ~petalinux && pwd) || echo 'none'`
-rm ${HOME}/.local/share/jupyter/runtime/*
-sudo su - petalinux -c "systemctl --user enable jupyter-setup.service"
+## Run Jupyter notebook
+dev_eeprom=$(find /sys/bus/i2c/devices/*54/ -name eeprom | head -1)
+board=$(fru-print -b som -s $dev_eeprom -f product | tr '[:upper:]' '[:lower:]')
+if [ $board == "vck190" ] || [ $board == "vmk180" ]
+then
+    HOME=`(cd ~root && pwd) || echo 'none'`
+    rm ${HOME}/.local/share/jupyter/runtime/*
+    systemctl enable jupyter-setup.service
+    systemctl start jupyter-setup.service
+else
+    ## Run jupyter notebook with non root user
+    HOME=`(cd ~petalinux && pwd) || echo 'none'`
+    rm ${HOME}/.local/share/jupyter/runtime/*
+    sudo su - petalinux -c "systemctl --user enable jupyter-setup.service"
+fi
 
 ## print ip on console
 COUNT=25

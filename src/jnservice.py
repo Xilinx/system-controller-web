@@ -6,6 +6,7 @@
 import os
 import json
 from config_app import *
+from term import *
 import psutil
 
 def checkJNK():
@@ -24,9 +25,19 @@ def checkJNS():
 
 
 def jnurl():
-    jnlst = os.listdir(app_config["jnlocalrundir"])
+    
+    jnlst = ""
+    jnd = ""
     ur = ""
-    nbfiles = [app_config["jnlocalrundir"]+"/"+f for f in jnlst if "nbserver" in f and ".json" in f]
+    deviname = Term.exec_cmd(app_config["sc_app_path"]+" -c board\n")    
+    if "VCK" in deviname or "VPK" in deviname:
+        jnlst = os.listdir(app_config["jnlocalrundirroot"])
+        jnd=app_config["jnlocalrundirroot"]
+    else:
+        jnlst = os.listdir(app_config["jnlocalrundir"])
+        jnd=app_config["jnlocalrundir"]
+
+    nbfiles = [jnd+"/"+f for f in jnlst if "nbserver" in f and ".json" in f]
     
     latfile = ""
     try:
