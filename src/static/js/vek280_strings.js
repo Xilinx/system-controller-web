@@ -65,7 +65,7 @@ var app_strings = {
 				"button_link":"",
 				"learnmore_link":"",
 			},
-			{
+			/*{
 				"title":"Versal Power Tool",
 				"image":"../static/images/xilinx_banner.png",
 				"text":"",
@@ -73,7 +73,7 @@ var app_strings = {
                                 "button_link_type":1,
 				"button_link": "jnurllink",
 				"learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1299251214/Versal+ACAP+Power+Tool+part+1+-+Introduction+to+the+Power+Tool",
-			},
+			},*/
 			{
 				"title":"Target Reference Designs",
 				"image":"../static/images/xilinx_banner.png",
