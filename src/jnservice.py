@@ -30,7 +30,7 @@ def jnurl():
     jnd = ""
     ur = ""
     deviname = Term.exec_cmd(app_config["sc_app_path"]+" -c board\n")    
-    if "VCK" in deviname or "VPK" in deviname:
+    if "VCK" in deviname or "VMK" in deviname:
         jnlst = os.listdir(app_config["jnlocalrundirroot"])
         jnd=app_config["jnlocalrundirroot"]
     else:
