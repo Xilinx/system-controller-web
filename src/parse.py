@@ -172,9 +172,9 @@ class ParseData(Parse):
             res["frequency"] = resar[1]
         return res
     def parsegpio(self,data):
-        resar = data.strip().split("(")
+        resar = data.strip().split(":")
         res = {}
-        res["gpio"] = "("+resar[1]
+        res["gpio"] = resar[1]
         return res
     def parseioexp(self,data):
         resar = data.strip().replace("\n","</br>")
