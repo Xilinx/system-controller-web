@@ -673,7 +673,7 @@ function generateBITUI(){
         var em = document.createElement("input");
         em.setAttribute("type", "checkbox");
         em.setAttribute("checked", true);
-        tdcomp.appendChild(em)
+       //tdcomp.appendChild(em)
         trcomp.appendChild(tdcomp);
         tdcomp = document.createElement("td");
         var man_test = 0;
