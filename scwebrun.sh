@@ -38,15 +38,21 @@ done
 echo >/dev/ttyPS0
 if [ "$IP" != "" ]; then
 
-    cat >/dev/ttyPS0 <<- EOM
-****************************************
+  msge=$(cat <<-EOM                                                            
+****************************************                                        
+*                                      *                                        
+*         BEAM Tool Web Address        *                                        
 *                                      *
-*         BEAM Tool Web Address        *
-*                                      *
-*      http://$IP:50002      *
-*                                      *
-****************************************
-EOM
+*      http://$IP:50002                                        
+*                                      *       
+****************************************       
+EOM                                            
+)                                                                  
+var=$(echo "$msge"  | sed -E '5s/(.{39})/&\*/')                                 
+                                                   
+    cat > /dev/ttyPS0 <<-EOM                   
+$var                                           
+EOM   
 
 else
 
