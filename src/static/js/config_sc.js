@@ -622,10 +622,10 @@ function addVadjTab(){
             , "B0" : "Set All"
     };
     var headcompsget = {
-            "headcomponents":["C,L0,L1,B0"]
+            "headcomponents":["C,L0,L1,L2"]
             ,"L0": "Voltage Name"
             , "L1" : "Volts"
-            , "B0" : "Run All"
+            , "L2" : ""
     };
 
     var headcompsgethspc = {
