@@ -552,7 +552,12 @@ function displaypopup(title, message,res,e,cn,inprg,count){
 
     var em = document.createElement("input");
     em.setAttribute("type", "button");
+    if (res.data.message.toLowerCase().indexOf("'ok'") > -1){
+    em.setAttribute("value", "Cancel");
+    }
+    else{
     em.setAttribute("value", "Fail");
+    }
     em.classList.add("popupbuttons");
     em.onclick = function(ev){
        ev.target.parentNode.parentNode.parentNode.remove();
@@ -564,7 +569,12 @@ function displaypopup(title, message,res,e,cn,inprg,count){
     sp.appendChild(em)
     em = document.createElement("input");
     em.setAttribute("type", "button");
+    if (res.data.message.toLowerCase().indexOf("'ok'") > -1){
+    em.setAttribute("value", "OK");
+    }
+    else{
     em.setAttribute("value", "Pass");
+    } 
     em.onclick = function(ev){
        ev.target.parentNode.parentNode.parentNode.remove();
        if (document.getElementById("popform").innerHTML.length == 0){
