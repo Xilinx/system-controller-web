@@ -24,7 +24,7 @@ var app_strings = {
 			}
 		],
 		"center_pane":{
-			"image":"../static/images/VPK180_home.png",
+			"image":"../static/images/VPK180_home.PNG",
 			"text":"",
 			"button_title":"",
 			"button_link":"",
