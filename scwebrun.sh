@@ -36,23 +36,26 @@ while [ "$IP" == "" -a "$COUNT" != "0" ]; do
 done
 
 echo >/dev/ttyPS0
-if [ "$IP" != "" ]; then
+if [ "$IP" != "" ]
+then
 
-  msge=$(cat <<-EOM                                                            
-****************************************                                        
-*                                      *                                        
-*         BEAM Tool Web Address        *                                        
+  msge=$(cat <<- EOM                                                      
+****************************************
 *                                      *
-*      http://$IP:50002                                        
-*                                      *       
+*         BEAM Tool Web Address        *
+*                                      *
+*      http://$IP:50002                                                                    
+*                                      *
 ****************************************       
-EOM                                            
-)                                                                  
+EOM
+)
+                                                                 
 var=$(echo "$msge"  | sed -E '5s/(.{39})/&\*/')                                 
                                                    
-    cat > /dev/ttyPS0 <<-EOM                   
-$var                                           
-EOM   
+cat > /dev/ttyPS0 <<- EOM
+$var 
+
+EOM
 
 else
 
@@ -67,4 +70,3 @@ else
 EOM
 
 fi
-
