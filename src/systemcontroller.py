@@ -136,7 +136,12 @@ if __name__ == '__main__':
         shutil.copyfile("./static/js/vek280_strings.js", "./static/js/beam_strings.js")
     else:
         shutil.copyfile("./static/js/vck190_strings.js","./static/js/beam_strings.js")
-    
+    f = open("./static/js/gen_sc.js", "a")
+    f.write("\nvar general = {\n")
+    deviname = deviname.strip('\n')
+    f.write('"boardName":''"' + deviname + '"');
+    f.write("\n}")
+    f.close()  
 
 
     #   bit tab components

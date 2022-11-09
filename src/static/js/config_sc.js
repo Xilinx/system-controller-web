@@ -597,7 +597,9 @@ function addVadjTab(){
             , "B0target": "VADJ_FMC"
             , "B0params":""
         };
+        if(general.boardName.toLowerCase()!="vek280"){
         innCompsget.push(setv);
+        }
         var innCompsboot = [];
 
      var bootv = {
@@ -669,7 +671,13 @@ var hspc =
             ,"name": "HSPC"
             , "components":hspctabs
             };
-
+var bootup =
+            {
+            "subtype":"list"
+            ,"name": "Boot-up"
+            ,"components": innCompsboot
+            , "headcomponents" : headcompsset
+            };
     var dict = {"tab": "FMC"
     ,"subtype":"tab"
         ,"components":[
@@ -683,20 +691,15 @@ var hspc =
             ,"components": innCompsget
             , "headcomponents" : headcompsget
 
-            },
-            {
-            "subtype":"list"
-            ,"name": "Boot-up"
-            ,"components": innCompsboot
-            , "headcomponents" : headcompsset
-
             }
-
             ]
 
             },
             ]
             };
+    if(general.boardName.toLowerCase()!="vek280"){
+        dict.components[0].components.push(bootup);
+    }
     if(hspctabs.length){
         dict.components.push(hspc);
     }
