@@ -101,11 +101,11 @@ function jnurllink(){
                 if(res.data[0] == 1){
                     openInNewTab(res.data[1]);
                 }else{
-                    window.alert("Not able to launch Junpyter notebook. Please check if Jupyter notebook is running.");
+                    window.alert("Not able to launch Jupyter notebook. Please check if Jupyter notebook is running.");
                 }
             },
             error: function(){
-                    window.alert("Not able to launch Junpyter notebook. Please check if Jupyter notebook is running.");
+                    window.alert("Not able to launch Jupyter notebook. Please check if Jupyter notebook is running.");
             }
     });
 }
