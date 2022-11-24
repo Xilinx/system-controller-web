@@ -11,7 +11,7 @@ python3 systemcontroller.py >/dev/null 2>&1 &
 
 ## Run Jupyter notebook
 dev_eeprom=$(find /sys/bus/i2c/devices/*54/ -name eeprom | head -1)
-board=$(fru-print -b som -s $dev_eeprom -f product | tr '[:upper:]' '[:lower:]')
+board=$(ipmi-fru --fru-file=${dev_eeprom} --interpret-oem-data | awk -F": " '/^  *FRU Board Product*/ { print tolower ($2) }')
 if [ $board == "vck190" ] || [ $board == "vmk180" ]
 then
     HOME=`(cd ~root && pwd) || echo 'none'`
