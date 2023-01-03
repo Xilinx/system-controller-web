@@ -133,7 +133,7 @@ ERROR: eeprom operation is not supported
     fi
     if [ $2 == "geteeprom" ]
     then 
-    if [ $4 == "all" ]
+    if [ $6 == "all" ]
     then
     echo "00: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
 10: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
@@ -152,7 +152,7 @@ d0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
 e0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
 f0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff"
     fi
-    if [ $4 == "summary" ]
+    if [ $6 == "summary" ]
     then
     echo "Language: 20
 Silicon Revision: ES1

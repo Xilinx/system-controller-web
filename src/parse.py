@@ -92,33 +92,17 @@ class ParseData(Parse):
         if app_config["deployment"] == "DEBUG":
             ver = ver + "." + app_config["dev_for_major_ver"]+"."+app_config["dev_minor_ver"] 
         resar = data.rstrip().split("\n")
-        res = {"device":"-"
-               ,"sil_rev":"-"
-               ,"board_pn":"-"
-               ,"rev":"-"
-               ,"serial_number":"-"
-               ,"mac1":"-"
-               ,"mac2":"-"
-               ,"appversion": ver
-                }
+        res = {}
         for re in resar:
-            ary = re.split(":")
-            if ary[0].startswith('Product'):
-                res['device']=ary[1].strip()
-            #if ary[0].startswith(''):
-            #    res["sil_rev"].ary[1].strip()
-            if ary[0].startswith('Board Part Number'):
-                res["board_pn"]=ary[1].strip()
-            if ary[0].startswith('Board Revision'):
-                res["rev"]=ary[1].strip()
-            if ary[0].startswith('Silicon Revision'):
-                res["sil_rev"]=ary[1].strip()
-            if ary[0].startswith('Board Serial Number'):
-                res["serial_number"]=ary[1].strip()
-            if ary[0].startswith('MAC Address 0'):
-                res["mac1"]=re[re.index(":")+1:]
-            if ary[0].startswith('MAC Address 1'):
-                res["mac2"]=re[re.index(":")+1:]
+            ary = re.split(":",1)
+            if ary[0].startswith('Language') or ary[0].startswith('Manufacturing Date'):
+                continue
+            res[ary[0]] = ary[1].strip()
+            print(res[ary[0]])
+        f_res = {}
+        f_res["summary"] = res
+        f_res["appversion"] = ver
+        return f_res  
         return res
     def parseGetPower(self,data):
         resar = data.rstrip().split("\n")

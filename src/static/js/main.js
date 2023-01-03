@@ -60,13 +60,13 @@ function filleepromdetails(){
                 if(res.status == "error" ){
 			return;
 		}
-                document.getElementById("db_details_Device").innerHTML = "Device : " + "<b>"+res.data.device+ "</b>"
-                document.getElementById("db_details_silrev").innerHTML = "Silicon Rev : " + "<b>"+res.data.sil_rev+ "</b>"
-                document.getElementById("db_details_boardpn").innerHTML = "Board P/N : " + "<b>"+res.data.board_pn+ "</b>"
-                document.getElementById("db_details_rev").innerHTML = "Rev : " + "<b>"+res.data.rev+ "</b>"
-                document.getElementById("db_details_serno").innerHTML = "Serial Number : " + "<b>"+res.data.serial_number+ "</b>"
-                document.getElementById("db_details_mac1").innerHTML = "MAC Address 1 : " + "<b>"+res.data.mac1+ "</b>"
-                document.getElementById("db_details_mac2").innerHTML = "MAC Address 2 : " + "<b>"+res.data.mac2 + "</b>"
+		var keys = Object.keys(res.data.summary)
+		for (var i in keys){
+		var em = document.createElement('p');
+		em.setAttribute("class","details_info");
+		em.innerHTML = keys[i]+" : " + "<b>"+res.data.summary[keys[i]]+"</b>"
+		document.getElementById("db_dashboard").appendChild(em);
+		}
                 document.getElementById("versionLabel").innerHTML = "V "+res.data.appversion
             },
             error: function(){
