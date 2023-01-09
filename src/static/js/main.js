@@ -27,7 +27,7 @@ function loadRefreshData(){
             success: function (res){
                 var el = document.getElementById("home_board_temp_id");
                 var tval = 0;
-		tval = res.data.temp > 100 ? 100 : res.data.temp;
+		tval = res.data.temp > 125 ? 125 : res.data.temp;
 		tval = tval < 0 ? 0 : tval;
 		el.style.setProperty("--temps", tval);
                 if(res.data.temp < 70) el.style.setProperty("--showc","green");

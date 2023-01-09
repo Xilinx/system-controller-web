@@ -1327,7 +1327,7 @@ margin: 25px auto;
     top:0;
     border-radius: 50%;
     left:0;   
-    transform: rotate(calc(-45deg + (1deg *(1.8 * var(--temps)))));
+    transform: rotate(calc(-45deg + (1deg *(1.44 * var(--temps)))));
 }
 
 
