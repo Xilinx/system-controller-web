@@ -138,7 +138,40 @@ class EEPROMDetails(Resource):
                 ,"data":{"error":"%s"%e}
             }
             return resp_json,500
+class ClockFilesList(Resource):
+    def get(self,):
+        try:
+            tcs_files = []
+            txt_files = []
+            for c in os.listdir(app_config["8A34001_clk_files_path"]):
+                if c.endswith(".tcs"):
+                    tcs_files.append(c)
+                if c.endswith(".txt"):
+                    txt_files.append(c)
 
+            upload_tcs_files = []
+            upload_txt_files = []
+            if (os.path.exists(app_config["uploaded_files_path"])):
+                for c in os.listdir(app_config["uploaded_files_path"]):
+                    if c.endswith(".tcs"):
+                        upload_tcs_files.append(c)
+                    if c.endswith(".txt"):
+                        upload_txt_files.append(c)
+
+            resp_json = {
+                "status": "success"
+                , "data": { "default":  {"txtfiles": txt_files ,"tcsfiles": tcs_files },
+                           "user":  {"txtfiles": upload_txt_files  ,"tcsfiles": upload_tcs_files }  }
+            }
+            print(resp_json)
+            return resp_json,200
+        except Exception as e:
+            resp_json = {
+                "status":"error"
+                ,"data":{"error":"%s"%e}
+            }
+            print('e',e)
+            return resp_json,500
 class CmdQuery(Resource):
     def get(self,):
         try:

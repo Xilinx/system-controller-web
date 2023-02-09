@@ -12,6 +12,7 @@
 from flask import Flask, render_template, request 
 from flask import Response  ,jsonify
 from flask_restful import Resource, Api , reqparse
+from werkzeug.utils import secure_filename
 import shutil
 
 from logg import *
@@ -25,8 +26,17 @@ from jnservice import *
 app = Flask(__name__)
 api = Api(app)
 
+app.secret_key = "secret key"
+app.config['UPLOAD_FOLDER'] = app_config["uploaded_files_path"]
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+ALLOWED_EXTENSIONS = set(['txt', 'tcs'])
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 @app.route('/')
 def index():
+    if not os.path.exists(app_config["uploaded_files_path"]):
+        os.makedirs(app_config["uploaded_files_path"])	
     # returning template.
     return render_template("index.html")
 
@@ -35,7 +45,7 @@ api.add_resource(Poll,"/poll")
 api.add_resource(FuncReq,"/funcreq")
 api.add_resource(CmdQuery,"/cmdquery")
 api.add_resource(EEPROMDetails,"/eeprom_details")
-
+api.add_resource(ClockFilesList,"/clock_files")
 
 ## Resources
 import threading
@@ -183,5 +193,40 @@ if __name__ == '__main__':
 
     f.write("\n}")
     f.close()
+    
+    @app.route('/uploader', methods=['POST'], )
+    def upload_file():
+        if not os.path.exists(app_config["uploaded_files_path"]):
+            os.makedirs(app_config["uploaded_files_path"])
+        # if request.method == 'POST':
+        # check if the post request has the file part
+        # print(request.files)
+        if 'file' not in request.files:
+            resp = jsonify({'message': 'No file part in the request'})
+            resp.status_code = 400
+            return resp
+            # flash('No file part')
+            # return redirect(request.url)
+        file = request.files['file']
+        if file.filename == '':
+            resp = jsonify({'message': 'No file selected for uploading'})
+            resp.status_code = 400
+            return resp
+            # flash('No file selected for uploading')
+            # return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            # file.save(os.path.join(upload_folder, filename))
+            resp = jsonify({'message': 'File successfully uploaded'})
+            resp.status_code = 200
+            return resp
+            # flash('File successfully uploaded')
+            # return redirect('/')
+        else:
+            resp = jsonify({'message': 'Allowed file types are txt'})
+            resp.status_code = 500
+            return resp
+        # print(filename)
     app.run(host="0.0.0.0", port=50002, debug=True)
 

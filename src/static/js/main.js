@@ -233,20 +233,30 @@ var theadcomp = document.createElement("thead");
                        tdcomp.appendChild(em)
                     break;
                     case "F":
-                       jQuery.each(c[elem+"V"],function(l, m){
-                       var em = document.createElement("select");
-                       em.setAttribute("reqkey", c[elem]);
-                  
-                        jQuery.each(m, function(j, n){  
-				var g = document.createElement("option");
-	                        g.setAttribute('value',n);
-        	                g.innerHTML = ""+n+" "+c[elem+"N"];
-				em.appendChild(g);
-                        });
-			
-                       tdcomp.appendChild(em)
+                        c[elem + "V"].forEach((values, index) => {
+    			var em = document.createElement("select");
+   			em.setAttribute("reqkey", c[elem]);
+    			em.setAttribute("id", 'selectElementId' + index);
+    			if (index == 0) {
+        		var defOptionTxt = document.createElement("optgroup");
+        		defOptionTxt.setAttribute("label", "Default");
+        		em.appendChild(defOptionTxt);
+        		var usrOptionTxt = document.createElement("optgroup");
+        		usrOptionTxt.setAttribute("label", "User");
+        		em.appendChild(usrOptionTxt);
+        		usrOptionTxt.setAttribute("id", "group" + index);
+    			} else {
+        		var defOptionTcs = document.createElement("optgroup");
+        		defOptionTcs.setAttribute("label", "Default");
+        		em.appendChild(defOptionTcs);
+        		var usrOptionTcs = document.createElement("optgroup");
+        		usrOptionTcs.setAttribute("label", "User");
+        		em.appendChild(usrOptionTcs);
+        		usrOptionTcs.setAttribute("id", "group" + index);
+    			}    	        			                        
+		        tdcomp.appendChild(em)
 			var g = document.createElement("br");
-                       tdcomp.appendChild(g)
+                        tdcomp.appendChild(g)
                         });
                     break;
                     case "D":
@@ -287,18 +297,168 @@ var theadcomp = document.createElement("thead");
     bodycomp.appendChild(tablecomp);
     return bodycomp;
 }
+function upload_clock_files() {
+    $.ajax({
+        url: "/clock_files",
+        type: 'GET',
+        dataType: 'json',
+        success: function (res) {
+            document.querySelectorAll('#selectElementId1').forEach((em, i) => {
+                while (em.length > 0) em.remove(em.length - 1);
+                jQuery.each(res["data"]["default"]["txtfiles"], function (k, d) {
+                    var g = document.createElement("option");
+                    g.setAttribute('value', d);
+                    g.innerHTML = d
+                    em.children[0].appendChild(g);
+                });
+                jQuery.each(res["data"]["user"]["txtfiles"], function (k, d) {
+                    var g = document.createElement("option");
+                    g.setAttribute('value', d);
+                    g.innerHTML = d
+                    em.children[1].appendChild(g);
+                });
+            });
+            document.querySelectorAll('#selectElementId0').forEach((em, i) => {
+                while (em.length > 0) em.remove(em.length - 1);
+                jQuery.each(res["data"]["default"]["tcsfiles"], function (k, d) {
+                    var g = document.createElement("option");
+                    g.setAttribute('value', d);
+                    g.innerHTML = d
+                    em.children[0].appendChild(g);
+                });
+                jQuery.each(res["data"]["user"]["tcsfiles"], function (k, d) {
+                    var g = document.createElement("option");
+                    g.setAttribute('value', d);
+                    g.innerHTML = d
+                    em.children[1].appendChild(g);
+                });
+            });
+        },
+        error: function (res) {
+            console.log(res)
+        }
+    });
+}
+function fileUploder(formdata, fileObj, select_id) {
+    var dupFound = false;
+    var sIds = ["selectElementId0", "selectElementId1"]
+    jQuery.each(sIds, function (t, l) {
+        document.querySelectorAll('#' + l).forEach((em, i) => {
+            jQuery.each(em.children, function (a, b) {
+                jQuery.each(b.children, function (c, d) {
+                    if (d.value == fileObj.name) dupFound = true;
+                });
+            });
+        });
+    });
+    if (dupFound) {
+        alert("File with same name already exists. Please upload file with different name.");
+        return;
+
+    }
+    if (select_id == 1) {
+        fetch('/uploader', {
+            method: 'POST', // or 'PUT'
+            body: formdata,
+        })
+            .then(data => {
+                if (data.status == 200) {
+                    console.log('File uploaded:');
+                    $.ajax({
+                        url: "/clock_files",
+                        type: 'GET',
+                        data: {},
+                        timeout: 5000,
+                        dataType: 'json',
+                        success: function (res) {
+                            upload_clock_files();
+                            count = true
+                        },
+                        error: function (res) {
+                            console.log(res)
+                        }
+                    });
+                }
+                else if (data.status == 500) {
+                    console.log(data)
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+    else if (select_id == 0) {
+        fetch('/uploader', {
+            method: 'POST', // or 'PUT'
+            body: formdata,
+        })
+            .then(data => {
+                if (data.status == 200) {
+                    console.log('File uploaded:');
+                    $.ajax({
+                        url: "/clock_files",
+                        type: 'GET',
+                        data: {},
+                        timeout: 5000,
+                        dataType: 'json',
+                        success: function (res) {
+                            upload_clock_files();
+                            count = true
+                        },
+                        error: function (res) {
+                            console.log(res)
+                        }
+                    });
+                }
+                else if (data.status == 500) {
+                    console.log(data)
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+}
 function rendertabComponentDiv(title, comp){
 
     var tabcomp = document.createElement("div");
     tabcomp.classList.add("content-body");
     tabcomp.id = title.split(' ').join('_').replace("+","")
-    if(comp.subtype == 'tab'){
+    if(comp.subtype == 'tab_plus'){
         var tabdiv = document.createElement("div");
         var navdiv = document.createElement("nav");
         var uldiv = document.createElement("ul");
         uldiv.classList.add("subtabitemlist");
 
         jQuery.each(comp.components, function(j, c){
+	if (c.subtype == 'tab_plus_button') {
+		var lidiv = document.createElement("li");
+                    var bt = document.createElement("input");
+                    var bt1 = document.createElement("button");
+                    bt1.setAttribute("type", "list");
+                    bt1.classList.add("button");
+                    bt1.innerHTML = c.name;
+                    bt.innerHTML = c.name;
+                    bt.classList.add("Btn");
+                    bt.setAttribute("style", "visibility: hidden");
+                    bt1.setAttribute("id", "selectFile");
+                    bt.setAttribute("type", "file");
+                    bt.setAttribute('accept', '.txt,.tcs');
+                    bt1.onclick = function () {
+                         bt.click();
+                         return false;
+                    }
+
+                    bt.addEventListener("change", (e) => {
+                         var formData = new FormData();
+                         formData.append('file', e.target.files[0]);
+                         fileUploder(formData, e.target.files[0], e.target.files[0].name.split('.')[1] == 'txt' ? '1' : '0')
+                        e.target.value = ""
+                    })
+                    lidiv.appendChild(bt);
+                    lidiv.appendChild(bt1);
+                    uldiv.appendChild(lidiv);
+               }else{
                 var lidiv = document.createElement("li");
                 lidiv.classList.add("tab_subitem");
                 if(j == 0){
@@ -308,7 +468,8 @@ function rendertabComponentDiv(title, comp){
                 var node = document.createTextNode(c.name);
                 lidiv.appendChild(node);
                 uldiv.appendChild(lidiv);
-        });
+              }
+	});
         navdiv.appendChild(uldiv);
         tabdiv.appendChild(navdiv);
         tabcomp.appendChild(tabdiv);
@@ -325,16 +486,57 @@ function rendertabComponentDiv(title, comp){
                 contentDiv.appendChild(b);
             }
             else{
+		if (c.subtype == 'tab_plus_button') {
+                    }
+		else{
                 var bodycomp = renderComponentDiv(title.split(' ').join('_') + c.name.split(' ').join('_').replace("+",""), c.components, c.headcomponents )
                 if(j){
                     bodycomp.classList.add("hide");
                 }
                 contentDiv.appendChild(bodycomp);
-
+	     }	
             }
         });
+  }
+    else if (comp.subtype == 'tab') {
+          var tabdiv = document.createElement("div");
+          var navdiv = document.createElement("nav");
+          var uldiv = document.createElement("ul");
+          uldiv.classList.add("subtabitemlist");
+          jQuery.each(comp.components, function (j, c) {
+               var lidiv = document.createElement("li");
+               lidiv.classList.add("tab_subitem");
+               if (j == 0) {
+                    lidiv.classList.add("active");
+               }
+               lidiv.setAttribute('specKey_id', title.split(' ').join('_') + c.name.split(' ').join('_').replace("+", ""));
+               var node = document.createTextNode(c.name);
+               lidiv.appendChild(node);
+               uldiv.appendChild(lidiv);
+          });
+          navdiv.appendChild(uldiv);
+          tabdiv.appendChild(navdiv);
+          tabcomp.appendChild(tabdiv);
+          var contentDiv = document.createElement("div");
+          jQuery.each(comp.components, function (j, c) {
+               if (c.subtype == 'tab') {
+                    var ti = title.split(' ').join('_') + c.name.split(' ').join('_').replace("+", "");
+                    var b = rendertabComponentDiv(ti, c);
+                    if (j) {
+                         b.classList.add("hide");
+                    }
+                    contentDiv.appendChild(b);
+               }
+               else {
+                    var bodycomp = renderComponentDiv(title.split(' ').join('_') + c.name.split(' ').join('_').replace("+", ""), c.components, c.headcomponents)
+                    if (j) {
+                         bodycomp.classList.add("hide");
+                    }
+                    contentDiv.appendChild(bodycomp);
 
-    }else{
+               }
+          });
+    }else {
         jQuery.each(comp, function(j, c){
 
             var bodycomp = renderComponentDiv(title.split(' ').join('_') + c.name.split(' ').join('_').replace("+",""), c.components, c.headcomponents)
@@ -1403,6 +1605,7 @@ $(document).ready(function () {
 	},5000);
 	filleepromdetails();
 	loadRefreshData();
+	upload_clock_files();
 
 });
 

@@ -402,7 +402,7 @@ function addClockTab(){
             , "B0" : "Restore All Clocks"
     };
     var dict = {"tab": "Clock"
-    ,"subtype":"tab"
+    ,"subtype":"tab_plus"
         ,"components":[
             {
             "subtype":"list"
@@ -431,6 +431,10 @@ function addClockTab(){
             ,"components": innCompsreset
             , "headcomponents" : headcompsreset
             }
+	    ,{
+            "subtype":"tab_plus_button"
+            ,"name": "Upload clock files"
+            }	
             ]
             };
     boardsettingsTab.push(dict);
