@@ -132,9 +132,9 @@ if __name__ == '__main__':
     f.close()
     # check device
     deviname = Term.exec_cmd(sc_app_path+" -c board\n")
-    if ("VCK" in deviname):
+    if ("VCK190" in deviname):
         shutil.copyfile("./static/js/vck190_strings.js","./static/js/beam_strings.js")
-    elif ("VMK" in deviname):
+    elif ("VMK180" in deviname):
         shutil.copyfile("./static/js/vmk180_strings.js","./static/js/beam_strings.js")
     elif ("VPK120" in deviname):
         shutil.copyfile("./static/js/vpk120_strings.js","./static/js/beam_strings.js")
