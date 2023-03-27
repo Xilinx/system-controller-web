@@ -445,10 +445,15 @@ function addVoltageTab(){
         var innCompsreset = [];
         var innCompssetboot = [];
         jQuery.each(listsjson_sc["listvoltage"] , function(i, tds){
+	tdsary = tds.split(" - (");
+        tds = tdsary[0];
+        tds2 = "-";
+        if(tdsary.length > 1) tds2 = "("+tdsary[1];
         var eachcomp = {
             "type":"list"
-            ,"components" : ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"components" : ["C,L0,L1,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
             ,"L0": tds
+	    ,"L1": tds2
             ,"V0": "- V"
             ,"V0N": "V"
             ,"V0V": "voltage"
@@ -499,7 +504,7 @@ function addVoltageTab(){
     });
 
     var headcompsget = {
-            "headcomponents":["C,L0,L1,B0"]
+            "headcomponents":["C,L0,L2,L1,B0"]
             ,"L0": "Voltage Name"
             , "L1" : "Volts"
             , "B0" : "Get All"
@@ -507,6 +512,7 @@ function addVoltageTab(){
     var headcompsset = {
             "headcomponents":["C,L0,L1,B0"]
             ,"L0": "Voltage Name"
+	    ,"L2": "Range"
             , "L1" : "Volts"
             , "B0" : "Set All"
     };
