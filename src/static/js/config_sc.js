@@ -759,6 +759,7 @@ function addPowerDomainTab(){
 function addgpioTab(){
 
         var innCompsget = [];
+	var innCompsset = [];
         jQuery.each(listsjson_sc["listgpio"] , function(i, tds){
         var eachcomp = {
             "type":"list"
@@ -774,6 +775,19 @@ function addgpioTab(){
             , "B0params":""
         };
         innCompsget.push(eachcomp);
+	var eachcomp = {
+            "type":"list"
+            ,"components" : ["C,L0,E0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"L0": tds
+            ,"E0": "value"
+            ,"E0K": "-V"
+            ,"B0": "Set"
+            ,"B0A": "/cmdquery"
+            ,"B0sc_cmd":"setgpio"
+            , "B0target": tds
+            , "B0params":""
+        };
+        innCompsset.push(eachcomp);
     });
 
     var headcompsget = {
@@ -782,6 +796,12 @@ function addgpioTab(){
             , "L1" : "State"
             , "B0" : "Get All"
     };
+    var headcompsset = {
+            "headcomponents":["C,L0,L1,B0"]
+            ,"L0": "GPIO Name"
+            , "L1" : "State"
+            , "B0" : "Set All"
+    };	
     var dict = {"tab": "Sys Ctlr Bank IO"
     ,"subtype":"tab"
         ,"components":[
@@ -791,6 +811,12 @@ function addgpioTab(){
             ,"components": innCompsget
             , "headcomponents" : headcompsget
 
+            }
+	    ,{
+             "subtype":"list"
+            ,"name": "Set GPIO"
+            ,"components": innCompsset
+            , "headcomponents" : headcompsset
             }
             ]
             };
