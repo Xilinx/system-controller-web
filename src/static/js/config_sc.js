@@ -506,14 +506,14 @@ function addVoltageTab(){
     var headcompsget = {
             "headcomponents":["C,L0,L2,L1,B0"]
             ,"L0": "Voltage Name"
+	    ,"L2": "Expected Volts"
             , "L1" : "Volts"
             , "B0" : "Get All"
     };
     var headcompsset = {
             "headcomponents":["C,L0,L1,B0"]
             ,"L0": "Voltage Name"
-	    ,"L2": "Range"
-            , "L1" : "Volts"
+	    , "L1" : "Volts"
             , "B0" : "Set All"
     };
     var headcompsreset = {
