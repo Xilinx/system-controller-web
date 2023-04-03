@@ -1054,10 +1054,44 @@ function addqsfpTab(){
         var innCompsset = [];
         jQuery.each(listsjson_sc["listQSFP"] , function(i, tds){
         jQuery.each([["QSFP","getQSFP"]/*,["PWM QSFP","getpwmQSFP"],["PWMO QSFP","getpwmoQSFP"]*/] , function(j, tdsd){
+        tdsary = tds.split(" - ");
+        tds1 = tdsary[0];
+        if(tds.toLowerCase().endsWith("not connected")==true ){
+	var eachcomp = {
+            "type":"list"
+            ,"components" : ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"L0":  tdsd[0] + " " + tds1
+            ,"V0": tdsary[1]
+            ,"V0N": ""
+            ,"V0V": "io"
+            ,"B0": "Get"
+            ,"B0A": "/cmdquery"
+            ,"B0sc_cmd":tdsd[1]
+            , "B0target": tds
+            , "B0params":""
+	    ,"B0disabled":true
+        };
+        innCompsget.push(eachcomp);
+	}else if(tds.toLowerCase().endsWith("connection unknown")==true){
         var eachcomp = {
             "type":"list"
             ,"components" : ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
-            ,"L0":  tdsd[0] + " " + tds
+            ,"L0":  tdsd[0] + " " + tds1
+            ,"V0": tdsary[1]
+            ,"V0N": ""
+            ,"V0V": "io"
+            ,"B0":"Get"
+            ,"B0A": "/cmdquery"
+            ,"B0sc_cmd":tdsd[1]
+            , "B0target": tds
+            , "B0params":""
+        };
+        innCompsget.push(eachcomp);
+        }else{
+        var eachcomp = {
+             "type":"list"
+            ,"components" : ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"L0":  tdsd[0] + " " + tds1
             ,"V0": "-"
             ,"V0N": ""
             ,"V0V": "io"
@@ -1068,6 +1102,7 @@ function addqsfpTab(){
             , "B0params":""
         };
         innCompsget.push(eachcomp);
+        }
     });
     });
         /*jQuery.each(listsjson_sc["listQSFP"] , function(i, tds){
@@ -1124,6 +1159,40 @@ function addsfpTab(){
         var innCompsset = [];
         jQuery.each(listsjson_sc["listSFP"] , function(i, tds){
         jQuery.each([["SFP","getSFP"]/*,["PWM SFP","getpwmSFP"]*/] , function(j, tdsd){
+        tdsary = tds.split(" - ");
+        tds1 = tdsary[0];
+        if(tds.toLowerCase().endsWith("not connected")==true ){
+	var eachcomp = {
+            "type":"list"
+            ,"components" : ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"L0":  tdsd[0] + " " + tds1
+            ,"V0": tdsary[1]
+            ,"V0N": ""
+            ,"V0V": "io"
+            ,"B0": "Get"
+            ,"B0A": "/cmdquery"
+            ,"B0sc_cmd":tdsd[1]
+            , "B0target": tds
+            , "B0params":""
+	    ,"B0disabled":true
+        };
+        innCompsget.push(eachcomp);
+	}else if(tds.toLowerCase().endsWith("connection unknown")==true){
+        var eachcomp = {
+            "type":"list"
+            ,"components" : ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"L0":  tdsd[0] + " " + tds1
+            ,"V0": tdsary[1]
+            ,"V0N": ""
+            ,"V0V": "io"
+            ,"B0":"Get"
+            ,"B0A": "/cmdquery"
+            ,"B0sc_cmd":tdsd[1]
+            , "B0target": tds
+            , "B0params":""
+        };
+        innCompsget.push(eachcomp);
+        }else{
         var eachcomp = {
             "type":"list"
             ,"components" : ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
@@ -1138,6 +1207,7 @@ function addsfpTab(){
             , "B0params":""
         };
         innCompsget.push(eachcomp);
+        }
     });
     });
         jQuery.each(listsjson_sc["listSFP"] , function(i, tds){

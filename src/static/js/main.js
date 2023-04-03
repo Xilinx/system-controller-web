@@ -222,7 +222,9 @@ var theadcomp = document.createElement("thead");
                        em.setAttribute("params",c[elem+"params"]);
                        if(c[elem+"dontcare"])
                        em.setAttribute("dontcare",c[elem+"dontcare"]);
-                       tdcomp.appendChild(em)
+                       if(c[elem+"disabled"])
+                       em.setAttribute("disabled",c[elem+"disabled"]);
+		       tdcomp.appendChild(em)
                     break;
                     case "E":
                        var em = document.createElement("input");
