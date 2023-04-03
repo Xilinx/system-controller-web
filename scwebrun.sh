@@ -26,7 +26,7 @@ else
 fi
 
 ## print ip on console
-COUNT=25
+COUNT=30
 IP=`/sbin/ifconfig eth0 | grep 'inet addr' | awk '{print $2}' | awk -F ':' '{print $2}'`
 while [ "$IP" == "" -a "$COUNT" != "0" ]; do
     echo -n "." >/dev/ttyPS0
