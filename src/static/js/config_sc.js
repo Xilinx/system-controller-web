@@ -917,7 +917,27 @@ function addEEPROMDataTab(){
 }
 function addEBMTab(){
         var innCompsget = [];
-     jQuery.each([["All","all"],["Common","common"],["Board","board"],["Multirecord","multirecord"]] , function(i, tds){
+	jQuery.each(listsjson_sc["listEBM"] , function(i, tds1){
+        tdsary = tds1.split(" - ");
+        tds = tdsary[0];
+        jQuery.each([["All","all"],["Common","common"],["Board","board"],["Multirecord","multirecord"]] , function(j, tds){
+        if(tds1.toLowerCase().endsWith("not connected")==true ){
+        var eachcomp = {
+            "type":"list"
+            ,"components" : ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"L0": tds[0]
+            ,"V0": tdsary[1]
+            ,"V0N": ""
+            ,"V0V": "io"
+            ,"B0": "Get"
+            ,"B0A": "/cmdquery"
+            ,"B0sc_cmd":"getEBM"
+            , "B0target": listsjson_sc.listEBM[0]
+            , "B0params":""+tds[1]
+	    ,"B0disabled":true
+        };
+        innCompsget.push(eachcomp);
+	}else{
         var eachcomp = {
             "type":"list"
             ,"components" : ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
@@ -932,6 +952,8 @@ function addEBMTab(){
             , "B0params":""+tds[1]
         };
         innCompsget.push(eachcomp);
+        }
+        });
     });
     var headcompsget = {
             "headcomponents":["C,L0,L1,B0"]
