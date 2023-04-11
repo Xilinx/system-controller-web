@@ -1089,7 +1089,7 @@ function addqsfpTab(){
             ,"B0": "Get"
             ,"B0A": "/cmdquery"
             ,"B0sc_cmd":tdsd[1]
-            , "B0target": tds
+            , "B0target": tds1
             , "B0params":""
 	    ,"B0disabled":true
         };
@@ -1105,7 +1105,7 @@ function addqsfpTab(){
             ,"B0":"Get"
             ,"B0A": "/cmdquery"
             ,"B0sc_cmd":tdsd[1]
-            , "B0target": tds
+            , "B0target": tds1
             , "B0params":""
         };
         innCompsget.push(eachcomp);
@@ -1194,7 +1194,7 @@ function addsfpTab(){
             ,"B0": "Get"
             ,"B0A": "/cmdquery"
             ,"B0sc_cmd":tdsd[1]
-            , "B0target": tds
+            , "B0target": tds1
             , "B0params":""
 	    ,"B0disabled":true
         };
@@ -1210,7 +1210,7 @@ function addsfpTab(){
             ,"B0":"Get"
             ,"B0A": "/cmdquery"
             ,"B0sc_cmd":tdsd[1]
-            , "B0target": tds
+            , "B0target": tds1
             , "B0params":""
         };
         innCompsget.push(eachcomp);
