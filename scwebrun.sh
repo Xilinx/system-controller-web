@@ -4,6 +4,19 @@
 #
 # SPDX-License-Identifier: MIT
 ##
+## Make sure sc_appd is up and running
+COUNT=30
+SC_APP_OUT=`/usr/bin/sc_app -c board 2>&1`
+while [ "$SC_APP_OUT" == "ERROR: failed to connect to socket: Connection refused" -a $COUNT -ne 0 ]; do
+    sleep 1
+    COUNT=`expr $COUNT - 1`
+    SC_APP_OUT=`/usr/bin/sc_app -c board 2>&1`
+done
+
+if [ $COUNT -eq 0 ]; then
+    echo "ERROR: sc_appd is not responding!" >/dev/ttyPS0
+    exit -1
+fi
 
 ## Run scweb server
 cd /usr/share/scweb/
