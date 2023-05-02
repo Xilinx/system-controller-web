@@ -6,11 +6,11 @@
 ##
 ## Make sure sc_appd is up and running
 COUNT=30
-SC_APP_OUT=`/usr/bin/sc_app -c board 2>&1`
-while [ "$SC_APP_OUT" == "ERROR: failed to connect to socket: Connection refused" -a $COUNT -ne 0 ]; do
+SC_APP_OUT=`/usr/bin/sc_app -c board 2>&1 | grep "ERROR: "`
+while [ "$SC_APP_OUT" != "" -a $COUNT -ne 0 ]; do
     sleep 1
     COUNT=`expr $COUNT - 1`
-    SC_APP_OUT=`/usr/bin/sc_app -c board 2>&1`
+    SC_APP_OUT=`/usr/bin/sc_app -c board 2>&1 | grep "ERROR: "`
 done
 
 if [ $COUNT -eq 0 ]; then

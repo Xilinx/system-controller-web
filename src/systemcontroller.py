@@ -128,7 +128,7 @@ if __name__ == '__main__':
 
     f.write(',\n"8A34001_clk_tcs_files":['+tcsfiles+']')
     f.write(',\n"8A34001_clk_txt_files":['+txtfiles+']')
-    f.write("\n}")
+    f.write("\n};")
     f.close()
     # check device
     deviname = Term.exec_cmd(sc_app_path+" -c board\n")
