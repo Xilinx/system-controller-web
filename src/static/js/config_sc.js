@@ -292,7 +292,7 @@ function addClockTab(){
             ,"L0": tds
             ,"L1":"-"
             ,"F0": "value"
-            ,"F0N": ""
+            ,"F0N": [".tcs",".txt"]
             ,"F0V": [listsjson_sc["8A34001_clk_tcs_files"],listsjson_sc["8A34001_clk_txt_files"]]
             ,"B0": "Set"
             ,"B0A": "/cmdquery"
@@ -332,7 +332,7 @@ function addClockTab(){
             ,"L0": tds
             ,"L1": "-"
             ,"F0": "value"
-            ,"F0N": ""
+            ,"F0N": [".tcs",".txt"]
             ,"F0V": [listsjson_sc["8A34001_clk_tcs_files"],listsjson_sc["8A34001_clk_txt_files"]]
             ,"B0": "Set"
             ,"B0A": "/cmdquery"

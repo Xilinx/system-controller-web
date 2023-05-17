@@ -257,6 +257,9 @@ var theadcomp = document.createElement("thead");
         		usrOptionTcs.setAttribute("id", "group" + index);
     			}    	        			                        
 		        tdcomp.appendChild(em)
+			var em = document.createElement("label");
+        	        em.innerHTML = c[elem+"N"][index];
+        	        tdcomp.appendChild(em)
 			var g = document.createElement("br");
                         tdcomp.appendChild(g)
                         });
