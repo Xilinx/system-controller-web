@@ -448,19 +448,22 @@ function rendertabComponentDiv(title, comp){
                     bt.setAttribute("style", "visibility: hidden");
                     bt1.setAttribute("id", "selectFile");
                     bt.setAttribute("type", "file");
-                    bt.setAttribute('accept', '.txt,.tcs');
+                    bt.setAttribute('multiple', 'multiple');
+		    bt.setAttribute('accept', '.txt,.tcs');
                     bt1.onclick = function () {
                          bt.click();
                          return false;
                     }
 
                     bt.addEventListener("change", (e) => {
-                         var formData = new FormData();
-                         formData.append('file', e.target.files[0]);
-                         fileUploder(formData, e.target.files[0], e.target.files[0].name.split('.')[1] == 'txt' ? '1' : '0')
-                        e.target.value = ""
+                    var formData = new FormData();
+                        for (let i = 0; i < e.target.files.length; i++) {
+                            formData.append('file', e.target.files[i]);
+                            fileUploder(formData, e.target.files[i], e.target.files[i].name.split('.')[1] == 'txt' ? '1' : '0');
+                        }
+                        e.target.value = "";
                     })
-                    lidiv.appendChild(bt);
+		    lidiv.appendChild(bt);
                     lidiv.appendChild(bt1);
                     uldiv.appendChild(lidiv);
                }else{
