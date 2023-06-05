@@ -345,6 +345,10 @@ function upload_clock_files() {
     });
 }
 function fileUploder(formdata, fileObj, select_id) {
+    if (fileObj.size == 0) {
+          alert("Cannot upload an empty file");
+          return;
+          }
     var dupFound = false;
     var sIds = ["selectElementId0", "selectElementId1"]
     jQuery.each(sIds, function (t, l) {
