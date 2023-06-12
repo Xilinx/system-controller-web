@@ -193,40 +193,39 @@ if __name__ == '__main__':
 
     f.write("\n}")
     f.close()
-    
-    @app.route('/uploader', methods=['POST'], )
+    @app.route('/uploader', methods=['POST'])
     def upload_file():
         if not os.path.exists(app_config["uploaded_files_path"]):
             os.makedirs(app_config["uploaded_files_path"])
-        # if request.method == 'POST':
-        # check if the post request has the file part
-        # print(request.files)
+
+        # Check if the post request has the file part
         if 'file' not in request.files:
             resp = jsonify({'message': 'No file part in the request'})
             resp.status_code = 400
             return resp
-            # flash('No file part')
-            # return redirect(request.url)
-        file = request.files['file']
-        if file.filename == '':
-            resp = jsonify({'message': 'No file selected for uploading'})
-            resp.status_code = 400
-            return resp
-            # flash('No file selected for uploading')
-            # return redirect(request.url)
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            # file.save(os.path.join(upload_folder, filename))
-            resp = jsonify({'message': 'File successfully uploaded'})
-            resp.status_code = 200
-            return resp
-            # flash('File successfully uploaded')
-            # return redirect('/')
-        else:
-            resp = jsonify({'message': 'Allowed file types are txt'})
+
+        files = request.files.getlist('file')  # Get list of files
+
+        errors = False
+        for file in files:
+            if file.filename == '':
+                resp = jsonify({'message': 'No file selected for uploading'})
+                resp.status_code = 400
+                return resp
+
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            else:
+                errors = True
+
+        if errors:
+            resp = jsonify({'message': 'Some files could not be uploaded. Allowed file types are txt'})
             resp.status_code = 500
             return resp
-        # print(filename)
+
+        resp = jsonify({'message': 'Files successfully uploaded'})
+        resp.status_code = 200
+        return resp
     app.run(host="0.0.0.0", port=50002, debug=True)
 
