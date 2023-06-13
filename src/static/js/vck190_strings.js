@@ -1,11 +1,11 @@
 /*
-* Copyright (c) 2020 - 2021 Xilinx, Inc. and Contributors. All rights reserved.
-*
-* SPDX-License-Identifier: MIT
-*/
+ * * Copyright (c) 2020 - 2021 Xilinx, Inc. and Contributors. All rights reserved.
+ * *
+ * * SPDX-License-Identifier: MIT
+ * */
 var app_strings = {
-	"tab_title":"Board Evaluation & Management Tool (BEAM)",
-	"app_title":"Board Evaluation & Management Tool (BEAM)",
+	"tab_title":"BOARD EVALUATION AND MANAGEMENT (BEAM) TOOL",
+	"app_title":"BOARD EVALUATION AND MANAGEMENT (BEAM) TOOL",
 	"xilinx_icon":"../images/icon.png",
 	"home_tab":{
 		"title":"Welcome & Get Started with Versal AI Core Series VCK190 Evaluation Kit",
@@ -13,20 +13,20 @@ var app_strings = {
 			{
 				"image":"../static/images/VersalSilicon.png",
 				"text":"",
-				"button_title":"About Versal ACAP",
+				"button_title":"LEARN MORE",
 				"button_link":"https://www.xilinx.com/products/silicon-devices/acap/versal.html",
 			},
 			{
 				"image":"../static/images/AICore.png",
 				"text":"",
-				"button_title":"Product Table",
+				"button_title":"LEARN MORE",
 				"button_link":"https://www.xilinx.com/products/silicon-devices/acap/versal-ai-core.html#productTable",
 			}
 		],
 		"center_pane":{
 			"image":"../static/images/VCK190_home.png",
 			"text":"",
-			"button_title":"Visit Product Page",
+			"button_title":"VISIT PRODUCT PAGE",
 			"button_link":"https://www.xilinx.com/products/boards-and-kits/vck190.html",
 		},
 	},
@@ -35,114 +35,52 @@ var app_strings = {
 		"center_pane":{
 			"image":"../static/images/vck190.jpg",
 			"text":"For more information regarding Hardware, Documentation, Tools & IP and Training & Support",
-			"button_title":"Visit Product Page",
+			"button_title":"VISIT PRODUCT PAGE",
 			"button_link":"https://www.xilinx.com/products/boards-and-kits/vck190.html",
 		},
-		
+
 	},
-	"linuxprompt":{
-		"title":"Obtain Linux Prompt",
+	"powertool":{
+		"title":"Versal Power Tool",
 		"pane":[
 			{
-				"title":"Instructions to obtain Linux prompt from Versal",
+				"title":"",
 				"image":"../static/images/xilinx_banner.png",
 				"text":"",
-				"button_title":"Download",
-				"button_link":"",
-				"learnmore_link":"https://xilinx.github.io/Embedded-Design-Tutorials/master/docs/index.html",
+				"button_title":"RUN",
+                "button_link_type":1,
+				"button_link": "jnurllink",
+				"learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1299251214/Versal+ACAP+Power+Tool+part+1+-+Introduction+to+the+Power+Tool",
 			},
 		],
 
 	},
-	"run_demos":{
-		"title":"Demos & Designs",
+	"cockpit":{
+		"title":"ACAP Cockpit",
 		"pane":[
 			{
-				"title":"Petalinux BSP Designs",
-				"image":"../static/images/xilinx_banner.png",
-				"text":"",
-				"button_title":"Product Page",
-				"button_link":"https://www.xilinx.com/products/boards-and-kits/vck190.html",
-				"learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/748617729/Versal+AI+Core+Series+VCK190+Evaluation+Kit",
-			},
-			{
-				"title":"Versal Power Tool",
-				"image":"../static/images/xilinx_banner.png",
-				"text":"",
-				"button_title":"Run",
-                                "button_link_type":1,
-				"button_link": "jnurllink",
-				"learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1299251214/Versal+ACAP+Power+Tool+part+1+-+Introduction+to+the+Power+Tool",
-			},
-			{
-				"title":"Target Reference Designs",
-				"image":"../static/images/xilinx_banner.png",
-				"text":"",
-				"button_title":"Product Page",
-				"button_link":"https://www.xilinx.com/products/boards-and-kits/vck190.html",
-				"learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/748617729/Versal+AI+Core+Series+VCK190+Evaluation+Kit",
-			},
-			{
-                                "title":"ACAP Cockpit",
+                                "title":"",
                                 "image":"../static/images/xilinx_banner.png",
                                 "text":"",
-                                "button_title":"Run",
+                                "button_title":"RUN",
                                 "button_link_type":1,
                                 "button_link": "launchacap",
                                 "learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1544192059/ACAP+Cockpit",
                         },
-			{
-                                "title":"Power Management Dashboard",
-                                "image":"../static/images/xilinx_banner.png",
-                                "text":"",
-                                "button_title":"Run",
-                                "button_link_type":1,
-                                "button_link": "launchpmtool",
-                                "learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1887862954/Power+Management+Dashboard",
-                        },
-
 		],
 
 	},
-	"develop_tools":{
-		"title":"Develop using Tools",
-		"left_pane":{
-			"image":"../static/images/Develop_tools.png",
-			"text":"Xilinx provides technical resources to help you understand the design flow, optimize software, and solve your development challenges.",
-			"button_title":"",
-			"button_link":"",
-		},
-		"right_pane":[
+	"design_examples":{
+		"title":"Target Reference Designs",
+		"pane":[
 			{
-				"image":"../static/images/ai_sc.png",
+				"title":"",
+				"image":"../static/images/xilinx_banner.png",
 				"text":"",
-				"button_title":"About Vitis/Vitis AI",
-				"button_link":"https://www.xilinx.com/products/design-tools/vitis.html",
+				"button_title":"Product Page",
+				"button_link":"https://www.xilinx.com/products/boards-and-kits/vck190.html",
+				"learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/2232385541/Versal+Targeted+Reference+Designs+TRDs",
 			},
-			{
-				"image":"../static/images/apd.png",
-				"text":"",
-				"button_title":"Visit Developer site",
-				"button_link":"https://developer.xilinx.com/",
-			},
-			{
-				"image":"../static/images/ed.png",
-				"text":"",
-				"button_title":"Download Libraries",
-				"button_link":"https://github.com/Xilinx/Vitis_Libraries",
-			},
-			{
-				"image":"../static/images/hd.png",
-				"text":"",
-				"button_title":"About Vivado Design Suite",
-				"button_link":"https://www.xilinx.com/products/design-tools/vivado.html",
-			},
-			{
-				"image":"../static/images/hd.png",
-				"text":"",
-				"button_title":"Download Vivado",
-				"button_link":"https://www.xilinx.com/support/download.html",
-			}
 		],
 
 	},
@@ -155,7 +93,7 @@ var app_strings = {
                                 "content":["The Board Evaluation & Management Tool (BEAM) is currently in production ("+listsjson_sc.version+")"]
                         },
                         {
-                                "heading":"known issues and bugs",
+                                "heading":"Known Issues and Bugs",
                                 "content_type":1,	
                                 "content":["Some webpage links may be broken or non-functional. This may happen because the webpage may not exist or is moved to a different location/address. These links will be fixed in subsequent release of the Board Evaluation & Management Tool (BEAM).","The Board Evaluation & Management Tool (BEAM) can execute one particular action/task only at a time. For example, you cannot run the Board Settings and Board Interface Test at the same time. Please wait till a particular task is complete and then proceed."]
                         },
@@ -187,3 +125,4 @@ var app_strings = {
         },
 
 };
+

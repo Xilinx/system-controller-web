@@ -1303,8 +1303,8 @@ function layoutDesigns(){
         em4.setAttribute("linkv", app_strings.home_tab.left_pane[i].button_link);
         em4.setAttribute("value", app_strings.home_tab.left_pane[i].button_title);
         em4.onclick = function (e){ openInNewTab(e.target.attributes.linkv.value);};
-        em1.append(em4)
         $("#railcolumn_com").append(em1);
+	$("#railcolumn_com").append(em4);
    }
 // center pane
    {
@@ -1410,30 +1410,29 @@ function layoutDesigns(){
         em4.setAttribute("linkv", app_strings.test_board.center_pane.button_link);
         em4.setAttribute("value", app_strings.test_board.center_pane.button_title);
         em4.onclick = function (e){ openInNewTab(e.target.attributes.linkv.value);};
-        em3.append(em4)
         if(app_strings.test_board.center_pane.button_title.length != 0){
             $("#testboard_home").append(em3);
         }
+	$("#testboard_home").append(em4);
    }
-/*      Obtain Linux Prompts  */
+/*      VERSAL POWER TOOL  */
    {
-       $('#linuxprompt_screen .app-title').html(app_strings.linuxprompt.title);
+       $('#linuxprompt_screen .app-title').html(app_strings.powertool.title);
         var em7 = document.createElement("span");
-        for(var i = 0; i < app_strings.linuxprompt.pane.length; i++){
+        for(var i = 0; i < app_strings.powertool.pane.length; i++){
         var em6 = document.createElement("span");
-        //em6.classList.add("");
         var em1 = document.createElement("div");
         em1.classList.add("block_dashboard_lp");
         var em5 = document.createElement("p");
         em5.classList.add("link_key");
-        em5.textContent = app_strings.linuxprompt.pane[i].title;
+        em5.textContent = app_strings.powertool.pane[i].title;
         em1.append(em5)
         var em2 = document.createElement("a");
         em2.classList.add("logo-align");
         em2.classList.add("align-center");
         em2.setAttribute("value", "Reset");
         var em3 = document.createElement("img");
-        em3.setAttribute("src", app_strings.linuxprompt.pane[i].image);
+        em3.setAttribute("src", app_strings.powertool.pane[i].image);
         em3.setAttribute("alt", "logo");
         em3.setAttribute("width", "100%");
         em2.append(em3)
@@ -1441,31 +1440,31 @@ function layoutDesigns(){
 
         var em11 = document.createElement("p");
         em11.classList.add("link_key");
-        em11.textContent = app_strings.linuxprompt.pane[i].text;
-        if (app_strings.linuxprompt.pane[i].text.length) em1.append(em11)
+        em11.textContent = app_strings.powertool.pane[i].text;
+        if (app_strings.powertool.pane[i].text.length) em1.append(em11)
 
         var em9 = document.createElement("span");
         var em4 = document.createElement("input");
         em4.classList.add("prod_page_btn");
         em4.setAttribute("type", "button");
-        em4.setAttribute("linkv", app_strings.linuxprompt.pane[i].button_link);
-        em4.setAttribute("value", app_strings.linuxprompt.pane[i].button_title);
-        if(app_strings.linuxprompt.pane[i].button_link_type){
+        em4.setAttribute("linkv", app_strings.powertool.pane[i].button_link);
+        em4.setAttribute("value", app_strings.powertool.pane[i].button_title);
+        if(app_strings.powertool.pane[i].button_link_type){
             em4.onclick = function (e) {
               window[e.target.attributes.linkv.value]();
             };
         }else{
         em4.onclick = function (e){ openInNewTab(e.target.attributes.linkv.value);};
         }
-        if (app_strings.linuxprompt.pane[i].button_link.length && app_strings.linuxprompt.pane[i].button_title.length ) em9.append(em4)
+        if (app_strings.powertool.pane[i].button_link.length && app_strings.powertool.pane[i].button_title.length ) em9.append(em4)
         var em8 = document.createElement("input");
         em8.classList.add("prod_page_btn");
         em8.setAttribute("type", "button");
-        em8.setAttribute("linkv", app_strings.linuxprompt.pane[i].learnmore_link);
-        em8.setAttribute("value", "Learn More");
+        em8.setAttribute("linkv", app_strings.powertool.pane[i].learnmore_link);
+        em8.setAttribute("value", "LEARN MORE");
         em8.onclick = function (e){ openInNewTab(e.target.attributes.linkv.value);};
 
-        if (app_strings.linuxprompt.pane[i].learnmore_link.length) em9.append(em8);
+        if (app_strings.powertool.pane[i].learnmore_link.length) em9.append(em8);
         em1.append(em9)
         em6.append(em1)
         em7.append(em6)
@@ -1473,25 +1472,80 @@ function layoutDesigns(){
         $("#linuxprompt_screen").append(em7);
 
    }
-/*	Run demos and designs */
+/*	VERSAL COCKPIT */
    {
-        $('#dnd_screen .app-title').html(app_strings.run_demos.title);
+        $('#dnd_screen .app-title').html(app_strings.cockpit.title);
         var em7 = document.createElement("span");
-        for(var i = 0; i < app_strings.run_demos.pane.length; i++){
+        for(var i = 0; i < app_strings.cockpit.pane.length; i++){
         var em6 = document.createElement("span");
-        em6.classList.add("homecolumn_4");
         var em1 = document.createElement("div");
-        em1.classList.add("block_dashboard");
+        em1.classList.add("block_dashboard_lp");
         var em5 = document.createElement("p");
         em5.classList.add("link_key");
-        em5.textContent = app_strings.run_demos.pane[i].title;
+        em5.textContent = app_strings.cockpit.pane[i].title;
         em1.append(em5)
         var em2 = document.createElement("a");
         em2.classList.add("logo-align");
         em2.classList.add("align-center");
         em2.setAttribute("value", "Reset");
         var em3 = document.createElement("img");
-        em3.setAttribute("src", app_strings.run_demos.pane[i].image);
+        em3.setAttribute("src", app_strings.cockpit.pane[i].image);
+        em3.setAttribute("alt", "logo");
+        em3.setAttribute("width", "100%");
+        em2.append(em3)
+        em1.append(em2)
+
+        var em11 = document.createElement("p");
+        em11.classList.add("link_key");
+        em11.textContent = app_strings.cockpit.pane[i].text;
+        if (app_strings.cockpit.pane[i].text.length) em1.append(em11)
+
+        var em9 = document.createElement("span");
+        var em4 = document.createElement("input");
+        em4.classList.add("prod_page_btn");
+        em4.setAttribute("type", "button");
+        em4.setAttribute("linkv", app_strings.cockpit.pane[i].button_link);
+        em4.setAttribute("value", app_strings.cockpit.pane[i].button_title);
+        if(app_strings.cockpit.pane[i].button_link_type){
+            em4.onclick = function (e) {
+              window[e.target.attributes.linkv.value]();
+            };
+        }else{
+        em4.onclick = function (e){ openInNewTab(e.target.attributes.linkv.value);};
+        }
+        if (app_strings.cockpit.pane[i].button_link.length && app_strings.cockpit.pane[i].button_title.length ) em9.append(em4)
+        var em8 = document.createElement("input");
+        em8.classList.add("prod_page_btn");
+        em8.setAttribute("type", "button");
+        em8.setAttribute("linkv", app_strings.cockpit.pane[i].learnmore_link);
+        em8.setAttribute("value", "LEARN MORE");
+        em8.onclick = function (e){ openInNewTab(e.target.attributes.linkv.value);};
+
+        if (app_strings.cockpit.pane[i].learnmore_link.length) em9.append(em8);
+        em1.append(em9)
+        em6.append(em1)
+        em7.append(em6)
+        }
+        $("#dnd_screen").append(em7);
+   }
+/*	DESIGN EAXMPLES */
+   {
+        $('#tools_screen .app-title').html(app_strings.design_examples.title);
+       var em7 = document.createElement("span");
+        for(var i = 0; i < app_strings.design_examples.pane.length; i++){
+        var em6 = document.createElement("span");
+        var em1 = document.createElement("div");
+        em1.classList.add("block_dashboard_lp");
+        var em5 = document.createElement("p");
+        em5.classList.add("link_key");
+        em5.textContent = app_strings.design_examples.pane[i].title;
+        em6.append(em5)
+        var em2 = document.createElement("a");
+        em2.classList.add("logo-align");
+        em2.classList.add("align-center");
+        em2.setAttribute("value", "Reset");
+        var em3 = document.createElement("img");
+        em3.setAttribute("src", app_strings.design_examples.pane[i].image);
         em3.setAttribute("alt", "logo");
         em3.setAttribute("width", "100%");
         em2.append(em3)
@@ -1501,79 +1555,33 @@ function layoutDesigns(){
         var em11 = document.createElement("input");
         em11.classList.add("prod_page_btn_disble");
         em11.setAttribute("type", "button");
-        em11.setAttribute("value",app_strings.run_demos.pane[i].text);
+        em11.setAttribute("value",app_strings.design_examples.pane[i].text);
         em9.append(em11);
-        if (app_strings.run_demos.pane[i].text.length) em1.append(em9)
+        if (app_strings.design_examples.pane[i].text.length) em1.append(em9)
 
         var em9 = document.createElement("span");
         var em4 = document.createElement("input");
         em4.classList.add("prod_page_btn");
         em4.setAttribute("type", "button");
-        em4.setAttribute("linkv", app_strings.run_demos.pane[i].button_link);
-        em4.setAttribute("value", app_strings.run_demos.pane[i].button_title);
-        if(app_strings.run_demos.pane[i].button_link_type){
+        em4.setAttribute("linkv", app_strings.design_examples.pane[i].button_link);
+        em4.setAttribute("value", app_strings.design_examples.pane[i].button_title);
+        if(app_strings.design_examples.pane[i].button_link_type){
             em4.onclick = function (e) {
               window[e.target.attributes.linkv.value]();
             };
         }else{
         em4.onclick = function (e){ openInNewTab(e.target.attributes.linkv.value);};
         }
-        if (app_strings.run_demos.pane[i].button_link.length && app_strings.run_demos.pane[i].button_title.length ) em9.append(em4)
         var em8 = document.createElement("input");
         em8.classList.add("prod_page_btn");
         em8.setAttribute("type", "button");
-        em8.setAttribute("linkv", app_strings.run_demos.pane[i].learnmore_link);
-        em8.setAttribute("value", "Learn More");
+        em8.setAttribute("linkv", app_strings.design_examples.pane[i].learnmore_link);
+        em8.setAttribute("value", "LEARN MORE");
         em8.onclick = function (e){ openInNewTab(e.target.attributes.linkv.value);};
-        
-        if (app_strings.run_demos.pane[i].learnmore_link.length) em9.append(em8);
-        em1.append(em9)
+
+        if (app_strings.design_examples.pane[i].learnmore_link.length) em9.append(em8);
         em6.append(em1)
-        em7.append(em6)
-        }
-        $("#dnd_screen").append(em7);
-   }
-/*	Develop using tools */
-   {
-        $('#tools_screen .app-title').html(app_strings.develop_tools.title);
-        var em0 = document.createElement("span");
-        em0.classList.add("toolscolumn1");
-        var em1 = document.createElement("div");
-        em1.classList.add("image_tools_bg_div");
-        var em2 = document.createElement("img");
-        em2.classList.add("image_bg");
-        em2.setAttribute("src", app_strings.develop_tools.left_pane.image);
-        em1.append(em2);
-        var em5 = document.createElement("p");
-        em5.classList.add("link_key");
-        em5.textContent = app_strings.develop_tools.left_pane.text;
-        em1.append(em5)
-        em0.append(em1);
-        $("#tools_screen").append(em0);
-        var em7 = document.createElement("span");
-        for(var i = 0; i < app_strings.develop_tools.right_pane.length; i++){
-        var em6 = document.createElement("span");
-        em6.classList.add("homecolumn");
-        var em1 = document.createElement("div");
-        em1.classList.add("block_dashboard");
-        var em2 = document.createElement("a");
-        em2.classList.add("logo-align");
-        em2.classList.add("align-center");
-        em2.setAttribute("value", "Reset");
-        var em3 = document.createElement("img");
-        em3.setAttribute("src", app_strings.develop_tools.right_pane[i].image);
-        em3.setAttribute("alt", "logo");
-        em3.setAttribute("width", "100%");
-        em2.append(em3)
-        em1.append(em2)
-        var em4 = document.createElement("input");
-        em4.classList.add("prod_page_btn");
-        em4.setAttribute("type", "button");
-        em4.setAttribute("linkv", app_strings.develop_tools.right_pane[i].button_link);
-        em4.setAttribute("value", app_strings.develop_tools.right_pane[i].button_title);
-        em4.onclick = function (e){ openInNewTab(e.target.attributes.linkv.value);};
-        em1.append(em4)
-        em6.append(em1)
+        em6.append(em9)
         em7.append(em6)
         }
         $("#tools_screen").append(em7);
@@ -1594,9 +1602,9 @@ $(document).ready(function () {
 
         $(e.target).addClass('active').siblings().removeClass('active');
             hideAllPages();
-            if (e.target.innerHTML == "Home") {$("#home_screen_com").removeClass('hide');} // "home_screen_com"  home_screen_db"
-            else if (e.target.innerHTML == "Help") {$("#help_screen").removeClass('hide');}
-            else if (e.target.innerHTML == "About") {$("#about_screen").removeClass('hide');}
+            if (e.target.innerHTML == "HOME") {$("#home_screen_com").removeClass('hide');} // "home_screen_com"  home_screen_db"
+            else if (e.target.innerHTML == "HELP") {$("#help_screen").removeClass('hide');}
+            else if (e.target.innerHTML == "ABOUT") {$("#about_screen").removeClass('hide');}
             else { navClick("testtheboard"); }
       });
       $('#bottom_menu li').click(function (e) {
