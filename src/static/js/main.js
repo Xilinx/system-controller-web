@@ -1412,8 +1412,8 @@ function layoutDesigns(){
         em4.onclick = function (e){ openInNewTab(e.target.attributes.linkv.value);};
         if(app_strings.test_board.center_pane.button_title.length != 0){
             $("#testboard_home").append(em3);
-        }
-	$("#testboard_home").append(em4);
+            $("#testboard_home").append(em4);
+ 	}
    }
 /*      VERSAL POWER TOOL  */
    {

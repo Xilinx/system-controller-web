@@ -262,7 +262,7 @@ min-width: 40px;
 float: right;
 color: #f1f2fc;
 font-family: sans-serif;
-font-size: 25px;
+font-size: 20px;
 text-align: center;
 text-transform: capitalize;
 padding: 10px 10px;
@@ -270,7 +270,7 @@ margin: 0px 0px;
 background: black00;
 cursor: pointer;
 border-left: solid 1px;
-border-left-color: white;
+border-left-color: #007c97;
 }
 .tabitem_left{
 min-width: 40px;

@@ -1,11 +1,11 @@
 /*
-* Copyright (c) 2020 - 2022 Xilinx, Inc. and Contributors. All rights reserved.
-*
-* SPDX-License-Identifier: MIT
-*/
+ * * Copyright (c) 2020 - 2022 Xilinx, Inc. and Contributors. All rights reserved.
+ * *
+ * * SPDX-License-Identifier: MIT
+ * */
 var app_strings = {
-	"tab_title":"Board Evaluation & Management Tool (BEAM)",
-	"app_title":"Board Evaluation & Management Tool (BEAM)",
+	"tab_title":"BOARD EVALUATION AND MANAGEMENT (BEAM) TOOL",
+	"app_title":"BOARD EVALUATION AND MANAGEMENT (BEAM) TOOL",
 	"xilinx_icon":"../images/icon.png",
 	"home_tab":{
 		"title":"Welcome & Get Started with Versal Premium Series VPK180 Evaluation Kit",
@@ -40,108 +40,47 @@ var app_strings = {
 		},
 		
 	},
-	"linuxprompt":{
-		"title":"Obtain Linux Prompt",
+	"powertool":{
+		"title":"Versal Power Tool",
 		"pane":[
-			/*{
-				"title":"Instructions to obtain Linux prompt from Versal",
+			{
+				"title":"",
 				"image":"../static/images/xilinx_banner.png",
 				"text":"",
-				"button_title":"Download",
-				"button_link":"",
-				"learnmore_link":"https://xilinx.github.io/Embedded-Design-Tutorials/master/docs/index.html",
-			},*/
+				"button_title":"RUN",
+                "button_link_type":1,
+				"button_link": "jnurllink",
+				"learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1299251214/Versal+ACAP+Power+Tool+part+1+-+Introduction+to+the+Power+Tool",
+			},
 		],
 
 	},
-	"run_demos":{
-		"title":"Demos & Designs",
+	"cockpit":{
+		"title":"ACAP Cockpit",
 		"pane":[
 			{
-				"title":"Petalinux BSP Designs",
-				"image":"../static/images/xilinx_banner.png",
-				"text":"Refer to VPK180 EA Lounge",
-				"button_title":"",
-				"button_link":"",
-				"learnmore_link":"",
-			},
-			/*{
-				"title":"Versal Power Tool",
-				"image":"../static/images/xilinx_banner.png",
-				"text":"",
-				"button_title":"Run",
-                                "button_link_type":1,
-				"button_link": "jnurllink",
-				"learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1299251214/Versal+ACAP+Power+Tool+part+1+-+Introduction+to+the+Power+Tool",
-			},*/
-			{
-				"title":"Target Reference Designs",
-				"image":"../static/images/xilinx_banner.png",
-				"text":"Refer to VPK180 EA Lounge",
-				"button_title":"",
-				"button_link":"",
-				"learnmore_link":"",
-			},
-			{
-                                "title":"ACAP Cockpit",
+                                "title":"",
                                 "image":"../static/images/xilinx_banner.png",
                                 "text":"",
-                                "button_title":"Run",
+                                "button_title":"RUN",
                                 "button_link_type":1,
                                 "button_link": "launchacap",
                                 "learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1544192059/ACAP+Cockpit",
                         },
-			/*{
-                                "title":"Power Management Dashboard",
-                                "image":"../static/images/xilinx_banner.png",
-                                "text":"",
-                                "button_title":"Run",
-                                "button_link_type":1,
-                                "button_link": "launchpmtool",
-                                "learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1887862954/Power+Management+Dashboard",
-                        },*/
 		],
 
 	},
-	"develop_tools":{
-		"title":"Develop using Tools",
-		"left_pane":{
-			"image":"../static/images/Develop_tools.png",
-			"text":"Xilinx provides technical resources to help you understand the design flow, optimize software, and solve your development challenges.",
-			"button_title":"",
-			"button_link":"",
-		},
-		"right_pane":[
+	"design_examples":{
+		"title":"Target Reference Designs",
+		"pane":[
 			{
-				"image":"../static/images/ai_sc.png",
+				"title":"",
+				"image":"../static/images/xilinx_banner.png",
 				"text":"",
-				"button_title":"About Vitis/Vitis AI",
-				"button_link":"https://www.xilinx.com/products/design-tools/vitis.html",
+				"button_title":"Product Page",
+				"button_link":"https://www.xilinx.com/products/boards-and-kits/vck190.html",
+				"learnmore_link":"https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/2232385541/Versal+Targeted+Reference+Designs+TRDs",
 			},
-			{
-				"image":"../static/images/apd.png",
-				"text":"",
-				"button_title":"Visit Developer site",
-				"button_link":"https://developer.xilinx.com/",
-			},
-			{
-				"image":"../static/images/ed.png",
-				"text":"",
-				"button_title":"Download Libraries",
-				"button_link":"https://github.com/Xilinx/Vitis_Libraries",
-			},
-			{
-				"image":"../static/images/hd.png",
-				"text":"",
-				"button_title":"About Vivado Design Suite",
-				"button_link":"https://www.xilinx.com/products/design-tools/vivado.html",
-			},
-			{
-				"image":"../static/images/hd.png",
-				"text":"",
-				"button_title":"Download Vivado",
-				"button_link":"https://www.xilinx.com/support/download.html",
-			}
 		],
 
 	},
@@ -154,35 +93,36 @@ var app_strings = {
                                 "content":["The Board Evaluation & Management Tool (BEAM) is currently in Beta version ("+listsjson_sc.version+")"]
                         },
                         {
-                                "heading":"known issues and bugs",
+                                "heading":"Known Issues and Bugs",
                                 "content_type":1,	
                                 "content":["Some webpage links may be broken or non-functional. This may happen because the webpage may not exist or is moved to a different location/address. These links will be fixed in subsequent release of the Board Evaluation & Management Tool (BEAM).","The Board Evaluation & Management Tool (BEAM) can execute one particular action/task only at a time. For example, you cannot run the Board Settings and Board Interface Test at the same time. Please wait till a particular task is complete and then proceed."]
                         },
-                        {
-                                "heading":"Jupyter Notebook",
-                                "content_type":1,
-                                "content":["Logout from jupyter notebook before exiting. Failing doing so may show login screen for next notebook launch.",
-					"Run jupyter notebook command in linux prompt to use from Board Evaluation & Management Tool if \"no jupyter notebook is running\" error message is shown.",
-					"Jupyter notebook and BITs/SCUI tabs cannot be run at a time. Shut down any jupyter notebook kernels to use BIT or SCUI tabs components.",
-					"Run jupyter notebook command in system controller prompt to start jupyter notebook server if system controller is set with static ip and notebook web page is not launching from BEAM Tool.",
-				]
-                        },
-                ],
-
-        },
-        "about_content":{
-                "title":"About",
-                "content":[
-                        {
-                                "heading":"",
-                                "content_type":0,       // 0: paragraph, 1: bullet points
-                                "content":["The Board Evaluation & Management Tool (BEAM) is the main menu of the System Controller. It primarily serves as a launcher for demos and designs, running the board interface test and to set/change/read board parameters.",
-                                           "The purpose of the Board Evaluation & Management Tool is to provide Versal users a much easier and far more intuitive experience with Xilinx Evaluation Board products. The goal is to help users get started faster and have all the available resources at one place for easy access.",
-                                           "The Board Evaluation & Management Tool (BEAM) offers multiple navigation options for users. Depending on the persona type (Hardware, Software or Embedded developer) users can choose to start with either testing the board, use the Versal power tool, download Versal reference designs or learn more above the latest tools and libraries. ",
-                                           "More features will be added in the next releases and existing features will be enhanced for a better out-of-box experience to users."]
-                        },
-                ],
-
-        },
-
-};
+//                        {
+//                        //                                "heading":"Jupyter Notebook",
+//                        //                                "content_type":1,
+//                        //                                "content":["Logout from jupyter notebook before exiting. Failing doing so may show login screen for next notebook launch.",
+//                        //					"Run jupyter notebook command in linux prompt to use from Board Evaluation & Management Tool if \"no jupyter notebook is running\" error message is shown.",
+//                        //					"Jupyter notebook and BITs/SCUI tabs cannot be run at a time. Shut down any jupyter notebook kernels to use BIT or SCUI tabs components.",
+//                        //					"Run jupyter notebook command in system controller prompt to start jupyter notebook server if system controller is set with static ip and notebook web page is not launching from BEAM Tool.",
+//                        //				]
+//                        //                        },
+//                                        ],
+//
+//                                                },
+//                                                        "about_content":{
+//                                                                        "title":"About",
+//                                                                                        "content":[
+//                                                                                                                {
+//                                                                                                                                                "heading":"",
+//                                                                                                                                                                                "content_type":0,       // 0: paragraph, 1: bullet points
+//                                                                                                                                                                                                                "content":["The Board Evaluation & Management Tool (BEAM) is the main menu of the System Controller. It primarily serves as a launcher for demos and designs, running the board interface test and to set/change/read board parameters.",
+//                                                                                                                                                                                                                                                           "The purpose of the Board Evaluation & Management Tool is to provide Versal users a much easier and far more intuitive experience with Xilinx Evaluation Board products. The goal is to help users get started faster and have all the available resources at one place for easy access.",
+//                                                                                                                                                                                                                                                                                                      "The Board Evaluation & Management Tool (BEAM) offers multiple navigation options for users. Depending on the persona type (Hardware, Software or Embedded developer) users can choose to start with either testing the board, use the Versal power tool, download Versal reference designs or learn more above the latest tools and libraries. ",
+//                                                                                                                                                                                                                                                                                                                                                 "More features will be added in the next releases and existing features will be enhanced for a better out-of-box experience to users."]
+//                                                                                                                                                                                                                                                                                                                                                                         },
+//                                                                                                                                                                                                                                                                                                                                                                                         ],
+//
+//                                                                                                                                                                                                                                                                                                                                                                                                 },
+//
+//                                                                                                                                                                                                                                                                                                                                                                                                 };
+//
