@@ -1082,7 +1082,7 @@ function addqsfpTab(){
 	var eachcomp = {
             "type":"list"
             ,"components" : ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
-            ,"L0":  tdsd[0] + " " + tds1
+            ,"L0": " " + tds1
             ,"V0": tdsary[1]
             ,"V0N": ""
             ,"V0V": "io"
@@ -1098,7 +1098,7 @@ function addqsfpTab(){
         var eachcomp = {
             "type":"list"
             ,"components" : ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
-            ,"L0":  tdsd[0] + " " + tds1
+            ,"L0":" " + tds1
             ,"V0": tdsary[1]
             ,"V0N": ""
             ,"V0V": "io"
@@ -1113,7 +1113,7 @@ function addqsfpTab(){
         var eachcomp = {
              "type":"list"
             ,"components" : ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
-            ,"L0":  tdsd[0] + " " + tds1
+            ,"L0": " " + tds1
             ,"V0": "-"
             ,"V0N": ""
             ,"V0V": "io"
@@ -1187,7 +1187,7 @@ function addsfpTab(){
 	var eachcomp = {
             "type":"list"
             ,"components" : ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
-            ,"L0":  tdsd[0] + " " + tds1
+            ,"L0": " " + tds1
             ,"V0": tdsary[1]
             ,"V0N": ""
             ,"V0V": "io"
@@ -1203,7 +1203,7 @@ function addsfpTab(){
         var eachcomp = {
             "type":"list"
             ,"components" : ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
-            ,"L0":  tdsd[0] + " " + tds1
+            ,"L0": " " + tds1
             ,"V0": tdsary[1]
             ,"V0N": ""
             ,"V0V": "io"
@@ -1218,7 +1218,7 @@ function addsfpTab(){
         var eachcomp = {
             "type":"list"
             ,"components" : ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
-            ,"L0":  tdsd[0] + " " + tds
+            ,"L0": " " + tds
             ,"V0": "-"
             ,"V0N": ""
             ,"V0V": "io"
