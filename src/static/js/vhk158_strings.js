@@ -97,16 +97,16 @@ var app_strings = {
                                 "content_type":1,
                                 "content":["Some webpage links may be broken or non-functional. This may happen because the webpage may not exist or is moved to a different location/address. These links will be fixed in subsequent release of the Board Evaluation & Management Tool (BEAM).","The Board Evaluation & Management Tool (BEAM) can execute one particular action/task only at a time. For example, you cannot run the Board Settings and Board Interface Test at the same time. Please wait till a particular task is complete and then proceed."]
                         },
-                       /* {
- *                                 "heading":"Jupyter Notebook",
- *                                                                 "content_type":1,
- *                                                                                                 "content":["Logout from jupyter notebook before exiting. Failing doing so may show login screen for next notebook launch.",
- *                                                                                                 					"Run jupyter notebook command in linux prompt to use from Board Evaluation & Management Tool if \"no jupyter notebook is running\" error message is shown.",
- *                                                                                                 										"Jupyter notebook and BITs/SCUI tabs cannot be run at a time. Shut down any jupyter notebook kernels to use BIT or SCUI tabs components.",
- *                                                                                                 															"Run jupyter notebook command in system controller prompt to start jupyter notebook server if system controller is set with static ip and notebook web page is not launching from BEAM Tool.",
- *                                                                                                 																			]
- *                                                                                                 																			                        },*/
-                ],
+                         /* {
+                                "heading":"Jupyter Notebook",
+                                "content_type":1,
+                                "content":["Logout from jupyter notebook before exiting. Failing doing so may show login screen for next notebook launch.",
+					"Run jupyter notebook command in linux prompt to use from Board Evaluation & Management Tool if \"no jupyter notebook is running\" error message is shown.",
+					"Jupyter notebook and BITs/SCUI tabs cannot be run at a time. Shut down any jupyter notebook kernels to use BIT or SCUI tabs components.",
+					"Run jupyter notebook command in system controller prompt to start jupyter notebook server if system controller is set with static ip and notebook web page is not launching from BEAM Tool.",
+				]
+                        },*/
+            ],
 
         },
         "about_content":{
