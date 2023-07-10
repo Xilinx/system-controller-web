@@ -158,6 +158,7 @@ var theadcomp = document.createElement("thead");
                        em.classList.add("buttons");
                        em.setAttribute("value", heads[elem]);
                        em.setAttribute("type", "button");
+                       em.addEventListener("click",cmdBtnonclick);
 
                        tdcomp.appendChild(em)
                     break;
@@ -220,6 +221,7 @@ var theadcomp = document.createElement("thead");
                        em.setAttribute("sc_cmd",c[elem+"sc_cmd"]);
                        em.setAttribute("target",c[elem+"target"]);
                        em.setAttribute("params",c[elem+"params"]);
+                       em.addEventListener("click",cmdBtnonclick);
                        if(c[elem+"dontcare"])
                        em.setAttribute("dontcare",c[elem+"dontcare"]);
                        if(c[elem+"disabled"])
@@ -428,6 +430,150 @@ function fileUploder(formdata, fileObj, select_id) {
             });
     }
 }
+function cmdBtnonclick(e){
+    var eles = $(e.target).parent().siblings();
+      var order = e.target.getAttribute("components");
+      var tar = e.target.getAttribute("request");
+        if(e.target.value.includes("All")){
+            // trigger all othter calls in the current table.
+            var erow = $(e.target).parent().parent().parent().parent().find('tbody').find("tr");
+            jQuery.each(erow, function(j,trs){
+                var checkSelected = false
+                jQuery.each(trs.childNodes, function(k,tds){
+                    try{
+                        var lst = tds.childNodes[0].classList;
+                        jQuery.each(tds.childNodes, function(k,ele){
+                            if(ele.nodeName.toLowerCase() == "input"){
+                                if(ele.type == "checkbox"){
+                                    checkSelected = ele.checked
+                                }
+                                if (ele.type == "button"){
+                                    if(checkSelected == true){
+                                        ele.click();
+                                    }
+                                }
+                            }
+
+                        });
+
+                    }catch(err){};
+
+                });
+            });
+        }
+        // Read value from html and create api and send to server.
+      var setparams = "";
+      jQuery.each(eles, function(i, tds){
+        var cnd = this.childNodes;
+        jQuery.each(cnd, function(k, cn){
+        try{
+            if(cn.getAttribute("reqKey")){
+                if(cn.nodeName.toLowerCase() == "input"){
+                    if(e.target.getAttribute("dontcare") && cn.value.length == 0 )
+                    setparams += (setparams.length ? "," : "" )+e.target.getAttribute("dontcare");
+                    else
+                    setparams += (setparams.length ? "," : "" )+cn.value
+                }
+                else if(cn.nodeName.toLowerCase() == "select"){
+                    setparams += (setparams.length ? "," : "" )+cn.value;
+                }
+            }
+            if(cn.nodeName.toLowerCase() == "div"){
+                cn.className = '';
+                cn.classList.add("ministatusloading");
+		cn.childNodes[0].innerHTML = "";
+      	    }
+        }catch (err){
+            //console.log("Error handled"+err);
+        }
+       });
+      });
+      // Ajax request
+      // Adding prerequired parameters if any.
+      setparams += (setparams.length ? " " : "" )+e.target.getAttribute("params")
+      setparams = setparams.trim();
+      if(setparams.indexOf(' ') >= 0){
+          setparams = "'"+setparams.trim()+"'";
+      }
+    $.ajax({
+            url: tar,
+            type: 'GET',
+            dataType: 'json',
+            data:{"sc_cmd":e.target.getAttribute("sc_cmd"), "target":e.target.getAttribute("target"), "params":setparams},
+            success: function (res){
+            if (e.target.getAttribute("sc_cmd").startsWith("list")){
+            listsjson_sc.listSFP = res.data;
+            console.log(boardsettingsTab);
+            jQuery.each(boardsettingsTab, function(i,t){
+            if (t.tab == "SFP Data"){
+            boardsettingsTab.splice(i,1);
+            return false;
+            }
+            });
+            addsfpTab();
+            var y=document.getElementById(e.target.parentElement.getAttribute("speckey_id"));
+            if (e.target.parentElement.getAttribute("speckey_id") == "SFP_Data" && !$("#SFP_Data").hasClass("hide")){
+            var bodycomp = rendertabComponentDiv(e.target.parentElement.getAttribute("speckey_id"), boardsettingsTab[boardsettingsTab.length-1]);
+           console.log(bodycomp);
+            y.remove();
+           bodycomp.classList.remove("hide");
+           $("#bsettings_subtabs").append(bodycomp);
+           return false;
+          }
+          return false;
+            }
+            else{
+                  // Set value from API response to html div here
+                  jQuery.each(eles, function(i, tds){
+                    var cn = this.childNodes[0];
+                    try{
+                        if(cn.getAttribute("respKey")){
+                            if(cn.nodeName.toLowerCase() == "label"){
+                                if (res.data[cn.getAttribute("respKey")] != undefined){
+                                    cn.innerHTML = res.data[cn.getAttribute("respKey")] + " " + cn.getAttribute("notation");
+                                }
+                            }
+                        }
+			if(cn.nodeName.toLowerCase() == "div"){
+			    if (res.status == "error"){
+                                cn.childNodes[0].innerHTML = res.data+restime();
+                                cn.className = '';
+                                cn.classList.add("ministatusfail");
+                                cn.classList.add("tooltip");
+			    }
+                            else{
+                                cn.childNodes[0].innerHTML = "Success"+restime();
+                                cn.className = '';
+                                cn.classList.add("ministatussuccess");
+                                cn.classList.add("tooltip");
+			    }
+                        }
+                    }catch (err){
+//                        console.log("Error handled"+err);
+                    }
+                  });
+                }
+            },
+            error: function(){
+//                console.log("mthod call")
+	           jQuery.each(eles, function(i, tds){
+                    var cn = this.childNodes[0];
+                    try{
+
+                        if(cn.nodeName.toLowerCase() == "div"){
+                            cn.childNodes[0].innerHTML = "Network Error"+restime();
+                            //cn.getElementByClass("tooltip").innerHTML = "Network Error";
+                            cn.className = '';
+                            cn.classList.add("ministatusfail");
+                            cn.classList.add("tooltip");
+                        }
+                    }catch (err){
+                        console.log("Error handled"+err);
+                    }
+                  });
+	    }
+    });
+}
 function rendertabComponentDiv(title, comp){
 
     var tabcomp = document.createElement("div");
@@ -440,7 +586,8 @@ function rendertabComponentDiv(title, comp){
         uldiv.classList.add("subtabitemlist");
 
         jQuery.each(comp.components, function(j, c){
-	if (c.subtype == 'tab_plus_button') {
+
+	if (c.subtype == 'tab_plus_button') {
 		var lidiv = document.createElement("li");
                     var bt = document.createElement("input");
                     var bt1 = document.createElement("button");
@@ -506,10 +653,12 @@ function rendertabComponentDiv(title, comp){
                     bodycomp.classList.add("hide");
                 }
                 contentDiv.appendChild(bodycomp);
-	     }	
+
+	     }	
             }
         });
-  }
+
+  }
     else if (comp.subtype == 'tab') {
           var tabdiv = document.createElement("div");
           var navdiv = document.createElement("nav");
@@ -565,7 +714,7 @@ function rendertabComponentDiv(title, comp){
 
 function generateBoardSettingsUI(){
     jQuery.each(boardsettingsTab, function(i, sidetab){
-        $("#boardtestdiv").append('<li class="'+(i == 0 ? "active":"") +'"; specKey_id="'+sidetab.tab.split(' ').join('_').replace("+","")+'">'+sidetab.tab+'</li>')
+        $("#boardtestdiv").append('<li class="'+(i == 0 ? "active":"") +'"; specKey_id="'+sidetab.tab.split(' ').join('_').replace("+","")+'">'+sidetab.tab+'<button class="buttons" request="/cmdquery" sc_cmd="list'+sidetab.tab.split(' ')[0]+'" style="float:right;"'+(sidetab.tab=="SFP Data"?" ":"hidden")+'>Refresh</button></li>');
         var compDiv = rendertabComponentDiv(sidetab.tab.split(' ').join('_').replace("+",""), sidetab);
         if(i){
             compDiv.classList.add("hide");
@@ -599,130 +748,7 @@ function generateBoardSettingsUI(){
             });
     });
     $(".buttons").click(function(e){
-      var eles = $(e.target).parent().siblings();
-      var order = e.target.getAttribute("components");
-      var tar = e.target.getAttribute("request");
-        if(e.target.value.includes("All")){
-            // trigger all othter calls in the current table.
-            var erow = $(e.target).parent().parent().parent().parent().find('tbody').find("tr");
-            jQuery.each(erow, function(j,trs){
-                var checkSelected = false
-                jQuery.each(trs.childNodes, function(k,tds){
-                    try{
-                        var lst = tds.childNodes[0].classList;
-                        jQuery.each(tds.childNodes, function(k,ele){
-                            if(ele.nodeName.toLowerCase() == "input"){
-                                if(ele.type == "checkbox"){
-                                    checkSelected = ele.checked
-                                }
-                                if (ele.type == "button"){
-                                    if(checkSelected == true){
-                                        ele.click();
-                                    }
-                                }
-                            }
-
-                        });
-
-                    }catch(err){};
-
-                });
-            });
-        }
-        // Read value from html and create api and send to server.
-      var setparams = "";
-      jQuery.each(eles, function(i, tds){
-        var cnd = this.childNodes;
-        jQuery.each(cnd, function(k, cn){
-        try{
-            if(cn.getAttribute("reqKey")){
-                if(cn.nodeName.toLowerCase() == "input"){
-                    if(e.target.getAttribute("dontcare") && cn.value.length == 0 )
-                    setparams += (setparams.length ? "," : "" )+e.target.getAttribute("dontcare");
-                    else
-                    setparams += (setparams.length ? "," : "" )+cn.value
-                }
-                else if(cn.nodeName.toLowerCase() == "select"){
-                    setparams += (setparams.length ? "," : "" )+cn.value;
-                }
-            }
-            if(cn.nodeName.toLowerCase() == "div"){
-                cn.className = '';
-                cn.classList.add("ministatusloading");
-		cn.childNodes[0].innerHTML = "";
-      	    }
-        }catch (err){
-            //console.log("Error handled"+err);
-        }
-       });
-      });
-      // Ajax request
-      // Adding prerequired parameters if any.
-      setparams += (setparams.length ? " " : "" )+e.target.getAttribute("params")
-      setparams = setparams.trim(); 
-      if(setparams.indexOf(' ') >= 0){
-          setparams = "'"+setparams.trim()+"'";
-      }
-    $.ajax({
-            url: tar,
-            type: 'GET',
-            dataType: 'json',
-            data:{"sc_cmd":e.target.getAttribute("sc_cmd"), "target":e.target.getAttribute("target"), "params":setparams},
-            success: function (res){
-                  // Set value from API response to html div here
-                  jQuery.each(eles, function(i, tds){
-                    var cn = this.childNodes[0];
-                    try{
-                        if(cn.getAttribute("respKey")){
-                            if(cn.nodeName.toLowerCase() == "label"){
-                                if (res.data[cn.getAttribute("respKey")] != undefined){
-                                    cn.innerHTML = res.data[cn.getAttribute("respKey")] + " " + cn.getAttribute("notation");
-                                }
-                            }
-                        }
-			if(cn.nodeName.toLowerCase() == "div"){
-			    if (res.status == "error"){
-                                cn.childNodes[0].innerHTML = res.data+restime();
-                                cn.className = '';
-                                cn.classList.add("ministatusfail");
-                                cn.classList.add("tooltip");
-			    }
-                            else{
-                                cn.childNodes[0].innerHTML = "Success"+restime();
-                                cn.className = '';
-                                cn.classList.add("ministatussuccess");
-                                cn.classList.add("tooltip");
-			    }
-                        }
-                    }catch (err){
-//                        console.log("Error handled"+err);
-                    }
-                  });
-
-            },
-            error: function(){
-//                console.log("mthod call")
-	           jQuery.each(eles, function(i, tds){
-                    var cn = this.childNodes[0];
-                    try{
-
-                        if(cn.nodeName.toLowerCase() == "div"){
-                            cn.childNodes[0].innerHTML = "Network Error"+restime();
-                            //cn.getElementByClass("tooltip").innerHTML = "Network Error";
-                            cn.className = '';
-                            cn.classList.add("ministatusfail");
-                            cn.classList.add("tooltip");
-                        }
-                    }catch (err){
-                        console.log("Error handled"+err);
-                    }
-                  });
-	    }
-    });
-
-
-
-
+      cmdBtnonclick(e);
     });
 }
 function displaypopup(title, message,res,e,cn,inprg,count){
@@ -1052,7 +1078,8 @@ function generateBITUI(){
 						setTimeout(()=>{inprg.innerHTML = "Fail";inprg.classList.add("inprogress_bar_state_fail"); },10);
 					}
 				    });
-				}
+
+				}
 
                                // });
                             //}
