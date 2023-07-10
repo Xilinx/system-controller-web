@@ -503,7 +503,6 @@ function cmdBtnonclick(e){
             success: function (res){
             if (e.target.getAttribute("sc_cmd").startsWith("list")){
             listsjson_sc.listSFP = res.data;
-            console.log(boardsettingsTab);
             jQuery.each(boardsettingsTab, function(i,t){
             if (t.tab == "SFP Data"){
             boardsettingsTab.splice(i,1);
@@ -514,7 +513,6 @@ function cmdBtnonclick(e){
             var y=document.getElementById(e.target.parentElement.getAttribute("speckey_id"));
             if (e.target.parentElement.getAttribute("speckey_id") == "SFP_Data" && !$("#SFP_Data").hasClass("hide")){
             var bodycomp = rendertabComponentDiv(e.target.parentElement.getAttribute("speckey_id"), boardsettingsTab[boardsettingsTab.length-1]);
-           console.log(bodycomp);
             y.remove();
            bodycomp.classList.remove("hide");
            $("#bsettings_subtabs").append(bodycomp);
