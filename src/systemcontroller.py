@@ -46,7 +46,7 @@ api.add_resource(FuncReq,"/funcreq")
 api.add_resource(CmdQuery,"/cmdquery")
 api.add_resource(EEPROMDetails,"/eeprom_details")
 api.add_resource(ClockFilesList,"/clock_files")
-
+api.add_resource(Banner,"/notif")
 ## Resources
 import threading
 req_lock = threading.Lock()
@@ -187,6 +187,7 @@ def generate_gen_sc_file(sc_app_path, app_config):
     f.close()
 
 if __name__ == '__main__':
+    Notif.notification_load()
     if not len(sc_app_path) or not len(SysFactory.exec_cmd("which " + sc_app_path, SysFactory.TERMINAL)):
         Logg.log("Please check sc_app Path", Logg.RELEASE)
         exit(0)

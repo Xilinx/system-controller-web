@@ -304,6 +304,43 @@ var theadcomp = document.createElement("thead");
     bodycomp.appendChild(tablecomp);
     return bodycomp;
 }
+var pollInterval;
+function Banner(){
+    $.ajax({
+        url:"/notif",
+        type:"GET",
+        dataType: "json",
+        success: function (res){
+        var Nav = document.getElementById("navSec");
+        if (res.data.length == []){
+                Nav.style.display = "none";
+            }
+        else{
+                Nav.style.display = "block";
+                var Msg = document.getElementById("navLink");
+                Msg.innerHTML = res.data[0].message;
+            }
+        },
+        error: function (res) {
+            console.log(res)
+             stopPolling();
+        }
+    });
+}
+function startPolling() {
+    pollInterval = setInterval(Banner, 5000);
+  }
+  function stopPolling() {
+    clearInterval(pollInterval);
+  }
+   document.addEventListener("visibilitychange", function () {
+    if (document.visibilityState === "visible") {
+      startPolling();
+    } else {
+      stopPolling();
+    }
+  });
+  startPolling();
 function upload_clock_files() {
     $.ajax({
         url: "/clock_files",
@@ -1655,6 +1692,7 @@ $(document).ready(function () {
 		}
 	},5000);
 	filleepromdetails();
+	Banner();
 	loadRefreshData();
 	upload_clock_files();
 

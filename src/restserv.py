@@ -6,7 +6,7 @@
 ##
 from flask import render_template
 from flask_restful import Resource, request
-
+from enum import Enum
 from config_app import *
 from term import *
 from parse import *
@@ -217,3 +217,120 @@ class CmdQuery(Resource):
                 ,"data":{"error":"%s"%e}
             }
             return resp_json,500
+class Notif:
+    _notifs = []
+
+    Priority = Enum('Priority',
+                    ['PDI'
+                     ,'TEMP_RANGE_EXCEED'
+                     ])
+
+    MODE_REALTIME = 101            # WHEN NEED TO SHOW/HIDE AT REALTIME. eg: show hide pdi loaded state
+    MODE_NETWORK = 102             # WHEN NEED TO SHOW A NETWORK NOTIFICATION. eg: a new board is availabe kind of notification from xilinx web site.
+    MODE_INFO = 103                # WHEN NEED TO SHOW FOR A APT UPGRADE IS AVAILABLE. THIS WONT BE REALTIME AND WILL NOT BE DISMISSED ONCE THE CONDITION IS SATISFIED
+
+    TYPE_CMD = 201                  # WHEN THE NOTIFICATION CHECK TYPE IS A LOCAL COMMAND EXECUTION.
+
+    def __init__(self,notif_id="",title="",message="",priority=1000,noti_type=0,type_related_info="",command="",conditionsToCompare=None,req_time="", result = "",prev_req_time="",prev_result = "", mode = 0,show = True):
+        self.notif_id = notif_id
+        self.title = title
+        self.message = message
+        self.priority = priority
+        self.mode= mode
+        self.noti_type= noti_type
+        self.type_related_info = type_related_info
+        self.command = command
+        self.conditionsToCompare = conditionsToCompare
+        self.req_time = req_time
+        self.result = result
+        self.prev_req_time = prev_req_time
+        self.prev_result = prev_result
+        self.show = show
+        Notif._notifs.append(self)
+    @staticmethod
+    # One time loading list of
+
+    def notification_load():
+        Notif(notif_id="PDI_NOT_LOADED"
+              , command=sc_app_path + " -c gettemp -t Versal"
+              , mode=Notif.MODE_REALTIME
+              , noti_type=Notif.TYPE_CMD
+              , priority=Notif.Priority.PDI.value
+              , conditionsToCompare=lambda x: x.startswith("ERROR: temperature is not available")
+              , message="⚠ PDI is not programmed. Ensure to program versal to view temperature value and fan control. Please refer to  <a href='https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/2273738753/Versal+Evaluation+Board+-+System+Controller#Vivado-Board-Files-%26-PetaLinux-Versal-DUT-BSPs' target='_blank'>wiki</a>"
+              )
+    @staticmethod
+    def jsonObj(noti_ary):
+        jsn_ary = []
+        for noti in noti_ary:
+            jsn_obj = {}
+            jsn_obj["notif_id"] = noti.notif_id
+            jsn_obj["message"] = noti.message
+            jsn_obj["show"] = noti.show
+            jsn_ary.append(jsn_obj)
+        return jsn_ary
+
+    def notif_check_realTime(self):
+        response = Term.exec_cmd(self.command)
+        return response
+
+    def validate_notif(self):
+        if self.conditionsToCompare(self.result):
+            self.show = True
+        else:
+            self.show = False
+        return self.show
+
+    def check_notif(self):
+        if self.noti_type == Notif.TYPE_CMD:
+            self.prev_result = self.result
+            self.result = self.notif_check_realTime()
+            return self.validate_notif()
+
+    @staticmethod
+    def getNotifs():
+        Notif._notifs.sort(key=lambda x: x.priority)
+        return Notif._notifs
+
+    @staticmethod
+    def identify_highPrior_notif():
+        alerts = []
+        all_notifs = Notif.getNotifs()
+        for notif in all_notifs:
+            result = notif.check_notif()
+            if result:
+                alerts.append(notif)
+                # break
+        return alerts
+
+    @staticmethod
+    def process_notif(open_notifs):
+        alert = []
+        # check for open_notifs else take the priority one. only one open notification is allowed.
+        em_noti = [a_noti for o_noti in open_notifs for a_noti in Notif.getNotifs() if a_noti.notif_id == o_noti["notif_id"]]
+        for noti in em_noti:
+            if noti.mode == Notif.MODE_REALTIME:
+                if noti.check_notif() == False:
+                    alert.append(noti)
+                break
+        else:
+            alert = Notif.identify_highPrior_notif()
+            for k in em_noti:
+                alert.remove(k)
+        return alert
+
+class Banner(Resource):
+    def get(self, ):
+        try:
+            result = Notif.process_notif([])
+            resp_json = {
+                "status": "success"
+                , "data": Notif.jsonObj(result)
+            }
+            return resp_json, 200
+        except Exception as e:
+            resp_json = {
+                "status": "error"
+                , "data": {"error": "%s" % e}
+            }
+            return resp_json, 500
