@@ -14,13 +14,13 @@ var app_strings = {
 			{
 				"image":"../static/images/VersalSilicon.png",
 				"text":"",
-				"button_title":"About Versal ACAP",
+				"button_title":"LEARN MORE",
 				"button_link":"https://www.xilinx.com/products/silicon-devices/acap/versal.html",
 			},
 			{
 				"image":"../static/images/AIEdge.jpg",
 				"text":"",
-				"button_title":"Product Table",
+				"button_title":"LEARN MORE",
 				"button_link":"https://www.xilinx.com/products/silicon-devices/acap/versal-ai-edge.html#productTable",
 			}
 		],
@@ -36,8 +36,8 @@ var app_strings = {
 		"center_pane":{
 			"image":"../static/images/vek280.jpg",
 			"text":"For more information regarding Hardware, Documentation, Tools & IP and Training & Support",
-			"button_title":"VISIT PRODUCT PAGE",
-			"button_link":"https://www.xilinx.com/products/boards-and-kits/vek280.html",
+			"button_title":"",
+			"button_link":"",
 		},
 
 	},

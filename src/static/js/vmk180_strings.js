@@ -14,13 +14,13 @@ var app_strings = {
 			{
 				"image":"../static/images/VersalSilicon.png",
 				"text":"",
-				"button_title":"About Versal ACAP",
+				"button_title":"LEARN MORE",
 				"button_link":"https://www.xilinx.com/products/silicon-devices/acap/versal.html",
 			},
 			{
 				"image":"../static/images/prime.png",
 				"text":"",
-				"button_title":"Product Table",
+				"button_title":"LEARN MORE",
 				"button_link":"https://www.xilinx.com/products/silicon-devices/acap/versal-prime.html#productTable",
 			}
 		],
