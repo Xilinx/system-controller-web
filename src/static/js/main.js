@@ -304,6 +304,14 @@ var theadcomp = document.createElement("thead");
     bodycomp.appendChild(tablecomp);
     return bodycomp;
 }
+function hideNavbar() {
+    var Nav = document.getElementById("navbar-collapse");
+    if (Nav.style.display === "none") {
+        Nav.style.display = "block";
+    } else {
+        Nav.style.display = "none";
+    }
+}
 var pollInterval;
 function Banner(){
     $.ajax({
