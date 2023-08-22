@@ -9,9 +9,9 @@
 app_config = {
     "deployment":"RELEASE"              # RELEASE, DEBUG
     ,"major_version":"1"
-    ,"minor_version" : "0"
+    ,"minor_version" : "1"
     ,"dev_for_major_ver" : "β_3"
-    ,"dev_minor_ver" : "020"
+    ,"dev_minor_ver" : "019"
     ,"sc_app_path":"sc_app"
     ,"config_sc_list_cmds":["listpower","listclock","listvoltage","listgpio","listSFP","listpowerdomain","listQSFP","listFMC"]
     ,"config_bit_list_cmds":["listBIT"]
