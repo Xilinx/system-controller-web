@@ -1487,10 +1487,10 @@ function layoutDesigns(){
    }
 /*      VERSAL POWER TOOL  */
 if(general.boardName.toLowerCase()=="vck190" || general.boardName.toLowerCase()=="vmk180"){
-console.log(general.boardName)
+	console.log(general.boardName)
 }else{
-var cockpit = document.getElementById("linuxprompts");
-cockpit.remove();
+	document.getElementById("linuxprompts").remove();
+	document.getElementById("developusingtools").remove();
 }   
 {
        $('#linuxprompt_screen .app-title').html(app_strings.powertool.title);
