@@ -505,6 +505,7 @@ function cmdBtnonclick(e){
 
                 });
             });
+	return true;
         }
         // Read value from html and create api and send to server.
       var setparams = "";
@@ -757,7 +758,7 @@ function rendertabComponentDiv(title, comp){
 
 function generateBoardSettingsUI(){
     jQuery.each(boardsettingsTab, function(i, sidetab){
-        $("#boardtestdiv").append('<li class="'+(i == 0 ? "active":"") +'"; specKey_id="'+sidetab.tab.split(' ').join('_').replace("+","")+'">'+sidetab.tab+'<button class="buttons" request="/cmdquery" sc_cmd="list'+sidetab.tab.split(' ')[0]+'" style="float:right;"'+(sidetab.tab=="SFP Data"?" ":"hidden")+'>Refresh</button></li>');
+        $("#boardtestdiv").append('<li class="'+(i == 0 ? "active":"") +'"; specKey_id="'+sidetab.tab.split(' ').join('_').replace("+","")+'">'+sidetab.tab+'<button class="buttons" onclick="cmdBtnonclick(event);" request="/cmdquery" sc_cmd="list'+sidetab.tab.split(' ')[0]+'" style="float:right;"'+(sidetab.tab=="SFP Data"?" ":"hidden")+'>Refresh</button></li>');
         var compDiv = rendertabComponentDiv(sidetab.tab.split(' ').join('_').replace("+",""), sidetab);
         if(i){
             compDiv.classList.add("hide");
@@ -789,9 +790,6 @@ function generateBoardSettingsUI(){
                     }catch(err){};
                 });
             });
-    });
-    $(".buttons").click(function(e){
-      cmdBtnonclick(e);
     });
 }
 function displaypopup(title, message,res,e,cn,inprg,count){
