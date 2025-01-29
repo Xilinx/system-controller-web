@@ -2327,6 +2327,7 @@ function layoutDesigns(){
         var em2 = document.createElement("img");
         em2.classList.add("image_bg");
         em2.setAttribute("src", app_strings.home_tab.center_pane.image);
+        em2.setAttribute("onerror", "this.src='../static/images/placeholder.png'");
         em1.append(em2)
         $("#railcolumn_com2").append(em1);
         var em3 = document.createElement("div");
@@ -2437,6 +2438,7 @@ function layoutDesigns(){
         var em2 = document.createElement("img");
         em2.classList.add("image_bg");
         em2.setAttribute("src", app_strings.test_board.center_pane.image);
+        em2.setAttribute("onerror", "this.src='../static/images/placeholder.png'");
         em1.append(em2)
         $("#testboard_home").append(em1);
         var em3 = document.createElement("div");
