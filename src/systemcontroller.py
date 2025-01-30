@@ -22,11 +22,17 @@ from parse import *
 from config_app import *
 from jnservice import *
 import restserv
+from raft import *
+import sys
 ##  Main that calls other functions and launches the server.
 #
 #
 app = Flask(__name__)
+# sys.path.insert(1, '/usr/share/raft/xclient/raft_services')
+
+# import pm_client
 api = Api(app)
+# pm_client = PM_Client()
 app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024 * 1024 # 1 GB
 ALLOWED_CLK_EXTENSIONS = set(app_config["allowed_clock_files"])
 # ALLOWED_PDI_EXTENSIONS = set(app_config["allowed_pdi_files"])
@@ -51,6 +57,7 @@ def index():
 api.add_resource(Poll,"/poll")
 api.add_resource(FuncReq,"/funcreq")
 api.add_resource(CmdQuery,"/cmdquery")
+api.add_resource(RaftQuery,"/raftquery")
 api.add_resource(MultiCmdQuery,"/multicmdquery")
 api.add_resource(EEPROMDetails,"/eeprom_details")
 api.add_resource(ClockFilesList,"/clock_files")
@@ -158,6 +165,36 @@ def generate_gen_sc_file(sc_app_path, app_config):
     f.write(',\n"8A34001_clk_bin_files":[' + binfiles + ']')
 
     f.write("\n};")
+    f.close()
+
+    #add raft listfeature to gen_sc
+    f = open("./static/js/gen_sc.js", "a")
+    f.write("\nvar listsjson_raft = {\n")
+
+    features = pm.listfeature() 
+    feature_data = {}
+
+    for feature in features["data"]: 
+        ke = "list" + feature
+        func = getattr(pm, ke, None)      
+        if func:
+            result = func()
+            if "data" in result:
+                if ke == "listvoltage":
+                    feature_data[ke] = [f"{list(item.keys())[0]} - ({list(item.values())[0]['typical_volt']})" for item in result["data"]]
+                else:
+                    feature_data[ke] = result["data"]
+            else:
+                feature_data[ke] = []
+        else:
+            feature_data[ke] = []
+
+    f.write("\"listfeature\":[" + ",".join([f'\"raft_list{feature}\"' for feature in features["data"]]) + "],\n")
+    for key, value in feature_data.items():
+        finStr = ",".join([f'\"{item}\"' for item in value])
+        f.write(f'"{key}":[{finStr}],\n')
+
+    f.write("};\n")
     f.close()
 
     # Check device

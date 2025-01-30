@@ -11,10 +11,12 @@ from config_app import *
 from term import *
 from parse import *
 from jnservice import *
+from raft import *
 ##
 # TODO :: Change parse data static to dynamic class for realtime data.
 #parse = ParseDataStatic()
 parse = ParseData()
+raft = PM_Client()
 deviname = ""
 
 sc_app_path = app_config["sc_app_path"]
@@ -352,6 +354,37 @@ class CmdQuery(Resource):
                 ,"data":{"error":"%s"%e}
             }
             return resp_json,500
+class RaftQuery(Resource):
+    def get(self,):
+        try:
+            req = request.args.get('sc_cmd')
+            tar = request.args.get('target')
+            params_req = request.args.get('params')
+            params = params_req.split(",")
+            paramStr = params_req.replace(","," ")
+            # raft_fun = raft.GetBoardInfo()
+            try:
+                raft_fun = eval(f"raft.{req}")
+                print(raft_fun["data"])
+                # if len(tar):
+                #     raft_fun = raft_fun + " -t '" + tar + "'"
+                # if len(params) and len(params[0]):
+                #     raft_fun = raft_fun + " -v '" + paramStr + "'"
+            except Exception as d:
+                print(d)
+
+            resp_json = {
+                "status" : raft_fun["status"],
+                "data":raft_fun["data"]
+            }
+            return resp_json
+        except Exception as e:
+            resp_json = {
+                "status":"error"
+                ,"data":{"error":"%s"%e}
+            }
+            return resp_json,500
+
 class Notif:
     _notifs = []
 

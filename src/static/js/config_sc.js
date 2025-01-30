@@ -242,7 +242,182 @@ var headcompsgetina = {
             };
     boardsettingsTab.push(dict);
 }
+function addPowerTab_raft(){
+    var innComps = [];
+    jQuery.each(listsjson_raft["listpower"] , function(i, tds){
+    var eachcomp = {
+        "type":"list"
+        ,"components" : ["C,L0,V0,V1,V2,B0"]    // Checkbox, Label, editfield, info, button, Action
+        ,"L0": tds
+        ,"V0": "- W"
+        ,"V0N": "W"
+        ,"V0V": "Power"
+        ,"V1" : "- V"
+        ,"V1N": "V"
+        ,"V1V": "Voltage"
+        ,"V2": "- A"
+        ,"V2N": "A"
+        ,"V2V": "Current"
+        ,"B0": "Get"
+        ,"B0A": "/raftquery"
+        ,"B0sc_cmd":"getpower()"
+        , "B0target": tds
+        , "B0params":""
+    };
+    innComps.push(eachcomp);
+});
+    var innCompscus = [];
+    jQuery.each(listsjson_raft["listpower"] , function(i, tds){
+    var eachcomp = {
+        "type":"list"
+        ,"components" : ["C,L0,V0,V1,V2,B0"]    // Checkbox, Label, editfield, info, button, Action
+        ,"L0": tds
+        ,"V0": "- W"
+        ,"V0N": "W"
+        ,"V0V": "Power"
+        ,"V1" : "- V"
+        ,"V1N": "V"
+        ,"V1V": "Voltage"
+        ,"V2": "- A"
+        ,"V2N": "A"
+        ,"V2V": "Current"
+        ,"B0": "Get"
+        ,"B0A": "/raftquery"
+        ,"B0sc_cmd":"getcalpower()"
+        , "B0target": tds
+        , "B0params":""
+    };
+    innCompscus.push(eachcomp);
+});
+    var innCompssetINA = [];
+    jQuery.each(listsjson_raft["listpower"] , function(i, tds){
+    var eachcomp = {
+        "type":"list"
+        ,"components" : ["C,L0,E0,E1,E2,E3,B0"]    // Checkbox, Label, editfield, info, button, Action
+        ,"L0": tds
+        ,"E0": "V"
+        ,"E0K": "V"
+        ,"E1": "V"
+        ,"E1K": "vV"
+        ,"E2": "V"
+        ,"E2K": "VVV"
+        ,"E3": "V"
+        ,"E3K": "VVVV"
+        ,"B0": "Set"
+        ,"B0A": "/raftquery"
+        ,"B0sc_cmd":"setINA226"
+        , "B0target": tds
+        , "B0params":""
+        ,"B0dontcare":"X"
+    };
+    innCompssetINA.push(eachcomp);
+});
+    var innCompsgetINA = [];
+    jQuery.each(listsjson_raft["listpower"] , function(i, tds){
+    var eachcomp = {
+        "type":"list"
+        ,"components" : ["C,L0,V0,V1,V2,V3,V4,V5,V6,V7,V8,B0"]    // Checkbox, Label, editfield, info, button, Action
+        ,"L0": tds
+        ,"V0": ""
+        ,"V0N": ""
+        ,"V0V": "Configuration"
+        ,"V1" : ""
+        ,"V1N": ""
+        ,"V1V": "Shunt_Voltage"
+        ,"V2": ""
+        ,"V2N": ""
+        ,"V2V": "Bus_Voltage"
+        ,"V3": ""
+        ,"V3N": ""
+        ,"V3V": "Power"
+        ,"V4": ""
+        ,"V4N": ""
+        ,"V4V": "Current"
+        ,"V5": ""
+        ,"V5N": ""
+        ,"V5V": "Calibration"
+        ,"V6": ""
+        ,"V6N": ""
+        ,"V6V": "Mask_Enable"
+        ,"V7": ""
+        ,"V7N": ""
+        ,"V7V": "Alert_Limit"
+        ,"V8": ""
+        ,"V8N": ""
+        ,"V8V": "Die_ID"
+        ,"B0": "Get"
+        ,"B0A": "/raftquery"
+        ,"B0sc_cmd":"getINA226"
+        , "B0target": tds
+        , "B0params":""
+    };
+    innCompsgetINA.push(eachcomp);
+});
+var headcomps = {
+        "headcomponents":["C,L0,L1,L2,L3,B0"]
+        ,"L0": "Rail Name"
+        , "L1" : "Power"
+        , "L2" : "Voltage"
+        , "L3" : "Current"
+        , "B0" : "Get All"
+}
+var headcompssetina = {
+        "headcomponents":["C,L0,L1,L2,L3,L4,B0"]
+        ,"L0": "Rail Name"
+        , "L1" : "Configuration"
+        , "L2" : "Calibration"
+        , "L3" : "Mask/Enable"
+        , "L4" : "Alert Limit"
+        , "B0" : "Set All"
+}
+var headcompsgetina = {
+        "headcomponents":["C,L9,L0,L1,L2,L3,L4,L5,L6,L7,L8,B0"]
+        ,"L9": "Rail Name"
+        ,"L0": "Configuration"
+        , "L1" : "Shunt Voltage"
+        , "L2" : "Bus Voltage"
+        , "L3" : "Power"
+        , "L4" : "Current"
+        , "L5" : "Calibration"
+        , "L6" : "Mask/Enable"
+        , "L7" : "Alert Limit"
+        , "L8" : "Die ID"
+        , "B0" : "Get All"
+}
+var dict = {"tab": "Power"
+,"subtype":"tab"
+    ,"components":[
+        // Power :: get "use default configuration"
+        {
+        "subtype":"list"
+        ,"name": "Use Default Calibration"
+        ,"components": innComps
+        , "headcomponents" : headcomps
 
+        }
+        // Power :: get "use custom configuration"
+        ,{
+        "subtype":"list",
+        "name": "Use Custom Calibration",
+        "components": innCompscus
+       ,"headcomponents":headcomps
+        }
+        ,{
+        "subtype":"list",
+        "name": "Get INA226 Registers",
+        "components": innCompsgetINA
+       ,"headcomponents":headcompsgetina
+        }
+        ,{
+        "subtype":"list",
+        "name": "Set INA226 Registers",
+        "components": innCompssetINA
+       ,"headcomponents":headcompssetina
+        }
+        ]
+        };
+boardsettingsTab.push(dict);
+}
 function addClockTab(){
         var innCompsget = [];
         jQuery.each(listsjson_sc["listclock"] , function(i, tds1){
@@ -574,6 +749,131 @@ function addVoltageTab(){
             }*/
             ]
             };
+    boardsettingsTab.push(dict);
+}
+function addVoltageTab_raft() {
+    var innCompsget = [];
+    var innCompsset = [];
+    var innCompsreset = [];
+    var innCompssetboot = [];
+    jQuery.each(listsjson_raft["listvoltage"], function (i, tds) {
+        tdsary = tds.split(" - (");
+        tds = tdsary[0];
+        tds2 = "-";
+        if (tdsary.length > 1) tds2 = "(" + tdsary[1];
+        var eachcomp = {
+            "type": "list"
+            , "components": ["C,L0,L1,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            , "L0": tds
+            , "L1": tds2
+            , "V0": "- V"
+            , "V0N": "V"
+            , "V0V": "Voltage"
+            , "B0": "Get"
+            , "B0A": "/raftquery"
+            , "B0sc_cmd": "getvoltage()"
+            , "B0target": tds
+            , "B0params": ""
+        };
+        innCompsget.push(eachcomp);
+        var eachcomp = {
+            "type": "list"
+            , "components": ["C,L0,E0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            , "L0": tds
+            , "E0": "value"
+            , "E0K": "-V"
+            , "B0": "Set"
+            , "B0A": "/raftquery"
+            , "B0sc_cmd": "setvoltage"
+            , "B0target": tds
+            , "B0params": ""
+        };
+        innCompsset.push(eachcomp);
+        var eachcomp = {
+            "type": "list"
+            , "components": ["C,L0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            , "L0": tds
+            , "B0": "Restore"
+            , "B0A": "/raftquery"
+            , "B0sc_cmd": "restorevoltage"
+            , "B0target": tds
+            , "B0params": ""
+        };
+        innCompsreset.push(eachcomp);
+        var eachcomp = {
+            "type": "list"
+            , "components": ["C,L0,E0,B0"]    // Checkbox, Label, editfield, info, button, Action
+            , "L0": tds
+            , "E0": "value"
+            , "E0K": "-V"
+            , "B0": "Set"
+            , "B0A": "/raftquery"
+            , "B0sc_cmd": "setbootvoltage"
+            , "B0target": tds
+            , "B0params": ""
+        };
+        innCompssetboot.push(eachcomp);
+    });
+
+    var headcompsget = {
+        "headcomponents": ["C,L0,L2,L1,B0"]
+        , "L0": "Voltage Name"
+        , "L2": "Expected Volts"
+        , "L1": "Volts"
+        , "B0": "Get All"
+    };
+    var headcompsset = {
+        "headcomponents": ["C,L0,L1,B0"]
+        , "L0": "Voltage Name"
+        , "L1": "Volts"
+        , "B0": "Set All"
+    };
+    var headcompsreset = {
+        "headcomponents": ["C,L0,B0"]
+        , "L0": "Voltage Name"
+        , "L1": "Volts"
+        , "B0": "Restore All"
+    };
+    var headcompssetboot = {
+        "headcomponents": ["C,L0,L1,B0"]
+        , "L0": "Voltage Name"
+        , "L1": "Volts"
+        , "B0": "Set All"
+    };
+    var dict = {
+        "tab": "Voltage"
+        , "subtype": "tab"
+        , "components": [
+            {
+                "subtype": "list"
+                , "name": "Get Voltage"
+                , "components": innCompsget
+                , "headcomponents": headcompsget
+
+            }/*
+        ,{
+        "subtype":"list"
+        ,"name": "Set Voltage"
+        ,"components": innCompsset
+        , "headcomponents" : headcompsset
+
+        }
+        ,{
+        "subtype":"list"
+        ,"name": "Restore Voltage"
+        ,"components": innCompsreset
+        , "headcomponents" : headcompsreset
+
+        }
+        ,{
+        "subtype":"list"
+        ,"name": "Set Boot Voltage"
+        ,"components": innCompssetboot
+        , "headcomponents" : headcompssetboot
+
+        }*/
+        ]
+    };
     boardsettingsTab.push(dict);
 }
 function addVadjTab() {
@@ -1320,18 +1620,20 @@ function addsfpTab(){
 
 }
 function isSupported(tabname){
-    if(listsjson_sc["listfeature"].indexOf(tabname) == -1){
+    if(listsjson_sc["listfeature"].indexOf(tabname) === -1 && listsjson_raft["listfeature"].indexOf(tabname) === -1){
         return false;
     }
     return true;
 }
 function generateBoardSettingsTabJSON(){
 
-    console.log(isSupported("listvoltage"))
+    console.log(isSupported("listclock"))
 
     if(isSupported("listclock"))    addClockTab();
     if(isSupported("listvoltage"))    addVoltageTab();
+    if(isSupported("raft_listvoltage"))    addVoltageTab_raft();
     if(isSupported("listpower"))    addPowerTab();
+    if(isSupported("raft_listpower"))    addPowerTab_raft();
 //    addPowerDomainTab();
     if(isSupported("listddr"))    addDDRDIMMTab();
     if(isSupported("listioexp"))    addioexpTab();
