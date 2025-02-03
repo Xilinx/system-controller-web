@@ -165,10 +165,8 @@ def generate_gen_sc_file(sc_app_path, app_config):
     f.write(',\n"8A34001_clk_bin_files":[' + binfiles + ']')
 
     f.write("\n};")
-    f.close()
 
     #add raft listfeature to gen_sc
-    f = open("./static/js/gen_sc.js", "a")
     f.write("\nvar listsjson_raft = {\n")
 
     features = pm.listfeature() 
@@ -189,7 +187,7 @@ def generate_gen_sc_file(sc_app_path, app_config):
         else:
             feature_data[ke] = []
 
-    f.write("\"listfeature\":[" + ",".join([f'\"raft_list{feature}\"' for feature in features["data"]]) + "],\n")
+    f.write("\"listfeature\":[" + ",".join([f'\"list{feature}\"' for feature in features["data"]]) + "],\n")
     for key, value in feature_data.items():
         finStr = ",".join([f'\"{item}\"' for item in value])
         f.write(f'"{key}":[{finStr}],\n')

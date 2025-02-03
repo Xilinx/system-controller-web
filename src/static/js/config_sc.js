@@ -1620,7 +1620,13 @@ function addsfpTab(){
 
 }
 function isSupported(tabname){
-    if(listsjson_sc["listfeature"].indexOf(tabname) === -1 && listsjson_raft["listfeature"].indexOf(tabname) === -1){
+    if(listsjson_sc["listfeature"].indexOf(tabname) == -1){
+        return false;
+    }
+    return true;
+}
+function isRaftSupported(tabname){
+    if(listsjson_raft["listfeature"].indexOf(tabname) == -1){
         return false;
     }
     return true;
@@ -1631,9 +1637,9 @@ function generateBoardSettingsTabJSON(){
 
     if(isSupported("listclock"))    addClockTab();
     if(isSupported("listvoltage"))    addVoltageTab();
-    if(isSupported("raft_listvoltage"))    addVoltageTab_raft();
+    if(isRaftSupported("listvoltage"))    addVoltageTab_raft();
     if(isSupported("listpower"))    addPowerTab();
-    if(isSupported("raft_listpower"))    addPowerTab_raft();
+    if(isRaftSupported("listpower"))    addPowerTab_raft();
 //    addPowerDomainTab();
     if(isSupported("listddr"))    addDDRDIMMTab();
     if(isSupported("listioexp"))    addioexpTab();
