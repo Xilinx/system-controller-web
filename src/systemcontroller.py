@@ -22,17 +22,11 @@ from parse import *
 from config_app import *
 from jnservice import *
 import restserv
-from raft import *
-import sys
 ##  Main that calls other functions and launches the server.
 #
 #
 app = Flask(__name__)
-# sys.path.insert(1, '/usr/share/raft/xclient/raft_services')
-
-# import pm_client
 api = Api(app)
-# pm_client = PM_Client()
 app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024 * 1024 # 1 GB
 ALLOWED_CLK_EXTENSIONS = set(app_config["allowed_clock_files"])
 # ALLOWED_PDI_EXTENSIONS = set(app_config["allowed_pdi_files"])
@@ -169,12 +163,12 @@ def generate_gen_sc_file(sc_app_path, app_config):
     #add raft listfeature to gen_sc
     f.write("\nvar listsjson_raft = {\n")
 
-    features = pm.listfeature() 
+    features = raft.listfeature() 
     feature_data = {}
 
     for feature in features["data"]: 
         ke = "list" + feature
-        func = getattr(pm, ke, None)      
+        func = getattr(raft, ke, None)      
         if func:
             result = func()
             if "data" in result:
@@ -252,7 +246,7 @@ def generate_gen_sc_file(sc_app_path, app_config):
             if len(finStr):
                 finStr = finStr + ","
             finStr = finStr + '"' + k + '"'
-        f.write('"' + ke + '":[' + finStr + "]");
+        f.write('"' + ke + '":[' + finStr + "]")
 
     f.write("\n}")
     f.close()
@@ -317,5 +311,6 @@ if __name__ == '__main__':
 
         return jsonify({'message': 'Files successfully uploaded'})
     app.run(host="0.0.0.0", port=80, debug=True)
+
 
 

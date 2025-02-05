@@ -260,7 +260,7 @@ function addPowerTab_raft(){
         ,"V2V": "Current"
         ,"B0": "Get"
         ,"B0A": "/raftquery"
-        ,"B0sc_cmd":"getpower()"
+        ,"B0sc_cmd":"getpower"
         , "B0target": tds
         , "B0params":""
     };
@@ -283,7 +283,7 @@ function addPowerTab_raft(){
         ,"V2V": "Current"
         ,"B0": "Get"
         ,"B0A": "/raftquery"
-        ,"B0sc_cmd":"getcalpower()"
+        ,"B0sc_cmd":"getcalpower"
         , "B0target": tds
         , "B0params":""
     };
@@ -305,7 +305,7 @@ function addPowerTab_raft(){
         ,"E3K": "VVVV"
         ,"B0": "Set"
         ,"B0A": "/raftquery"
-        ,"B0sc_cmd":"setINA226"
+        ,"B0sc_cmd":"setpowerconf"
         , "B0target": tds
         , "B0params":""
         ,"B0dontcare":"X"
@@ -316,7 +316,7 @@ function addPowerTab_raft(){
     jQuery.each(listsjson_raft["listpower"] , function(i, tds){
     var eachcomp = {
         "type":"list"
-        ,"components" : ["C,L0,V0,V1,V2,V3,V4,V5,V6,V7,V8,B0"]    // Checkbox, Label, editfield, info, button, Action
+        ,"components" : ["C,L0,V0,V1,V2,V3,V4,V5,V6,V7,B0"]    // Checkbox, Label, editfield, info, button, Action
         ,"L0": tds
         ,"V0": ""
         ,"V0N": ""
@@ -342,12 +342,9 @@ function addPowerTab_raft(){
         ,"V7": ""
         ,"V7N": ""
         ,"V7V": "Alert_Limit"
-        ,"V8": ""
-        ,"V8N": ""
-        ,"V8V": "Die_ID"
         ,"B0": "Get"
         ,"B0A": "/raftquery"
-        ,"B0sc_cmd":"getINA226"
+        ,"B0sc_cmd":"getpowerconf"
         , "B0target": tds
         , "B0params":""
     };
@@ -371,7 +368,7 @@ var headcompssetina = {
         , "B0" : "Set All"
 }
 var headcompsgetina = {
-        "headcomponents":["C,L9,L0,L1,L2,L3,L4,L5,L6,L7,L8,B0"]
+        "headcomponents":["C,L9,L0,L1,L2,L3,L4,L5,L6,L7,B0"]
         ,"L9": "Rail Name"
         ,"L0": "Configuration"
         , "L1" : "Shunt Voltage"
@@ -381,7 +378,6 @@ var headcompsgetina = {
         , "L5" : "Calibration"
         , "L6" : "Mask/Enable"
         , "L7" : "Alert Limit"
-        , "L8" : "Die ID"
         , "B0" : "Get All"
 }
 var dict = {"tab": "Power"
@@ -404,13 +400,13 @@ var dict = {"tab": "Power"
         }
         ,{
         "subtype":"list",
-        "name": "Get INA226 Registers",
+        "name": "Get INA7XX Registers",
         "components": innCompsgetINA
        ,"headcomponents":headcompsgetina
         }
         ,{
         "subtype":"list",
-        "name": "Set INA226 Registers",
+        "name": "Set INA7XX Registers",
         "components": innCompssetINA
        ,"headcomponents":headcompssetina
         }
@@ -489,7 +485,7 @@ function addClockTab(){
             "type":"list"
             ,"components" : ["C,L0,L1,E0,B0"]    // Checkbox, Label, editfield, info, button, Action
             ,"L0": tds
-	    ,"L1": tds2
+	        ,"L1": tds2
             ,"E0": "value"
             ,"E0K": "-v"
             ,"B0": "Set"
@@ -633,7 +629,7 @@ function addVoltageTab(){
         var innCompsreset = [];
         var innCompssetboot = [];
         jQuery.each(listsjson_sc["listvoltage"] , function(i, tds){
-	tdsary = tds.split(" - (");
+	    tdsary = tds.split(" - (");
         tds = tdsary[0];
         tds2 = "-";
         if(tdsary.length > 1) tds2 = "("+tdsary[1];
@@ -771,7 +767,7 @@ function addVoltageTab_raft() {
             , "V0V": "Voltage"
             , "B0": "Get"
             , "B0A": "/raftquery"
-            , "B0sc_cmd": "getvoltage()"
+            , "B0sc_cmd": "getvoltage"
             , "B0target": tds
             , "B0params": ""
         };
@@ -1631,6 +1627,7 @@ function isRaftSupported(tabname){
     }
     return true;
 }
+
 function generateBoardSettingsTabJSON(){
 
     console.log(isSupported("listclock"))

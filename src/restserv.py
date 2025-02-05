@@ -12,11 +12,18 @@ from term import *
 from parse import *
 from jnservice import *
 from raft import *
+import sys
+import os
+sys.path.insert(1, '/usr/share/raft/xclient/raft_services')
+if os.path.isfile('/usr/share/raft/xclient/raft_services/pm_client.py'):
+    import pm_client
+    raft = pm_client.pm
+else:
+    raft = PM_Client()
 ##
 # TODO :: Change parse data static to dynamic class for realtime data.
 #parse = ParseDataStatic()
 parse = ParseData()
-raft = PM_Client()
 deviname = ""
 
 sc_app_path = app_config["sc_app_path"]
@@ -336,7 +343,7 @@ class CmdQuery(Resource):
                     ,"data":dresp
                 }
             else : 
-                result = parse.parse_cmd_resp(response, req, tar, params);
+                result = parse.parse_cmd_resp(response, req, tar, params)
                 resp_json = {
                     "status":"success"
                     ,"data":result
@@ -361,15 +368,11 @@ class RaftQuery(Resource):
             tar = request.args.get('target')
             params_req = request.args.get('params')
             params = params_req.split(",")
-            paramStr = params_req.replace(","," ")
-            # raft_fun = raft.GetBoardInfo()
+            paramStr = ""
+            if len(params_req):
+                paramStr = ",["+params_req+"]"
             try:
-                raft_fun = eval(f"raft.{req}")
-                print(raft_fun["data"])
-                # if len(tar):
-                #     raft_fun = raft_fun + " -t '" + tar + "'"
-                # if len(params) and len(params[0]):
-                #     raft_fun = raft_fun + " -v '" + paramStr + "'"
+                raft_fun = eval(f"raft.{req}(\"{tar}\"{paramStr})")
             except Exception as d:
                 print(d)
 
@@ -582,3 +585,4 @@ class RaucUpdate(Resource):
                 , "data": {"error": "%s" % e}
             }
             return resp_json, 500
+
