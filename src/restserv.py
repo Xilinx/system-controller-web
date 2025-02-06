@@ -1,6 +1,6 @@
 ##
 # Copyright (c) 2020 - 2022 Xilinx, Inc.  All rights reserved.
-# Copyright (c) 2022 - 2024 Advanced Micro Devices, Inc.  All rights reserved.
+# Copyright (c) 2022 - 2025 Advanced Micro Devices, Inc.  All rights reserved.
 #
 # SPDX-License-Identifier: MIT
 ##
@@ -11,15 +11,11 @@ from config_app import *
 from term import *
 from parse import *
 from jnservice import *
-from raft import *
 import sys
 import os
 sys.path.insert(1, '/usr/share/raft/xclient/raft_services')
 if os.path.isfile('/usr/share/raft/xclient/raft_services/pm_client.py'):
-    import pm_client
-    raft = pm_client.pm
-else:
-    raft = PM_Client()
+    from pm_client import *
 ##
 # TODO :: Change parse data static to dynamic class for realtime data.
 #parse = ParseDataStatic()
@@ -372,7 +368,7 @@ class RaftQuery(Resource):
             if len(params_req):
                 paramStr = ",["+params_req+"]"
             try:
-                raft_fun = eval(f"raft.{req}(\"{tar}\"{paramStr})")
+                raft_fun = eval(f"pm.{req}(\"{tar}\"{paramStr})")
             except Exception as d:
                 print(d)
 

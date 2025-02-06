@@ -1,6 +1,6 @@
 ##
 # Copyright (c) 2020 - 2022 Xilinx, Inc.  All rights reserved.
-# Copyright (c) 2022 - 2024 Advanced Micro Devices, Inc.  All rights reserved.
+# Copyright (c) 2022 - 2025 Advanced Micro Devices, Inc.  All rights reserved.
 #
 # SPDX-License-Identifier: MIT
 ##
@@ -162,13 +162,18 @@ def generate_gen_sc_file(sc_app_path, app_config):
 
     #add raft listfeature to gen_sc
     f.write("\nvar listsjson_raft = {\n")
-
-    features = raft.listfeature() 
+    features = {
+        "data":[]
+    }
+    try:
+        features = pm.listfeature()
+    except:
+        pass
     feature_data = {}
 
     for feature in features["data"]: 
         ke = "list" + feature
-        func = getattr(raft, ke, None)      
+        func = getattr(pm, ke, None)      
         if func:
             result = func()
             if "data" in result:
