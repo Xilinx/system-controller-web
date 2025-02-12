@@ -538,7 +538,7 @@ class exportCSV(Resource):
             output_dir = "./static/tmp/"
             if not os.path.exists(output_dir):
                 os.makedirs(output_dir)
-            cmd = f"{app_config['csvFIlePath']} -d {sampling_rate}"
+            cmd = f"{app_config['csvFIlePath']} {sampling_rate}"
             result = Term.exec_cmd(f"python3 {cmd}")
             resp_json = {
                 "status":"success"
