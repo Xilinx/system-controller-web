@@ -132,7 +132,7 @@ function addPowerTab(){
             ,"B0sc_cmd":"setINA226"
             , "B0target": tds
             , "B0params":""
-            ,"B0dontcare":"X"
+            ,"B0dontcare":"X" //sc_app ignores the X to set the power 
         };
         innCompssetINA.push(eachcomp);
     });
@@ -245,10 +245,14 @@ var headcompsgetina = {
 function addPowerTab_raft(){
     var innComps = [];
     jQuery.each(listsjson_raft["listpower"] , function(i, tds){
+    var tdsjson = tds.replace(/'/g, '"'); //Replace single quotes with double quotes for valid JSON parsing
+    var parsetds = JSON.parse(tdsjson);
+    var key = Object.keys(parsetds)[0];
+    var tds1 = key;
     var eachcomp = {
         "type":"list"
         ,"components" : ["C,L0,V0,V1,V2,B0"]    // Checkbox, Label, editfield, info, button, Action
-        ,"L0": tds
+        ,"L0": tds1
         ,"V0": "- W"
         ,"V0N": "W"
         ,"V0V": "Power"
@@ -261,17 +265,21 @@ function addPowerTab_raft(){
         ,"B0": "Get"
         ,"B0A": "/raftquery"
         ,"B0sc_cmd":"getpower"
-        , "B0target": tds
+        , "B0target": tds1
         , "B0params":""
     };
     innComps.push(eachcomp);
 });
     var innCompscus = [];
     jQuery.each(listsjson_raft["listpower"] , function(i, tds){
+    var tdsjson = tds.replace(/'/g, '"'); //Replace single quotes with double quotes for valid JSON parsing
+    var parsetds = JSON.parse(tdsjson);
+    var key = Object.keys(parsetds)[0];
+    var tds1 = key;
     var eachcomp = {
         "type":"list"
         ,"components" : ["C,L0,V0,V1,V2,B0"]    // Checkbox, Label, editfield, info, button, Action
-        ,"L0": tds
+        ,"L0": tds1
         ,"V0": "- W"
         ,"V0N": "W"
         ,"V0V": "Power"
@@ -284,71 +292,161 @@ function addPowerTab_raft(){
         ,"B0": "Get"
         ,"B0A": "/raftquery"
         ,"B0sc_cmd":"getcalpower"
-        , "B0target": tds
+        , "B0target": tds1
         , "B0params":""
     };
     innCompscus.push(eachcomp);
 });
-    var innCompssetINA = [];
-    jQuery.each(listsjson_raft["listpower"] , function(i, tds){
-    var eachcomp = {
-        "type":"list"
-        ,"components" : ["C,L0,E0,E1,E2,E3,B0"]    // Checkbox, Label, editfield, info, button, Action
-        ,"L0": tds
-        ,"E0": "V"
-        ,"E0K": "V"
-        ,"E1": "V"
-        ,"E1K": "vV"
-        ,"E2": "V"
-        ,"E2K": "VVV"
-        ,"E3": "V"
-        ,"E3K": "VVVV"
-        ,"B0": "Set"
-        ,"B0A": "/raftquery"
-        ,"B0sc_cmd":"setpowerconf"
-        , "B0target": tds
-        , "B0params":""
-        ,"B0dontcare":"X"
-    };
-    innCompssetINA.push(eachcomp);
+    var innCompssetINA226 = [];
+    var innCompssetINA7XX = [];
+    jQuery.each(listsjson_raft["listpower"], function (i, tds) {
+    var tdsjson = tds.replace(/'/g, '"'); //Replace single quotes with double quotes for valid JSON parsing
+    var parsetds = JSON.parse(tdsjson);
+    var key = Object.keys(parsetds)[0];
+    var device = parsetds[key].Device;
+    var tds1 = key;
+    if (device.startsWith("INA2") == true) {
+        var eachcomp226 = {
+            "type": "list"
+            , "components": ["C,L0,E0,E1,E2,E3,B0"]    // Checkbox, Label, editfield, info, button, Action
+            , "L0": tds1
+            , "E0": "V"
+            , "E0K": "V"
+            , "E1": "V"
+            , "E1K": "vV"
+            , "E2": "V"
+            , "E2K": "VVV"
+            , "E3": "V"
+            , "E3K": "VVVV"
+            , "B0": "Set"
+            , "B0A": "/raftquery"
+            , "B0sc_cmd": "setpowerconf"
+            , "B0target": tds1
+            , "B0params": ""
+            , "B0dontcare": "None"
+        };
+        innCompssetINA226.push(eachcomp226);
+    }else if(device.startsWith("INA7") == true){
+        var eachcomp7XX = {
+            "type": "list"
+            , "components": ["C,L0,E0,E1,E2,E3,E4,B0"]    // Checkbox, Label, editfield, info, button, Action
+            , "L0": tds1
+            , "E0": "V"
+            , "E0K": "V"
+            , "E1": "V"
+            , "E1K": "vV"
+            , "E2": "V"
+            , "E2K": "VVV"
+            , "E3": "V"
+            , "E3K": "VVVV"
+            , "E4": "V"
+            , "E4K": "VVVVV"
+            , "B0": "Set"
+            , "B0A": "/raftquery"
+            , "B0sc_cmd": "setpowerconf"
+            , "B0target": tds1
+            , "B0params": ""
+            , "B0dontcare": "None"
+        };
+        innCompssetINA7XX.push(eachcomp7XX);
+    }
 });
-    var innCompsgetINA = [];
+    var innCompsgetINA226 = [];
+    var innCompsgetINA7XX = [];
     jQuery.each(listsjson_raft["listpower"] , function(i, tds){
-    var eachcomp = {
-        "type":"list"
-        ,"components" : ["C,L0,V0,V1,V2,V3,V4,V5,V6,V7,B0"]    // Checkbox, Label, editfield, info, button, Action
-        ,"L0": tds
-        ,"V0": ""
-        ,"V0N": ""
-        ,"V0V": "Configuration"
-        ,"V1" : ""
-        ,"V1N": ""
-        ,"V1V": "Shunt_Voltage"
-        ,"V2": ""
-        ,"V2N": ""
-        ,"V2V": "Bus_Voltage"
-        ,"V3": ""
-        ,"V3N": ""
-        ,"V3V": "Power"
-        ,"V4": ""
-        ,"V4N": ""
-        ,"V4V": "Current"
-        ,"V5": ""
-        ,"V5N": ""
-        ,"V5V": "Calibration"
-        ,"V6": ""
-        ,"V6N": ""
-        ,"V6V": "Mask_Enable"
-        ,"V7": ""
-        ,"V7N": ""
-        ,"V7V": "Alert_Limit"
-        ,"B0": "Get"
-        ,"B0A": "/raftquery"
-        ,"B0sc_cmd":"getpowerconf"
-        , "B0target": tds
-        , "B0params":""
-    };
-    innCompsgetINA.push(eachcomp);
+    var tdsjson = tds.replace(/'/g, '"'); //Replace single quotes with double quotes for valid JSON parsing
+    var parsetds = JSON.parse(tdsjson);
+    var key = Object.keys(parsetds)[0];
+    var device = parsetds[key].Device;
+    var tds1 = key;
+    if (device.startsWith("INA2") == true) {
+        var eachcomp226 = {
+            "type":"list"
+            ,"components" : ["C,L0,V0,V1,V2,V3,V4,V5,V6,V7,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"L0": tds1
+            ,"V0": ""
+            ,"V0N": ""
+            ,"V0V": "Configuration"
+            ,"V1" : ""
+            ,"V1N": ""
+            ,"V1V": "Shunt_Voltage"
+            ,"V2": ""
+            ,"V2N": ""
+            ,"V2V": "Bus_Voltage"
+            ,"V3": ""
+            ,"V3N": ""
+            ,"V3V": "Power"
+            ,"V4": ""
+            ,"V4N": ""
+            ,"V4V": "Current"
+            ,"V5": ""
+            ,"V5N": ""
+            ,"V5V": "Calibration"
+            ,"V6": ""
+            ,"V6N": ""
+            ,"V6V": "Mask_Enable"
+            ,"V7": ""
+            ,"V7N": ""
+            ,"V7V": "Alert_Limit"
+            ,"B0": "Get"
+            ,"B0A": "/raftquery"
+            ,"B0sc_cmd":"getpowerconf"
+            , "B0target": tds1
+            , "B0params":""
+        };
+        innCompsgetINA226.push(eachcomp226);
+    }else if(device.startsWith("INA7") == true){
+        var eachcomp7XX = {
+            "type":"list"
+            ,"components" : ["C,L0,V0,V1,V2,V3,V4,V5,V6,V7,V8,V9,V10,V11,V12,B0"]    // Checkbox, Label, editfield, info, button, Action
+            ,"L0": tds1
+            ,"V0": ""
+            ,"V0N": ""
+            ,"V0V": "Configuration"
+            ,"V1" : ""
+            ,"V1N": ""
+            ,"V1V": "ADC_Configuration"
+            ,"V2": ""
+            ,"V2N": ""
+            ,"V2V": "Bus_Voltage"
+            ,"V3": ""
+            ,"V3N": ""
+            ,"V3V": "Die_Temp"
+            ,"V4": ""
+            ,"V4N": ""
+            ,"V4V": "Current"
+            ,"V5": ""
+            ,"V5N": ""
+            ,"V5V": "Power"
+            ,"V6": ""
+            ,"V6N": ""
+            ,"V6V": "Diag_Alert"
+            ,"V7": ""
+            ,"V7N": ""
+            ,"V7V": "Current_OL"
+            ,"V8": ""
+            ,"V8N": ""
+            ,"V8V": "Current_UL"
+            ,"V9": ""
+            ,"V9N": ""
+            ,"V9V": "Voltage_OL"
+            ,"V10": ""
+            ,"V10N": ""
+            ,"V10V": "Voltage_UL"
+            ,"V11": ""
+            ,"V11N": ""
+            ,"V11V": "Temp_Limit"
+            ,"V12": ""
+            ,"V12N": ""
+            ,"V12V": "Power_Limit"
+            ,"B0": "Get"
+            ,"B0A": "/raftquery"
+            ,"B0sc_cmd":"getpowerconf"
+            , "B0target": tds1
+            , "B0params":""
+        };
+        innCompsgetINA7XX.push(eachcomp7XX);
+    }
 });
 var headcomps = {
         "headcomponents":["C,L0,L1,L2,L3,B0"]
@@ -358,7 +456,7 @@ var headcomps = {
         , "L3" : "Current"
         , "B0" : "Get All"
 }
-var headcompssetina = {
+var headcompssetina226 = {
         "headcomponents":["C,L0,L1,L2,L3,L4,B0"]
         ,"L0": "Rail Name"
         , "L1" : "Configuration"
@@ -367,7 +465,7 @@ var headcompssetina = {
         , "L4" : "Alert Limit"
         , "B0" : "Set All"
 }
-var headcompsgetina = {
+var headcompsgetina226 = {
         "headcomponents":["C,L9,L0,L1,L2,L3,L4,L5,L6,L7,B0"]
         ,"L9": "Rail Name"
         ,"L0": "Configuration"
@@ -379,6 +477,34 @@ var headcompsgetina = {
         , "L6" : "Mask/Enable"
         , "L7" : "Alert Limit"
         , "B0" : "Get All"
+}
+var headcompssetina7XX = {
+    "headcomponents":["C,L0,L1,L2,L3,L4,L5,B0"]
+    ,"L0": "Rail Name"
+    , "L1" : "Configuration"
+    , "L2" : "ADC COnfiguration"
+    , "L3" : "Diag Alert"
+    , "L4" : "Temp Limit"
+    , "L5" : "Power Limit"
+    , "B0" : "Set All"
+}
+var headcompsgetina7XX = {
+    "headcomponents":["C,L14,L0,L1,L2,L3,L4,L5,L6,L7,L8,L9,L10,L11,L12,B0"]
+    ,"L14": "Rail Name"
+    ,"L0": "Configuration"
+    , "L1" : "ADC Configuration"
+    , "L2" : "Bus Voltage"
+    , "L3" : "Die Temp"
+    , "L4" : "Current"
+    , "L5" : "Power"
+    , "L6" : "Diag Alert"
+    , "L7" : "Current OL"
+    , "L8" : "Current UL"
+    , "L9" : "Voltage OL"
+    , "L10" : "Voltage UL"
+    , "L11" : "Temp Limit"
+    , "L12" : "Power Limit"
+    , "B0" : "Get All"
 }
 var dict = {"tab": "Power"
 ,"subtype":"tab"
@@ -398,20 +524,38 @@ var dict = {"tab": "Power"
         "components": innCompscus
        ,"headcomponents":headcomps
         }
-        ,{
-        "subtype":"list",
-        "name": "Get INA7XX Registers",
-        "components": innCompsgetINA
-       ,"headcomponents":headcompsgetina
-        }
-        ,{
-        "subtype":"list",
-        "name": "Set INA7XX Registers",
-        "components": innCompssetINA
-       ,"headcomponents":headcompssetina
-        }
         ]
         };
+        if (innCompsgetINA226.length>0){
+            dict.components.push({
+                "subtype":"list",
+                "name": "Get INA226 Registers",
+                "components": innCompsgetINA226
+               ,"headcomponents":headcompsgetina226
+                }
+                ,{
+                "subtype":"list",
+                "name": "Set INA266 Registers",
+                "components": innCompssetINA226
+               ,"headcomponents":headcompssetina226
+                }
+            ); 
+        }
+        if (innCompsgetINA7XX.length>0){
+            dict.components.push({
+                "subtype":"list",
+                "name": "Get INA7XX Registers",
+                "components": innCompsgetINA7XX
+               ,"headcomponents":headcompsgetina7XX
+                }
+                ,{
+                "subtype":"list",
+                "name": "Set INA7XX Registers",
+                "components": innCompssetINA7XX
+               ,"headcomponents":headcompssetina7XX
+                }
+            );
+        }
 boardsettingsTab.push(dict);
 }
 function addClockTab(){
