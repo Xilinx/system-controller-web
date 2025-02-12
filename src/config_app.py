@@ -1,6 +1,6 @@
 ##
 # Copyright (c) 2020 - 2022 Xilinx, Inc.  All rights reserved.
-# Copyright (c) 2022 - 2024 Advanced Micro Devices, Inc.  All rights reserved.
+# Copyright (c) 2022 - 2025 Advanced Micro Devices, Inc.  All rights reserved.
 #
 # SPDX-License-Identifier: MIT
 ##
@@ -9,7 +9,7 @@
 app_config = {
     "deployment":"RELEASE"              # RELEASE, DEBUG
     ,"major_version":"1"
-    ,"minor_version" : "4"
+    ,"minor_version" : "5"
     ,"dev_for_major_ver" : "1"
     ,"dev_minor_ver" : "3"
     ,"sc_app_path":"sc_app"
