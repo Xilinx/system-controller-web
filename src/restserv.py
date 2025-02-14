@@ -534,11 +534,11 @@ class InstallBoard(Resource):
 class exportCSV(Resource):
     def get(self, ):
         try:
-            sampling_rate = request.args.get('sampling_rate', 5)
+            duration = request.args.get('file_duration', 5)
             output_dir = "./static/tmp/"
             if not os.path.exists(output_dir):
                 os.makedirs(output_dir)
-            cmd = f"{app_config['csvFIlePath']} {sampling_rate}"
+            cmd = f"{app_config['csvFIlePath']} {duration} 1"
             result = Term.exec_cmd(f"python3 {cmd}")
             resp_json = {
                 "status":"success"

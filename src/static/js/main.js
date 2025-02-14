@@ -557,7 +557,7 @@ function exportCSV() {
     inputField.setAttribute('value', 5);
     inputField.min = 5;
     inputField.max = 30;
-    inputField.setAttribute('id', 'sampling_rate_input');
+    inputField.setAttribute('id', 'file_duration_input');
     inputField.style.width = "10%";
     inputField.style.margin = "0 10px 0 10px";
 
@@ -591,8 +591,8 @@ function exportCSV() {
         document.getElementById("downloadCSVid").className = "";
         document.getElementById("downloadCSVid").style.border = "3px dotted black";
         document.getElementById("downloadCSVid").classList.add("ministatusloading");
-        var samplingRate = document.getElementById('sampling_rate_input').value;
-        console.log('Selected sampling rate:', samplingRate);
+        var fileDuration = document.getElementById('file_duration_input').value;
+        console.log('Selected duration:', fileDuration);
         var originalText = downloadbtn.innerHTML;
         downloadbtn.innerHTML = "Please wait..";
         downloadbtn.disabled = true;
@@ -600,7 +600,7 @@ function exportCSV() {
         $.ajax({
             url: "/exportcsv",
             method: "GET",
-            data: { sampling_rate: samplingRate },
+            data: { file_duration: fileDuration },
             contentType: "json",
             success: function (res) {
                 document.getElementById("downloadCSVid").className = "";
