@@ -17,7 +17,7 @@ app_config = {
     ,"boardsetupfile":"/usr/bin/setup_board.sh"
     ,"versioninfo":"/usr/bin/version_info.sh" 
     ,"bitlogFilePath":"/usr/share/system-controller-app/.sc_app/BIT.log"
-    ,"csvFIlePath":"/usr/share/raft/examples/python/pmtool/pm-cmd.py output-csv 1 --path ./static/tmp/"
+    ,"csvFIlePath":"/usr/share/raft/examples/python/pmtool/pm-cmd.py output-csv --path ./static/tmp/"
     ,"raucFilepath":"/data/"
     ,"config_sc_list_cmds":["listpower","listclock","listvoltage","listFMCvoltage","listgpio","listSFP","listpowerdomain","listQSFP","listFMC"]
     ,"config_bit_list_cmds":["listBIT"]
