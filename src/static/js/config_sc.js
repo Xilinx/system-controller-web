@@ -535,7 +535,7 @@ var dict = {"tab": "Power"
                 }
                 ,{
                 "subtype":"list",
-                "name": "Set INA266 Registers",
+                "name": "Set INA226 Registers",
                 "components": innCompssetINA226
                ,"headcomponents":headcompssetina226
                 }
