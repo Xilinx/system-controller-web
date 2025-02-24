@@ -1775,12 +1775,14 @@ function isRaftSupported(tabname){
 function generateBoardSettingsTabJSON(){
 
     console.log(isSupported("listclock"))
-
+    var powerDisplay = false;
+    var voltageDisplay = false;
     if(isSupported("listclock"))    addClockTab();
-    if(isSupported("listvoltage"))    addVoltageTab();
-    if(isRaftSupported("listvoltage"))    addVoltageTab_raft();
-    if(isSupported("listpower"))    addPowerTab();
-    if(isRaftSupported("listpower"))    addPowerTab_raft();
+    if(isSupported("listvoltage")){voltageDisplay = true;    addVoltageTab()};
+    if(!voltageDisplay && isRaftSupported("listvoltage"))    addVoltageTab_raft();
+    if(isSupported("listpower")){powerDisplay = true;    addPowerTab()};
+    if(!powerDisplay && isRaftSupported("listpower"))    addPowerTab_raft();
+
 //    addPowerDomainTab();
     if(isSupported("listddr"))    addDDRDIMMTab();
     if(isSupported("listioexp"))    addioexpTab();
