@@ -1037,18 +1037,21 @@ function addVadjTab() {
     } catch (error) {
         console.log("An error occurred:", error.message);
     }
+    var apiCall = isRaftSupported("listvoltage") ? "/raftquery" : (isSupported("listvoltage") ? "/cmdquery" : "");
+    var parameterName = isRaftSupported("listvoltage") ? "Voltage" : (isSupported("listvoltage") ? "voltage" : "");
     var getv = {
         "type": "list"
         , "components": ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
         , "L0": "Get " + tds
         , "V0": "- V"
         , "V0N": "V"
-        , "V0V": "voltage"
+        , "V0V": parameterName
         , "B0": "Get"
-        , "B0A": "/cmdquery"
+        , "B0A": apiCall
         , "B0sc_cmd": "getvoltage"
         , "B0target": tds
         , "B0params": ""
+        , "B0disabled":false
     };
     innCompsget.push(getv);
     var getv2 = {
@@ -1059,10 +1062,11 @@ function addVadjTab() {
         , "V0N": "V"
         , "V0V": "io"
         , "B0": "Get"
-        , "B0A": "/cmdquery"
+        , "B0A": apiCall
         , "B0sc_cmd": "getvoltage"
         , "B0target": tds
         , "B0params": "all"
+        , "B0disabled":false
     };
     innCompsget.push(getv2);
 
@@ -1076,10 +1080,11 @@ function addVadjTab() {
         , "D0sc_cmd": "getvoltage"
         , "D0F": true
         , "B0": "Set"
-        , "B0A": "/cmdquery"
+        , "B0A": apiCall
         , "B0sc_cmd": "setvoltage"
         , "B0target": tds
         , "B0params": ""
+        , "B0disabled":false
     };
     if (general.boardName.toLowerCase() != "vek280") {
         innCompsget.push(setv);
@@ -1094,12 +1099,19 @@ function addVadjTab() {
         , "D0sc_cmd": "getvoltage"
         , "D0F": true
         , "B0": "Set"
-        , "B0A": "/cmdquery"
+        , "B0A": apiCall
         , "B0sc_cmd": "setbootvoltage"
         , "B0target": tds
         , "B0params": ""
+        , "B0disabled":false
     };
     innCompsboot.push(bootv);
+    if (apiCall == "") {
+        getv.B0disabled = true;
+        getv2.B0disabled = true;
+        setv.B0disabled = true;
+        bootv.B0disabled = true;
+    }
     var headcompsset = {
         "headcomponents": ["C,L0,L1,B0"]
         , "L0": "Voltage Name"

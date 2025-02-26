@@ -282,9 +282,10 @@ var theadcomp = document.createElement("thead");
                                 }
                             }
                         }
+                        var apiCall = isRaftSupported("listvoltage") ? "/raftquery" : (isSupported("listvoltage") ? "/cmdquery" : "");
                         if (c[elem + "F"]) {
                             $.ajax({
-                                url: "/cmdquery",
+                                url: apiCall,
                                 type: "GET",
                                 data: { "sc_cmd": c[elem + "sc_cmd"], "target": "" + targ, "params": "" },
                                 dataType: "json",
