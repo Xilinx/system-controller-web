@@ -188,7 +188,10 @@ def generate_gen_sc_file(sc_app_path, app_config):
 
     f.write("\"listfeature\":[" + ",".join([f'\"list{feature}\"' for feature in features["data"]]) + "],\n")
     for key, value in feature_data.items():
-        finStr = ",".join([f'\"{item}\"' for item in value])
+        if value is None:
+            finStr = ""
+        else:
+            finStr = ",".join([f'\"{item}\"' for item in value])
         f.write(f'"{key}":[{finStr}],\n')
 
     f.write("};\n")
