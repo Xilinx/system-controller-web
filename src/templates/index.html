@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
 - Copyright (c) 2020 - 2022 Xilinx, Inc.  All rights reserved.
-- Copyright (c) 2022 - 2024 Advanced Micro Devices, Inc.  All rights reserved.
+- Copyright (c) 2022 - 2025 Advanced Micro Devices, Inc.  All rights reserved.
 -
 - SPDX-License-Identifier: MIT
 -->
@@ -119,6 +119,9 @@
         <div>
         <button class="navopt_btn" id="raucupdate" onclick=navClick(this.id)>Linux File System</button>
         </div>
+        <div>
+          <button class="navopt_btn" id="versalimageupdate" onclick=navClick(this.id)>Versal Image Upload</button>
+          </div>
         <!--<div class="second_dashboard">
         <br><br><br><br><br><br>
                 <p class='link_key'>For more information regarding Hardware, Documentation, Tools & IP and Training & Support</p>
@@ -143,6 +146,9 @@
         <div class="block_dashboard_1" id="detectPDI">
             <p class='details_info'> <b>Upload PDI:</b></p>
         </div>
+        <div class="block_dashboard_1" id="detectOSPI">
+          <p class='details_info'> <b>Upload OSPI:</b></p>
+      </div>
     </span>
   </div>
 <!-- Help Screen-->
@@ -410,6 +416,12 @@
     <div id="rauc_update_screen">
 
     </div>
+</div>
+<div class="homelandingrow hide" id="versalimageupdate_screen">
+  <div class="app-title">Versal Image Upload</div>
+  <div id="versal_image_screen">
+
+  </div>
 </div>
   <section class="content_sec ">
     <div class="tab_section footer">

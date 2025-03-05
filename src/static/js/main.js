@@ -121,7 +121,7 @@ function launchpmtool(){
 
 }
 function hideAllPages(){
-    $("#home_screen_com, #home_screen_db, #help_screen, #about_screen, #dnd_screen, #boardseettings_screen, #tools_screen, #testandebug_screen, #linuxprompt_screen,#raucupdate_screen, #ttbbackid").addClass('hide');
+    $("#home_screen_com, #home_screen_db, #help_screen, #about_screen, #dnd_screen, #boardseettings_screen, #tools_screen, #testandebug_screen, #linuxprompt_screen,#raucupdate_screen,#versalimageupdate_screen, #ttbbackid").addClass('hide');
 }
 
 function renderComponentDiv(name, comps,heads){
@@ -437,6 +437,16 @@ function upload_clock_files(funcType) {
                         em.appendChild(g);
                     });
                 });
+            }else if (funcType === "ospi"){
+                document.querySelectorAll('#OSPIselectionOption').forEach((em, i) => {
+                    while (em.length > 0) em.remove(em.length - 1);
+                    jQuery.each(res["data"]["ospi"]["ospi_files"], function (k, d) {
+                        var g = document.createElement("option");
+                        g.setAttribute('value', d);
+                        g.innerHTML = d
+                        em.appendChild(g);
+                    });
+                });
             }else if (funcType === "rauc"){
                 document.querySelectorAll('#rauc_file_name').forEach((em, i) => {
                     while (em.length > 0) em.remove(em.length - 1);
@@ -460,7 +470,7 @@ function fileUploder(formdata, fileObj, select_id, funcType) {
         return;
     }
     var dupFound = false;
-    var sIds = ["selectElementId0", "selectElementId1", "PDIselectionOption1", "PDIselectionOption2", "rauc_file_name"]
+    var sIds = ["selectElementId0", "selectElementId1", "PDIselectionOption1", "PDIselectionOption2", "rauc_file_name", "OSPIselectionOption"]
     jQuery.each(sIds, function (t, l) {
 
         document.querySelectorAll('#' + l).forEach((em, i) => {
@@ -483,7 +493,7 @@ function fileUploder(formdata, fileObj, select_id, funcType) {
         .then(response => {
             if (response.status == 200) {
                 console.log('File uploaded successfully.');
-                if (["clock", "pdi", "rauc"].includes(funcType)) {
+                if (["clock", "pdi", "rauc", "ospi"].includes(funcType)) {
                     upload_clock_files(funcType);
                 }
                 return "Success";
@@ -499,7 +509,7 @@ function getlogs(){
     $.ajax({
         url:"/scriptrunner",
         method:"GET",
-        data:{},
+        data:{"cmd":"getlogs"},
         contentType:"application/tar",
         success: function (res){
             var link = document.createElement('a')
@@ -2271,7 +2281,103 @@ function generatePDIblock(){
     });
     });
 
-}    
+}
+
+//Upload OSPI section
+function generateOSPIblock(){
+    var block = $("#detectOSPI");
+    var em1 = document.createElement("div");
+    em1.classList.add("details_info");
+    block.append(em1)
+    var es = document.createTextNode("Browse OSPI:");
+    em1.appendChild(es);
+
+    var button = document.createElement("input");
+    button.classList.add("buttons");
+    button.classList.add("dash_bm");
+    button.style.width = '58%';
+    button.id="uploadospi";
+    button.setAttribute("value", "Browse");
+    button.setAttribute("type", "file");
+//    button.setAttribute('accept', '.bin');
+    button.addEventListener('change', function(event) {
+    var file = event.target.files[0];
+    if (file) {
+        var formData = new FormData();
+        formData.append("file", file);
+        fileUploder(formData, file, "OSPIselectionOption", "ospi");
+    }
+});
+    em1.appendChild(button);
+    //load OSPI section
+    var em2 = document.createElement("p");
+    em2.classList.add("details_info");
+//    em2.style.borderBottom = 'none';
+    em2.id="loadospi";
+    block.append(em2);
+
+    var es2 = document.createTextNode(" Load OSPI:");
+    em2.append(es2);
+    var m = document.createElement("select");
+    m.id = "OSPIselectionOption";
+    m.classList.add("dash_bm");
+    em2.appendChild(m);
+    var button2 = document.createElement("input");
+    button2.classList.add("buttons");
+    button2.classList.add("dash_bm");
+    button2.id="loadospibuttonid";
+    button2.setAttribute("value", "Load");
+    button2.setAttribute("type", "button");
+    em2.appendChild(button2);
+
+    var smload1 = document.createElement("div");
+    smload1.id="loadospiloadid";
+    smload1.style.display = 'inline-block';
+    smload1.style.marginLeft = '15px';
+    em2.append(smload1);
+    var tip1=document.createElement("a");
+    tip1.id="loadospistatus";
+    tip1.classList.add("tooltiptext");
+    smload1.append(tip1);
+
+    $('#OSPIselectionOption').change(function(e){
+        document.getElementById("loadospiloadid").className = "";
+        document.getElementById("loadospistatus").innerHTML = "";
+    });
+    $('#loadospibuttonid').click(function(e){
+        document.getElementById("loadospistatus").innerHTML = "";
+        document.getElementById("loadospiloadid").className = "";
+        document.getElementById("loadospiloadid").classList.add("ministatusloading");
+        var ospifile = $('#OSPIselectionOption').val().split("\t")[0]
+        console.log(ospifile)
+
+        $.ajax({
+        url: "/scriptrunner",
+        type: 'GET',
+        dataType: 'json',
+        data:{"cmd" : "ospiboot", "file":ospifile},
+        success: function (res){
+            document.getElementById("loadospiloadid").className = "";
+                if (res.status === 'error'){
+			document.getElementById("loadospiloadid").classList.add("tooltip");
+			document.getElementById("loadospistatus").innerHTML = res.data.message;
+		    	document.getElementById("loadospiloadid").classList.add("ministatusfail");
+                }else{
+			document.getElementById("loadospiloadid").classList.add("tooltip");
+			document.getElementById("loadospistatus").innerHTML = "Success";
+		   	document.getElementById("loadospiloadid").classList.add("ministatussuccess");
+                }
+        },
+            error: function(){
+                document.getElementById("loadospiloadid").className = "";
+                document.getElementById("loadospiloadid").classList.add("ministatusfail");
+                document.getElementById("loadospiloadid").classList.add("tooltip");
+                document.getElementById("loadospistatus").innerHTML = "Network Error";
+	    }
+        });
+    });
+}
+
 function navClick(tid){
     console.log(tid);
     if (tid !== "cockpit" && tid !== "pmdashboard") {
@@ -2282,6 +2388,8 @@ function navClick(tid){
     if (tid === "boardsettings") {$("#boardseettings_screen").removeClass('hide'); $("#ttbbackid").removeClass('hide');}
     if (tid === "boardinterfacetest") {$("#testandebug_screen").removeClass('hide'); $("#ttbbackid").removeClass('hide');}
     if (tid === "raucupdate") {$("#raucupdate_screen").removeClass('hide'); $("#ttbbackid").removeClass('hide');}
+    if (tid === "versalimageupdate") {$("#versalimageupdate_screen").removeClass('hide'); $("#ttbbackid").removeClass('hide');}
+    
 //    if (tid === "demosdesigns") {$("#dnd_screen").removeClass('hide');}
     if (tid === "cockpit") {launchacap()}
     if (tid === "pmdashboard") {launchpmtool()}    
@@ -2656,6 +2764,7 @@ $(document).ready(function () {
     generateBootModeblock();
     generateRAUCblock();
     generatePDIblock();
+    generateOSPIblock();
     $('.app-title:empty').hide();
       $('#top_menu li').click(function (e) {
 
@@ -2688,6 +2797,7 @@ $(document).ready(function () {
 	upload_clock_files("pdi");
 	upload_clock_files("clock");
 	upload_clock_files("rauc");
+	upload_clock_files("ospi");
         if(!listsjson_sc.listfeature.includes("listBIT")){
         	$("#boardinterfacetest").remove();
     	}

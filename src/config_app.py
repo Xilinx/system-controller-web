@@ -19,6 +19,8 @@ app_config = {
     ,"bitlogFilePath":"/usr/share/system-controller-app/.sc_app/BIT.log"
     ,"csvFIlePath":"/usr/share/raft/examples/python/pmtool/pm-cmd.py output-csv --path ./static/tmp/"
     ,"raucFilepath":"/data/"
+    ,"ospiFilepath":"/data/OSPIs"
+    ,"ospirunscript":"prog_spi.sh -d versal_eval -i " #TODO
     ,"config_sc_list_cmds":["listpower","listclock","listvoltage","listFMCvoltage","listgpio","listSFP","listpowerdomain","listQSFP","listFMC"]
     ,"config_bit_list_cmds":["listBIT"]
     ,"config_bm_list_cmds":["listbootmode"]

@@ -37,6 +37,8 @@ def allowed_pdi_file(filename):
     return True
 def allowed_rauc_file(filename):
     return True
+def allowed_ospi_file(filename):
+    return True
 
 @app.route('/')
 def index():
@@ -310,6 +312,9 @@ if __name__ == '__main__':
             elif req == 'rauc' and file and allowed_rauc_file(file.filename):
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(app_config["raucFilepath"], filename))
+            elif req == 'ospi' and file and allowed_rauc_file(file.filename):
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app_config["ospiFilepath"], filename))
             else:
                 errors = True
 

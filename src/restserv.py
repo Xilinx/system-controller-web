@@ -210,6 +210,17 @@ class ClockFilesList(Resource):
                     }
                 }
                 return resp_json,200
+            elif req == "ospi":
+                ospifiles = os.listdir(app_config["ospiFilepath"]) if os.path.exists(app_config["ospiFilepath"]) else []
+                resp_json = {
+                    "status": "success"
+                    , "data": {
+                        "ospi": {
+                            "ospi_files": ospifiles
+                        }
+                    }
+                }
+                return resp_json,200
             else:
                 resp_json = {
                     "status": "error",
@@ -504,12 +515,38 @@ class Banner(Resource):
 class ScriptRunner(Resource):
     def get(self, ):
         try:
-            result = Term.exec_cmd(app_config["scriptfile"])
-            resp_jon = {
-                "status":"success"
-                ,"data": result.strip().split("\n")[-1]
-            }
-            return resp_jon
+            cmd = ""
+            funq = request.args.get('cmd')
+            if funq == 'ospiboot':
+                # api should be 
+                # /scriptrunner?cmd=ospiboot,file=<ospifile>
+                file = request.args.get('file')
+                cmd = app_config["ospirunscript"]+file
+                result = Term.exec_cmd(cmd)
+                if "ERROR:" in result or "failed" in result or "No such file" in result:
+                    resp_json = {
+                        "status": "error"
+                        , "data":{
+                            "message": result
+                        }
+                    }
+                    return resp_json
+                else:
+                    resp_json = {
+                        "status": "success"
+                        , "data": result
+                    }
+                    return resp_json
+            elif funq == 'getlogs':
+                 # api should be 
+                # /scriptrunner?cmd=getlogs
+                cmd = app_config["scriptfile"]
+                result = Term.exec_cmd(cmd)
+                resp_jon = {
+                    "status":"success"
+                    ,"data": result.strip().split("\n")[-1]
+                }
+                return resp_jon
         except Exception as e:
             resp_json = {
                 "status":"error"
