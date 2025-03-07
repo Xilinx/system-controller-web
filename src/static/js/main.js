@@ -2376,6 +2376,10 @@ function generateOSPIblock(){
 	    }
         });
     });
+    
+    if (general.boardName.toLowerCase()!="vek385"){
+        document.getElementById("detectOSPI").remove();
+    }
 }
 
 function navClick(tid){
