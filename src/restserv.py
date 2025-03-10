@@ -31,7 +31,10 @@ class BootMode:
     @staticmethod
     def setBootMode(mode):
         BootMode.active_bootmode = mode
-        SysFactory.exec_cmd(sc_app_path +" -c setbootmode -t "+mode + " -v alternate",SysFactory.TERMINAL) 
+        if deviname == "VEK385":
+            SysFactory.exec_cmd(sc_app_path +" -c setbootmode -t "+mode + "",SysFactory.TERMINAL) 
+        else:
+            SysFactory.exec_cmd(sc_app_path +" -c setbootmode -t "+mode + " -v alternate",SysFactory.TERMINAL)
         res = SysFactory.exec_cmd(sc_app_path +" -c reset",SysFactory.TERMINAL)           
         if res.startswith("ERROR") or "ERROR" in res:
             resp_json = {

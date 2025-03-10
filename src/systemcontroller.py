@@ -201,6 +201,7 @@ def generate_gen_sc_file(sc_app_path, app_config):
 
     # Check device
     deviname = Term.exec_cmd(sc_app_path + " -c board\n")
+    restserv.deviname = deviname
     app_config["deviname"] = deviname.strip()
     print("deviname = ", deviname)
     string_file = "./static/js/" + deviname.lower().strip() + "_strings.js"
