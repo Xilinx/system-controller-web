@@ -526,18 +526,18 @@ class ScriptRunner(Resource):
                 file = request.args.get('file')
                 cmd = app_config["ospirunscript"]+file
                 result = Term.exec_cmd(cmd)
-                if "ERROR:" in result or "failed" in result or "No such file" in result:
+                if "written successfully" in result:
+                    resp_json = {
+                        "status": "success"
+                        , "data": result
+                    }
+                    return resp_json
+                else:
                     resp_json = {
                         "status": "error"
                         , "data":{
                             "message": result
                         }
-                    }
-                    return resp_json
-                else:
-                    resp_json = {
-                        "status": "success"
-                        , "data": result
                     }
                     return resp_json
             elif funq == 'getlogs':
