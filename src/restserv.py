@@ -525,12 +525,12 @@ class StatusRequest(Resource):
             funq = request.args.get('cmd')
             if funq == 'ospiboot':
                 # api should be
-                # /scriptrunner?cmd=ospiboot,file=<ospifile>
+                # /status?cmd=ospiboot,file=<ospifile>
                 cmd = app_config["ospirunstatusfile_getstatus"]
                 result = SysFactory.exec_cmd(cmd,SysFactory.TERMINAL)
                 resp_json = {
                     "status": "success"
-                    , "data": "status 5%" #result
+                    , "data": {"message":result}
                 }
                 return resp_json
         except Exception as e:
@@ -552,7 +552,7 @@ class ScriptRunner(Resource):
                 # /scriptrunner?cmd=ospiboot,file=<ospifile>
                 file = request.args.get('file')
                 cmd = app_config["ospirunscript"]+file
-                result = SysFactory.exec_cmd(cmd,SysFactory.SCRIPT)
+                result = SysFactory.exec_cmd(cmd,SysFactory.SCRIPT,app_config["ospirunstatusfile"])
                 if "written successfully" in result:
                     resp_json = {
                         "status": "success"
