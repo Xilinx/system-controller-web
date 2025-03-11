@@ -21,6 +21,8 @@ app_config = {
     ,"raucFilepath":"/data/"
     ,"ospiFilepath":"/data/OSPIs"
     ,"ospirunscript":"prog_spi.sh -d versal_eval -i " #TODO
+    ,'ospirunstatusfile': "./ospi_flash_status.txt"
+    ,'ospirunstatusfile_getstatus':"[ -f ./ospi_flash_status.txt ] && tail -n 4 ./ospi_flash_status.txt"
     ,"config_sc_list_cmds":["listpower","listclock","listvoltage","listFMCvoltage","listgpio","listSFP","listpowerdomain","listQSFP","listFMC"]
     ,"config_bit_list_cmds":["listBIT"]
     ,"config_bm_list_cmds":["listbootmode"]

@@ -48,7 +48,36 @@ class Term:
             Logg.log("error 2",Logg.DEBUG)
             term_mutex.release()
             return None
-
+class ScriptTerm:
+    ##  @def exec_cmd(cmd)
+    #   function to execute cmd on terminal and returns the reuslt.
+    #   @param cmd          command to execute on terminal.
+    #   @return             result of cmd on sucess
+    #                       None on failure
+    #
+    @staticmethod
+    def exec_cmd(cmd):
+        try:
+            proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,shell=True)
+            outs, errs = proc.communicate()
+            if errs is None:
+                Logg.log(cmd,Logg.DEBUG)
+                Logg.log(outs,Logg.DEBUG)
+                #return outs.decode('utf-8')
+                try:
+                    val = outs.decode('utf-8')
+                    open(app_config['ospirunstatusfile'], 'w').writelines(f'{line}' for line in val)
+                    return val
+                except :
+                    val = outs.decode('iso-8859-1')
+                    open(app_config['ospirunstatusfile'], 'w').writelines(f'{line}\n' for line in val)
+                    return val
+            else:
+                Logg.log("error",Logg.DEBUG)
+                return None
+        except FileNotFoundError:
+            Logg.log("error 2",Logg.DEBUG)
+            return None
 class Xsdb:
     ##  @def exec_cmd(cmd)
     #   function to execute cmd on Xsdb and returns the reuslt.
@@ -80,6 +109,7 @@ class SysFactory:
     #
     TERMINAL = "Term"
     XSDB = "Xsdb"
+    SCRIPT = "Scripts"
 
     ##  @def exec_cmd(cmd,cmdtype)
     #   function to execute cmd based on type and returns the reuslt.
@@ -92,6 +122,8 @@ class SysFactory:
     def exec_cmd(command, cmdType=None):
         if cmdType == SysFactory.TERMINAL:
             return Term.exec_cmd(command)
+        if cmdType == SysFactory.SCRIPT:
+            return ScriptTerm.exec_cmd(command)
         elif cmdType == SysFactory.XSDB:
             return Xsdb.exec_cmd(command)
         else:

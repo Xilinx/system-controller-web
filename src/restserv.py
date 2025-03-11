@@ -403,6 +403,7 @@ class Notif:
 
     Priority = Enum('Priority',
                     ['PDI'
+                     ,'STATUS'
                      ,'TEMP_RANGE_EXCEED'
                      ])
 
@@ -440,6 +441,7 @@ class Notif:
               , conditionsToCompare=lambda x: x.startswith("ERROR: temperature is not available")
               , message="⚠ PDI is not programmed. Ensure to program versal to view temperature value and fan control. Please refer to  <a href='https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/2273738753/Versal+Evaluation+Board+-+System+Controller#Vivado-Board-Files-%26-PetaLinux-Versal-DUT-BSPs' target='_blank'>wiki</a>"
               )
+
     @staticmethod
     def jsonObj(noti_ary):
         jsn_ary = []
@@ -515,17 +517,42 @@ class Banner(Resource):
                 , "data": {"error": "%s" % e}
             }
             return resp_json, 500
+
+class StatusRequest(Resource):
+    def get(self, ):
+        try:
+            cmd = ""
+            funq = request.args.get('cmd')
+            if funq == 'ospiboot':
+                # api should be
+                # /scriptrunner?cmd=ospiboot,file=<ospifile>
+                cmd = app_config["ospirunstatusfile_getstatus"]
+                result = SysFactory.exec_cmd(cmd,SysFactory.TERMINAL)
+                resp_json = {
+                    "status": "success"
+                    , "data": "status 5%" #result
+                }
+                return resp_json
+        except Exception as e:
+            resp_json = {
+                "status": "error"
+                , "data": {"error": "%s" % e}
+            }
+            return resp_json, 500
+
 class ScriptRunner(Resource):
     def get(self, ):
         try:
             cmd = ""
             funq = request.args.get('cmd')
             if funq == 'ospiboot':
+                with open(app_config['ospirunstatusfile'], 'w'):
+                    pass
                 # api should be 
                 # /scriptrunner?cmd=ospiboot,file=<ospifile>
                 file = request.args.get('file')
                 cmd = app_config["ospirunscript"]+file
-                result = Term.exec_cmd(cmd)
+                result = SysFactory.exec_cmd(cmd,SysFactory.SCRIPT)
                 if "written successfully" in result:
                     resp_json = {
                         "status": "success"
