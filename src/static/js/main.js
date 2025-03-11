@@ -282,6 +282,14 @@ var theadcomp = document.createElement("thead");
                                 }
                             }
                         }
+                        else if("listvoltage" in listsjson_raft && listsjson_raft.listvoltage.length > 0) {
+                            for (var i = 0; i < listsjson_raft.listvoltage.length; i++) {
+                                var voltageValue = listsjson_raft.listvoltage[i];
+                                if (voltageValue.includes("FMC") || voltageValue.includes("VCCO_706")) {
+                                    targ = voltageValue.split(" - (")[0];
+                                }
+                            }
+                        }
                         var apiCall = isRaftSupported("listvoltage") ? "/raftquery" : (isSupported("listvoltage") ? "/cmdquery" : "");
                         if (c[elem + "F"]) {
                             $.ajax({
