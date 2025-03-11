@@ -2309,14 +2309,34 @@ function generateOSPIblock(){
     button.setAttribute("type", "file");
 //    button.setAttribute('accept', '.bin');
     button.addEventListener('change', function(event) {
-    var file = event.target.files[0];
-    if (file) {
-        var formData = new FormData();
-        formData.append("file", file);
-        fileUploder(formData, file, "OSPIselectionOption", "ospi");
-    }
-});
+        document.getElementById("uploadospiloadid").className = "";
+        document.getElementById("uploadospistatus").innerHTML = "";
+        var file = event.target.files[0];
+        if (file) {
+            var formData = new FormData();
+            formData.append("file", file);
+            document.getElementById("uploadospiloadid").className = "ministatusloading";
+            fileUploder(formData, file, "OSPIselectionOption", "ospi").then(() => {
+                document.getElementById("uploadospiloadid").className = "ministatussuccess";
+                document.getElementById("uploadospistatus").innerHTML = "Upload Success";
+            }).catch(() => {
+                document.getElementById("uploadospiloadid").className = "ministatusfail";
+                document.getElementById("uploadospistatus").innerHTML = "Upload Failed";
+            });
+        }
+    });
     em1.appendChild(button);
+
+    // Add loading indicator for file upload
+    var smload2 = document.createElement("div");
+    smload2.id="uploadospiloadid";
+    smload2.style.display = 'inline-block';
+    smload2.style.marginLeft = '15px';
+    em1.append(smload2);
+    var tip2 = document.createElement("a");
+    tip2.id="uploadospistatus";
+    tip2.classList.add("tooltiptext");
+    smload2.append(tip2);
     //load OSPI section
     var em2 = document.createElement("p");
     em2.classList.add("details_info");
@@ -2389,7 +2409,6 @@ function generateOSPIblock(){
         document.getElementById("detectOSPI").remove();
     }
 }
-
 function navClick(tid){
     console.log(tid);
     if (tid !== "cockpit" && tid !== "pmdashboard") {
