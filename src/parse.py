@@ -43,6 +43,49 @@ or component == "geteeprom" or component == "getvoltage"):
     def dashboard_eeprom(self,data):
         # Parse eeprom data for details
         pass
+    def parse_ospi_response(self,data):
+        dict = {
+            "Initializing Update":"In progress"
+            ,"Booting device over JTAG (step 1/4)":""
+            ,"Booting Status":""
+            ,"Downloading flash mage to DDR (step 2/4)":""
+            ,"Download status":""
+            ,"SPI Erasing and programming...this could take up to 5 minutes (step 3/4)":""
+            ,"Flashing":""
+            ,"SPI written successfully.":""
+            ,"Verifying (step 4/4)":""
+        }
+        for line in data.split('\n'):
+            if "Booting device over JTAG (step 1/4)" in line:
+                dict["Initializing Update"] = "Done"
+                dict["Booting device over JTAG (step 1/4)"] = "In progress"
+                continue
+            if "Downloading flash mage to DDR (step 2/4)" in line:
+                dict["Booting device over JTAG (step 1/4)"] = "Done"
+                dict["Downloading flash mage to DDR (step 2/4)"] = "In progress"
+                dict["Booting Status"] = "Done"
+
+                continue
+            if "SPI Erasing and programming...this could take up to 5 minutes (step 3/4)" in line:
+                dict["Downloading flash mage to DDR (step 2/4)"] = "Done"
+                dict["SPI Erasing and programming...this could take up to 5 minutes (step 3/4)"] = "In progress"
+                dict["Download status"] = "Done"
+                continue
+            if "SPI written successfully." in line:
+                dict["SPI Erasing and programming...this could take up to 5 minutes (step 3/4)"] = "Done"
+                dict["SPI written successfully."] = "Done"
+                dict["Verifying (step 4/4)"] = "In progress"
+                dict["Flashing"] = "Done"
+                continue
+            if "Verifying (step 4/4)" in line:
+                dict["Verifying (step 4/4)"] = "Done"
+                continue
+
+        # html_table = '<table>\n'
+        # for key, value in dict.items():
+        #     html_table += '  <tr><td>{}</td><td>{}</td></tr>\n'.format(key, value)
+        # html_table += '</table>'
+        return dict
 
 import json
 class ParseData(Parse):

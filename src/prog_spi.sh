@@ -1,25 +1,27 @@
 #!/bin/sh
-
-echo "Starting the script and waits for 2 seconds"
+echo "Detected board type vek385"
 sleep 1
-echo "1"
+echo "Size of bin file to program is 0x003db370"
 sleep 1
-echo "2"
+echo "Boot bin path: BOOT_vek385.bin"
 sleep 1
-echo "13"
+echo "Device type: versal"
 sleep 1
-echo "41"
+echo "Booting device over JTAG (step 1/4)"
 sleep 1
-echo "15"
+echo "^M^[[44;38;5;25m██████████▍                                                                     ^[[0m 13.00%^M^[[44;38;5;25m███████████"
 sleep 1
-echo "61"
+echo "Downloading flash mage to DDR (step 2/4)"
 sleep 1
-echo "17"
+echo "^M^[[44;38;5;25m█████████▌                                                                      ^[[0m 12.00%^M^[[44;38;5;25m███████████��"
 sleep 1
-echo "81"
+echo "SPI Erasing and programming...this could take up to 5 minutes (step 3/4)"
 sleep 1
-echo "19"
+echo "^M^[[44;38;5;25m█████▌                                                                          ^[[0m  7.00%^M^[[44;38;5;25m██████████████�"
 sleep 1
-echo "19"
-echo "End of the script"
+echo "SPI written successfully."
+sleep 1
+echo "Verifying (step 4/4)"
+sleep 1
+echo "Verification successful"
 

@@ -528,6 +528,7 @@ class StatusRequest(Resource):
                 # /status?cmd=ospiboot,file=<ospifile>
                 cmd = app_config["ospirunstatusfile_getstatus"]
                 result = SysFactory.exec_cmd(cmd,SysFactory.TERMINAL)
+                result = parse.parse_ospi_response(result)
                 resp_json = {
                     "status": "success"
                     , "data": {"message":result}
