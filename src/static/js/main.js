@@ -2479,7 +2479,6 @@ function generateOSPIblock(){
                     document.getElementById("loadospiloadid").classList.add("ministatusfail");
                     popupMessage.innerHTML = ErrorStatus;
                     closeButton.disabled = false;
-}
                 } else {
                     document.getElementById("loadospiloadid").classList.add("tooltip");
                     document.getElementById("loadospistatus").innerHTML = "Success";
