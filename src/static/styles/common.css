@@ -1465,8 +1465,7 @@ box-shadow: 0 4px 8px 0 rgba(250, 250, 250, 0.2), 0 6px 20px 0 rgba(250, 250, 25
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-    box-shadow: 2vh 2vh 1vh 0vh rgba(0,0,0,0.8);
-
+  box-shadow: -2vh -2vh 2vh 0vh rgb(63 67 66);
 }
 .popup-header {
   padding: 0.1vh;

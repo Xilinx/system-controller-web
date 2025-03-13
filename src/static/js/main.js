@@ -2338,6 +2338,50 @@ function generateOSPIblock(){
     tip2.classList.add("tooltiptext");
     smload2.append(tip2);
     //load OSPI section
+    var ospipopupmain = document.createElement('div');
+    ospipopupmain.className = 'popup-background';
+    ospipopupmain.style.display = "block";
+
+    var popup = document.createElement('div');
+    popup.setAttribute('id', 'popup');
+    popup.className = 'popup-content';
+    popup.style.zoom = "normal";
+    popup.style.width = "60%";
+    popup.style.maxHeight = "56%";
+    popup.style.overflow = "auto";
+
+    var popupHeader = document.createElement('div');
+    popupHeader.className = 'popup-header';
+
+    var heading = document.createElement('h2');
+    heading.style.textAlign = 'center';
+    heading.setAttribute('popupid', '1');
+    heading.id = 'popupheadingid';
+    heading.textContent = 'OSPI Image Update Status';
+    popupHeader.appendChild(heading);
+
+    var popupMessage = document.createElement('p');
+    popupMessage.style.padding = "10px";
+    popupMessage.style.lineHeight = "25px";
+    popupMessage.style.maxHeight = "50vh";
+    popupMessage.style.overflow = "auto";
+
+    var popupFooter = document.createElement('div');
+    popupFooter.classList.add('popup-footer');
+
+    var closeButton = document.createElement('button');
+    closeButton.textContent = 'Close';
+    closeButton.classList.add('popupbuttons');
+    closeButton.onclick = function () {
+        document.body.removeChild(ospipopupmain);
+    };
+    closeButton.disabled = true;
+    popupFooter.appendChild(closeButton);
+    ospipopupmain.appendChild(popup);
+    popup.appendChild(popupHeader);
+    popup.appendChild(popupMessage);
+    popup.appendChild(popupFooter);
+
     var em2 = document.createElement("p");
     em2.classList.add("details_info");
 //    em2.style.borderBottom = 'none';
@@ -2368,40 +2412,90 @@ function generateOSPIblock(){
     tip1.classList.add("tooltiptext");
     smload1.append(tip1);
 
+    var ErrorStatus = "OSPI Flash Failure: The OSPI flash process has encountered an error. Please try the following steps to resolve the issue:\
+<br>&emsp;1.Retry the flashing process.\
+<br>&emsp;2.If the issue persists, verify the integrity of the OSPI image.\
+<br>&emsp;3.Check the board settings for any discrepancies.\
+<br>If the problem persists after troubleshooting these steps, consider seeking additional support or consulting the relevant documentation.";
+
     $('#OSPIselectionOption').change(function(e){
         document.getElementById("loadospiloadid").className = "";
         document.getElementById("loadospistatus").innerHTML = "";
     });
-    $('#loadospibuttonid').click(function(e){
+    $('#loadospibuttonid').click(function (e) {
+        popupMessage.innerHTML = "<b>Initializing... Please wait</b>";
+        popupMessage.style.display = 'flex';
+        popupMessage.style.justifyContent = 'center';
+        popupMessage.style.alignItems = 'center';
+        closeButton.disabled = true;
+        document.body.appendChild(ospipopupmain);
+        var pollactive = true;
+        var pollInterval = setInterval(() => {
+            if (!pollactive) {
+                clearInterval(pollInterval);
+                return;
+            }
+    
+            $.ajax({
+                url: "/status",
+                type: 'GET',
+                dataType: 'json',
+                data: { "cmd": "ospiboot" },
+                success: function (res) {
+                    if (!pollactive) { 
+                        clearInterval(pollInterval);
+                        return;
+                    }
+                    var message = res.data.message;
+                    var table = "<table>";
+                    for (var key in message) {
+                        table += "<tr><td></td><td>" + " " + key + "</td><td style='text-align:center'>" + message[key] + "</td></tr>";
+                    }
+                    table += "</table>";
+                    popupMessage.innerHTML = table;
+                },
+                error: function () {
+                    popupMessage.innerHTML = ErrorStatus
+                }
+            });
+        }, 1000);
         document.getElementById("loadospistatus").innerHTML = "";
         document.getElementById("loadospiloadid").className = "";
         document.getElementById("loadospiloadid").classList.add("ministatusloading");
         var ospifile = $('#OSPIselectionOption').val().split("\t")[0]
-        console.log(ospifile)
 
         $.ajax({
-        url: "/scriptrunner",
-        type: 'GET',
-        dataType: 'json',
-        data:{"cmd" : "ospiboot", "file":ospifile},
-        success: function (res){
-            document.getElementById("loadospiloadid").className = "";
-                if (res.status === 'error'){
-			document.getElementById("loadospiloadid").classList.add("tooltip");
-			document.getElementById("loadospistatus").innerHTML = res.data.message;
-		    	document.getElementById("loadospiloadid").classList.add("ministatusfail");
-                }else{
-			document.getElementById("loadospiloadid").classList.add("tooltip");
-			document.getElementById("loadospistatus").innerHTML = "Success";
-		   	document.getElementById("loadospiloadid").classList.add("ministatussuccess");
+            url: "/scriptrunner",
+            type: 'GET',
+            dataType: 'json',
+            data: { "cmd": "ospiboot", "file": ospifile },
+            success: function (res) {
+                pollactive = false;
+                clearInterval(pollInterval);
+                document.getElementById("loadospiloadid").className = "";
+                if (res.status === 'error') {
+                    document.getElementById("loadospiloadid").classList.add("tooltip");
+                    document.getElementById("loadospistatus").innerHTML = res.data.message;
+                    document.getElementById("loadospiloadid").classList.add("ministatusfail");
+                    closeButton.disabled = false;
+                } else {
+                    document.getElementById("loadospiloadid").classList.add("tooltip");
+                    document.getElementById("loadospistatus").innerHTML = "Success";
+                    document.getElementById("loadospiloadid").classList.add("ministatussuccess");
+                    closeButton.disabled = false;
                 }
-        },
-            error: function(){
+            },
+            error: function () {
+                pollactive = false;
+                clearInterval(pollInterval);
+                document.body.appendChild(ospipopupmain);
                 document.getElementById("loadospiloadid").className = "";
                 document.getElementById("loadospiloadid").classList.add("ministatusfail");
                 document.getElementById("loadospiloadid").classList.add("tooltip");
-                document.getElementById("loadospistatus").innerHTML = "Network Error";
-	    }
+                document.getElementById("loadospistatus").innerHTML = ErrorStatus;
+                popupMessage.innerHTML = ErrorStatus
+                closeButton.disabled = false;
+            }
         });
     });
     
@@ -2409,6 +2503,7 @@ function generateOSPIblock(){
         document.getElementById("detectOSPI").remove();
     }
 }
+
 function navClick(tid){
     console.log(tid);
     if (tid !== "cockpit" && tid !== "pmdashboard") {

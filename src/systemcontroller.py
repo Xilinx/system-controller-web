@@ -46,6 +46,9 @@ def index():
         os.makedirs(app_config["uploaded_files_path"])
     if not os.path.exists(app_config["PDIFilePath"]):
         os.makedirs(app_config["PDIFilePath"])
+    if not os.path.exists(app_config["ospiFilepath"]):
+        os.makedirs(app_config["ospiFilepath"])
+        
     # returning template.
     generate_gen_sc_file(sc_app_path, app_config)
     return render_template("index.html", versioning = ""+ app_config["major_version"]+"."+app_config["minor_version"] + "." + app_config["dev_for_major_ver"]+"."+app_config["dev_minor_ver"])	
