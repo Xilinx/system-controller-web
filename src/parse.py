@@ -5,6 +5,7 @@
 # SPDX-License-Identifier: MIT
 ##
 from config_app import *
+import re
 
 class Parse:
     def parse_cmd_resp(self, data, component,targ="",params = ""):
@@ -55,31 +56,40 @@ or component == "geteeprom" or component == "getvoltage"):
             ,"SPI written successfully.":""
             ,"Verifying (step 4/4)":""
         }
+        inprog_key = ""
         for line in data.split('\n'):
             if "Booting device over JTAG (step 1/4)" in line:
                 dict["Initializing Update"] = "Done"
                 dict["Booting device over JTAG (step 1/4)"] = "In progress"
+                inprog_key = "Booting Status"
                 continue
             if "Downloading flash mage to DDR (step 2/4)" in line:
                 dict["Booting device over JTAG (step 1/4)"] = "Done"
                 dict["Downloading flash mage to DDR (step 2/4)"] = "In progress"
                 dict["Booting Status"] = "Done"
-
+                inprog_key = "Download status"
                 continue
             if "SPI Erasing and programming...this could take up to 5 minutes (step 3/4)" in line:
                 dict["Downloading flash mage to DDR (step 2/4)"] = "Done"
                 dict["SPI Erasing and programming...this could take up to 5 minutes (step 3/4)"] = "In progress"
                 dict["Download status"] = "Done"
+                inprog_key = "Flashing"
                 continue
             if "SPI written successfully." in line:
                 dict["SPI Erasing and programming...this could take up to 5 minutes (step 3/4)"] = "Done"
                 dict["SPI written successfully."] = "Done"
                 dict["Verifying (step 4/4)"] = "In progress"
                 dict["Flashing"] = "Done"
+                inprog_key = ""
                 continue
-            if "Verifying (step 4/4)" in line:
+            if "Verification successful" in line:
                 dict["Verifying (step 4/4)"] = "Done"
                 continue
+            percentage_match = re.search(r'(\d{1,3})%', line)
+            if percentage_match and len(inprog_key):
+                print("Printing",line)
+                print("value:: ",percentage_match)
+                dict[inprog_key] = percentage_match.group()
 
         # html_table = '<table>\n'
         # for key, value in dict.items():

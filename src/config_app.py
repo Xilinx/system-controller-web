@@ -19,8 +19,8 @@ app_config = {
     ,"bitlogFilePath":"/usr/share/system-controller-app/.sc_app/BIT.log"
     ,"csvFIlePath":"/usr/share/raft/examples/python/pmtool/pm-cmd.py output-csv --path ./static/tmp/"
     ,"raucFilepath":"/data/"
-    ,"ospiFilepath":"/data/OSPIs"
-    ,"ospirunscript":"prog_spi.sh -d versal_eval -i " #TODO
+    ,"ospiFilepath":"/data/OSPI/"
+    ,"ospirunscript":"/usr/share/prog_spi.sh -V -s 4001  -d versal_eval -b ./BOOT_vek385.bin -vp -i "
     ,'ospirunstatusfile': "./ospi_flash_status.txt"
     ,'ospirunstatusfile_getstatus':"[ -f ./ospi_flash_status.txt ] && cat ./ospi_flash_status.txt" #"[ -f ./ospi_flash_status.txt ] && tail -n 1 ./ospi_flash_status.txt"
     ,"config_sc_list_cmds":["listpower","listclock","listvoltage","listFMCvoltage","listgpio","listSFP","listpowerdomain","listQSFP","listFMC"]

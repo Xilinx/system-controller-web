@@ -9,7 +9,15 @@ echo "Device type: versal"
 sleep 1
 echo "Booting device over JTAG (step 1/4)"
 sleep 1
-echo "^M^[[44;38;5;25m██████████▍                                                                     ^[[0m 13.00%^M^[[44;38;5;25m███████████"
+ echo "0%    0MB   0.0MB/s  ??:?? ETA"
+sleep 1
+ echo "13%    0MB   1.0MB/s  ??:?? ETA"
+sleep 1
+ echo "18%    0MB   0.6MB/s  ??:?? ETA"
+sleep 1
+ echo "25%    1MB   0.6MB/s  ??:?? ETA"
+sleep 1
+ echo "33%    1MB   0.6MB/s  ??:?? ETA"
 sleep 1
 echo "Downloading flash mage to DDR (step 2/4)"
 sleep 1
