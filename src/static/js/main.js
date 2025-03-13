@@ -2477,7 +2477,9 @@ function generateOSPIblock(){
                     document.getElementById("loadospiloadid").classList.add("tooltip");
                     document.getElementById("loadospistatus").innerHTML = res.data.message;
                     document.getElementById("loadospiloadid").classList.add("ministatusfail");
+                    popupMessage.innerHTML = ErrorStatus;
                     closeButton.disabled = false;
+}
                 } else {
                     document.getElementById("loadospiloadid").classList.add("tooltip");
                     document.getElementById("loadospistatus").innerHTML = "Success";
@@ -2493,7 +2495,7 @@ function generateOSPIblock(){
                 document.getElementById("loadospiloadid").classList.add("ministatusfail");
                 document.getElementById("loadospiloadid").classList.add("tooltip");
                 document.getElementById("loadospistatus").innerHTML = ErrorStatus;
-                popupMessage.innerHTML = ErrorStatus
+                popupMessage.innerHTML = ErrorStatus;
                 closeButton.disabled = false;
             }
         });
