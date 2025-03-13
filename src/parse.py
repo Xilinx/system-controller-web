@@ -87,8 +87,6 @@ or component == "geteeprom" or component == "getvoltage"):
                 continue
             percentage_match = re.search(r'(\d{1,3})%', line)
             if percentage_match and len(inprog_key):
-                print("Printing",line)
-                print("value:: ",percentage_match)
                 dict[inprog_key] = percentage_match.group()
 
         # html_table = '<table>\n'
