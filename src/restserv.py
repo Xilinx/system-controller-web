@@ -554,7 +554,7 @@ class ScriptRunner(Resource):
                 file = request.args.get('file')
                 cmd = app_config["ospirunscript"]+file
                 result = SysFactory.exec_cmd(cmd,SysFactory.SCRIPT,app_config["ospirunstatusfile"])
-                if "written successfully" in result:
+                if "Verification successful" in result:
                     resp_json = {
                         "status": "success"
                         , "data": result
