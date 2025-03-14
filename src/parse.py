@@ -49,7 +49,7 @@ or component == "geteeprom" or component == "getvoltage"):
             "Initializing Update":"In progress"
             ,"Booting device over JTAG (step 1/4)":""
             ,"Booting Status":""
-            ,"Downloading flash mage to DDR (step 2/4)":""
+            ,"Downloading flash image to DDR (step 2/4)":""
             ,"Download status":""
             ,"SPI Erasing and programming...this could take up to 5 minutes (step 3/4)":""
             ,"Flashing":""
@@ -63,14 +63,14 @@ or component == "geteeprom" or component == "getvoltage"):
                 dict["Booting device over JTAG (step 1/4)"] = "In progress"
                 inprog_key = "Booting Status"
                 continue
-            if "Downloading flash mage to DDR (step 2/4)" in line:
+            if "Downloading flash image to DDR (step 2/4)" in line:
                 dict["Booting device over JTAG (step 1/4)"] = "Done"
-                dict["Downloading flash mage to DDR (step 2/4)"] = "In progress"
+                dict["Downloading flash image to DDR (step 2/4)"] = "In progress"
                 dict["Booting Status"] = "Done"
                 inprog_key = "Download status"
                 continue
             if "SPI Erasing and programming...this could take up to 5 minutes (step 3/4)" in line:
-                dict["Downloading flash mage to DDR (step 2/4)"] = "Done"
+                dict["Downloading flash image to DDR (step 2/4)"] = "Done"
                 dict["SPI Erasing and programming...this could take up to 5 minutes (step 3/4)"] = "In progress"
                 dict["Download status"] = "Done"
                 inprog_key = "Flashing"
