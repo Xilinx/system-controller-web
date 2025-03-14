@@ -197,7 +197,7 @@ class ClockFilesList(Resource):
                     , "data": {
                         "default": {
                             "finallist": final_list
-                            , "binfiles": bin_files
+                            , "binfiles": final_list
                         }
                         , "user": {
                             "finaluploadlist": final_upload_list
