@@ -562,7 +562,8 @@ function addClockTab(){
         var innCompsget = [];
         jQuery.each(listsjson_sc["listclock"] , function(i, tds1){
         tdsary = tds1.split(" - (");
-        tds = tdsary[0];
+        tdsfinalary = tdsary[0].split(" - ");
+        tds = tdsfinalary[0];
         if(tds.startsWith("8A34001") == true) {
         var eachcomp = {
             "type":"list"
@@ -605,17 +606,18 @@ function addClockTab(){
      var innCompsset = [];
         jQuery.each(listsjson_sc["listclock"] , function(i, tds1){
         tdsary = tds1.split(" - (");
-        tds = tdsary[0];
+        tdsfinalary = tdsary[0].split(" - ");
+        tds = tdsfinalary[0];
         tds2 = "-";
         if(tdsary.length > 1) tds2 = "("+tdsary[1];
-        if(tds.startsWith("8A34001") == true) {
+        if(tdsary[0].includes("Vendor Utility") == true) {
         var eachcomp = {
             "type":"list"
             ,"components" : ["C,L0,L1,F0,B0"]    // Checkbox, Label, editfield, info, button, Action
             ,"L0": tds
             ,"L1":"-"
             ,"F0": "value"
-            ,"F0V": [listsjson_sc["8A34001_clk_tcs_files"],listsjson_sc["8A34001_clk_txt_files"]]
+            ,"F0V": [listsjson_sc["Vendor_clock_files"]]
             ,"B0": "Set"
             ,"B0A": "/cmdquery"
             ,"B0sc_cmd":"setclock"
@@ -644,17 +646,18 @@ function addClockTab(){
      var innCompssetboot = [];
         jQuery.each(listsjson_sc["listclock"] , function(i, tds1){
         tdsary = tds1.split(" - (");
-        tds = tdsary[0];
+        tdsfinalary = tdsary[0].split(" - ");
+        tds = tdsfinalary[0];
         tds2 = "-";
         if(tdsary.length > 1) tds2 = "("+tdsary[1];
-        if(tds.startsWith("8A34001") == true) {
+        if(tdsary[0].includes("Vendor Utility") == true) {
         var eachcomp = {
             "type":"list"
             ,"components" : ["C,L0,L1,G0,B0"]    // Checkbox, Label, editfield, info, button, Action
             ,"L0": tds
             ,"L1": "-"
             ,"G0": "value"
-            ,"G0V": [listsjson_sc["8A34001_clk_bin_files"]]
+            ,"G0V": [listsjson_sc["Vendor_clock_files"]]
             ,"B0": "Set"
             ,"B0A": "/cmdquery"
             ,"B0sc_cmd":"setbootclock"
@@ -684,7 +687,8 @@ function addClockTab(){
      var innCompsreset = [];
         jQuery.each(listsjson_sc["listclock"] , function(i, tds1){
         tdsary = tds1.split(" - (");
-        tds = tdsary[0];
+        tdsfinalary = tdsary[0].split(" - ");
+        tds = tdsfinalary[0];
         var eachcomp = {
             "type":"list"
             ,"components" : ["C,L0,B0"]    // Checkbox, Label, editfield, info, button, Action
@@ -755,16 +759,20 @@ function addClockTab(){
             }
             ]
             };
-            jQuery.each(listsjson_sc["listclock"] , function(i, tds1){
-            tdsary = tds1.split(" - (");
-            tds = tdsary[0];
-            if(tds.startsWith("8A34001") == true) {
-                    dict.components.push({
-                        "subtype": "tab_plus_button",
-                        "name": "Upload clock files"
-                    });
-            }
+            var available = false;
+            jQuery.each(listsjson_sc["listclock"], function (i, tds1) {
+                tdsary = tds1.split(" - (");
+                tds = tdsary[0];
+                if (tds.includes("Vendor Utility") == true) {
+                    available = true;
+                }
             });
+            if (available){
+                dict.components.push({
+                    "subtype": "tab_plus_button",
+                    "name": "Upload clock files"
+                });
+            }
     boardsettingsTab.push(dict);
 }
 function addVoltageTab(){

@@ -23,6 +23,20 @@ parse = ParseData()
 deviname = ""
 
 sc_app_path = app_config["sc_app_path"]
+
+def get_base_filename(filename):
+    while '.' in filename:
+        filename = os.path.splitext(filename)[0]
+    return filename
+ 
+def list_files_recursive(directory,bname):
+    fileslist = []
+    for root, dirs, files in os.walk(directory):
+        for file in files:
+            if file.startswith(bname.split('\n')[0]):
+                base_filename = get_base_filename(file)
+                fileslist.append(base_filename)
+    return list(set(fileslist))
 class BootMode:
     active_bootmode = "-"
     @staticmethod
@@ -155,6 +169,7 @@ class ClockFilesList(Resource):
                 tcs_files = []
                 txt_files = []
                 bin_files = []
+                vendor_clock_files = []
                 for c in os.listdir(app_config["8A34001_clk_files_path"]):
                     if c.endswith(".tcs"):
                         tcs_files.append(os.path.splitext(c)[0])
@@ -162,7 +177,7 @@ class ClockFilesList(Resource):
                         txt_files.append(os.path.splitext(c)[0])
                     if c.endswith(".bin"):
                         bin_files.append(os.path.splitext(c)[0])
-                final_list = list(set(tcs_files+txt_files))
+                final_list = list_files_recursive(app_config["8A34001_clk_files_path"],deviname.replace(" ",""))
                 bin_files = list(set(bin_files))
                 upload_tcs_files = []
                 upload_txt_files = []

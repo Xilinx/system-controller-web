@@ -95,8 +95,11 @@ def crstring():
 * SPDX-License-Identifier: MIT
 */
 '''
+
+
 def generate_gen_sc_file(sc_app_path, app_config):
     # Creating a config file which contains a list of each tab type.
+    deviname = Term.exec_cmd(sc_app_path + " -c board\n")
     f = open("./static/js/gen_sc.js", "w")
     p = ParseData()
     f.write(crstring())
@@ -163,7 +166,12 @@ def generate_gen_sc_file(sc_app_path, app_config):
     f.write(',\n"8A34001_clk_tcs_files":[' + tcsfiles + ']')
     f.write(',\n"8A34001_clk_txt_files":[' + txtfiles + ']')
     f.write(',\n"8A34001_clk_bin_files":[' + binfiles + ']')
-
+    vendor_clock_files = ""
+    for c in list_files_recursive(app_config["8A34001_clk_files_path"],deviname.replace(" ","")):
+        if len(vendor_clock_files):
+            vendor_clock_files = vendor_clock_files + ","
+        vendor_clock_files = vendor_clock_files + '"' + c + '"'
+    f.write(',\n"Vendor_clock_files":[' + vendor_clock_files + ']')
     f.write("\n};")
 
     #add raft listfeature to gen_sc
@@ -204,7 +212,6 @@ def generate_gen_sc_file(sc_app_path, app_config):
     f.close()
 
     # Check device
-    deviname = Term.exec_cmd(sc_app_path + " -c board\n")
     restserv.deviname = deviname
     app_config["deviname"] = deviname.strip()
     print("deviname = ", deviname)
