@@ -2423,10 +2423,7 @@ function generateOSPIblock(){
         document.getElementById("loadospistatus").innerHTML = "";
     });
     $('#loadospibuttonid').click(function (e) {
-        popupMessage.innerHTML = "<b>Initializing... Please wait</b>";
-        popupMessage.style.display = 'flex';
-        popupMessage.style.justifyContent = 'center';
-        popupMessage.style.alignItems = 'center';
+        popupMessage.innerHTML = "<b style='display: flex; justify-content: center; align-items: center;'>Initializing... Please wait</b>";
         closeButton.disabled = true;
         document.body.appendChild(ospipopupmain);
         var pollactive = true;
