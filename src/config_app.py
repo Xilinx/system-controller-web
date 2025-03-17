@@ -20,7 +20,7 @@ app_config = {
     ,"csvFIlePath":"/usr/share/raft/examples/python/pmtool/pm-cmd.py output-csv --path ./static/tmp/"
     ,"raucFilepath":"/data/"
     ,"ospiFilepath":"/data/OSPI/"
-    ,"ospirunscript":"/usr/share/prog_spi.sh -V -s 4001 -d versal_eval -vp -i /data/OSPI/"
+    ,"ospirunscript":"/usr/share/embpf-bootfw-update-tool/prog_spi.sh -V -s 4001 -d versal_eval -vp -i /data/OSPI/"
     ,'ospirunstatusfile': "./ospi_flash_status.txt"
     ,'ospirunstatusfile_getstatus':"[ -f ./ospi_flash_status.txt ] && cat ./ospi_flash_status.txt" #"[ -f ./ospi_flash_status.txt ] && tail -n 1 ./ospi_flash_status.txt"
     ,"config_sc_list_cmds":["listpower","listclock","listvoltage","listFMCvoltage","listgpio","listSFP","listpowerdomain","listQSFP","listFMC"]
