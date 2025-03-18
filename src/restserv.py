@@ -428,7 +428,7 @@ class Notif:
 
     TYPE_CMD = 201                  # WHEN THE NOTIFICATION CHECK TYPE IS A LOCAL COMMAND EXECUTION.
 
-    def __init__(self,notif_id="",title="",message="",priority=1000,noti_type=0,type_related_info="",command="",conditionsToCompare=None,req_time="", result = "",prev_req_time="",prev_result = "", mode = 0,show = True):
+    def __init__(self,notif_id="",title="",message="",priority=1000,noti_type=0,type_related_info="",command="",conditionsToCompare=None,req_time="", result = "",prev_req_time="",prev_result = "", mode = 0,show = True, components={}):
         self.notif_id = notif_id
         self.title = title
         self.message = message
@@ -443,6 +443,7 @@ class Notif:
         self.prev_req_time = prev_req_time
         self.prev_result = prev_result
         self.show = show
+        self.components = components
         Notif._notifs.append(self)
     @staticmethod
     # One time loading list of
@@ -454,7 +455,12 @@ class Notif:
               , noti_type=Notif.TYPE_CMD
               , priority=Notif.Priority.PDI.value
               , conditionsToCompare=lambda x: x.startswith("ERROR: temperature is not available")
-              , message="⚠ PDI is not programmed. Ensure to program versal to view temperature value and fan control. Please refer to  <a href='https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/2273738753/Versal+Evaluation+Board+-+System+Controller#Vivado-Board-Files-%26-PetaLinux-Versal-DUT-BSPs' target='_blank'>wiki</a>"
+              , message="⚠ PDI is not programmed. Ensure to program versal to view temperature value and fan control. click to  <a href='#' onclick ='/cmdquery?sc_cmd=loadPDI&target=default.pdi&params='>Load PDI</a>"
+              , components={
+                           "components":["B0"]
+                           ,"B0":"Load PDI"
+                           ,"B0A":"/cmdquery?sc_cmd=loadPDI&target=default.pdi&params="
+               }
               )
 
     @staticmethod
@@ -465,6 +471,7 @@ class Notif:
             jsn_obj["notif_id"] = noti.notif_id
             jsn_obj["message"] = noti.message
             jsn_obj["show"] = noti.show
+            jsn_obj["components"] = noti.components
             jsn_ary.append(jsn_obj)
         return jsn_ary
 
