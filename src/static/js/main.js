@@ -412,7 +412,7 @@ function Banner() {
     });
 }
 function startPolling() {
-    pollInterval = setInterval(Banner, 500000);
+    pollInterval = setInterval(Banner, 5000);
   }
   function stopPolling() {
     clearInterval(pollInterval);
