@@ -203,7 +203,7 @@ class ParseData(Parse):
         return res
     def parseGetClock(self,data,targ):
         res = {}
-        if targ.startswith('8A34001'):
+        if len(data.split("\n")) > 2  :
             res["frequency"] = data.replace("\n","</br>")
         else:
             resar = data.strip().split(":")
@@ -211,7 +211,7 @@ class ParseData(Parse):
         return res
     def parseGetMeasuredClock(self,data,targ):
         res = {}
-        if targ.startswith('8A34001'):
+        if len(data.split("\n")) > 2  :
             res["measuredfrequency"] = data.replace("\n","</br>")
         else:
             resar = data.strip().split(":")
