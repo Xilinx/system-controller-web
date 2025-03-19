@@ -361,30 +361,58 @@ function hideNavbar() {
     }
 }
 var pollInterval;
-function Banner(){
+function Banner() {
     $.ajax({
-        url:"/notif",
-        type:"GET",
+        url: "/notif",
+        type: "GET",
         dataType: "json",
-        success: function (res){
-        var Nav = document.getElementById("navSec");
-        if (res.data.length == []){
+        success: function (res) {
+            var Nav = document.getElementById("navSec");
+            if (res.data.length == []) {
                 Nav.style.display = "none";
             }
-        else{
+            else {
                 Nav.style.display = "block";
-                var Msg = document.getElementById("navLink");
-                Msg.innerHTML = res.data[0].message;
+                var bannerId = document.getElementById("navLink");
+                bannerId.innerHTML = res.data[0].message;
+                if (Object.keys(res.data[0].components).length) {
+                    jQuery.each(res.data[0].components.components, function (l, elem) {
+                        switch (elem.split("")[0]) {
+                            case "B":
+                                var em = document.createElement("input");
+                                em.classList.add("buttons");
+                                em.setAttribute("value", res.data[0].components[elem]);
+                                em.setAttribute("type", "button");
+                                em.onclick = function () {
+                                    showLoadingTooltip("bannerpdistatus",bannerId);
+                                    $.ajax({
+                                        url: res.data[0].components[elem + "A"],
+                                        method: "GET",
+                                        data: "",
+                                        contentType: "application/json",
+                                        success: function (res) {
+                                            showSuccessTooltip("bannerpdistatus",res.status,bannerId);
+                                        },
+                                        error: function (res) {
+                                            showFailureTooltip("bannerpdistatus",res.status,bannerId);
+                                        }
+                                    });
+                                }
+                                bannerId.appendChild(em);
+                                break;
+                        }
+                    });
+                }
             }
         },
         error: function (res) {
             console.log(res)
-             stopPolling();
+            stopPolling();
         }
     });
 }
 function startPolling() {
-    pollInterval = setInterval(Banner, 5000);
+    pollInterval = setInterval(Banner, 500000);
   }
   function stopPolling() {
     clearInterval(pollInterval);
@@ -546,6 +574,50 @@ function installboardsetup(){
         }
     });
 }
+function createTooltipElement(elementId,parentElement) {
+    var existingElement = document.getElementById(elementId);
+    if (!existingElement) {
+        var smload = document.createElement("div");
+        smload.id = elementId;
+        smload.style.display = 'inline-block';
+        smload.style.marginLeft = '15px';
+        
+        var tip = document.createElement("a");
+        tip.id = elementId + "status";
+        tip.classList.add("tooltiptext");
+        
+        smload.appendChild(tip);
+        parentElement.appendChild(smload);
+    }
+}
+function showSuccessTooltip(elementId, message,parentElement) {
+    // createTooltipElement(elementId, parentElement);
+    var tip = document.getElementById(elementId + "status");
+    var element = document.getElementById(elementId);
+    element.className = "";
+    element.classList.add("tooltip", "ministatussuccess");
+    tip.innerHTML = message;
+}
+
+function showFailureTooltip(elementId, message, parentElement) {
+    createTooltipElement(elementId,parentElement);
+    var tip = document.getElementById(elementId + "status");
+    var element = document.getElementById(elementId);
+    element.className = "";
+    element.classList.add("tooltip","ministatusfail");
+    tip.innerHTML = message;
+}
+function showLoadingTooltip(elementId, parentElement) {
+    createTooltipElement(elementId,parentElement);
+    var tip = document.getElementById(elementId + "status");
+    var element = document.getElementById(elementId);
+    element.className = "";
+    element.classList.add("tooltip","ministatusloading");
+    if (elementId === "bannerpdistatus") {
+        element.style.border = "3px dotted black";
+    }
+}
+
 function exportCSV() {
     var popupmain = document.createElement('div');
     popupmain.className = 'popup-background';
@@ -2417,7 +2489,39 @@ function generateOSPIblock(){
 <br>&emsp;2.If the issue persists, verify the integrity of the OSPI image.\
 <br>&emsp;3.Check the board settings for any discrepancies.\
 <br>If the problem persists after troubleshooting these steps, consider seeking additional support or consulting the relevant documentation.";
-
+    var pollactive = true;
+    var pollInterval;
+    function Timer(){
+            if (!pollactive) {
+                clearInterval(pollInterval);
+                return;
+            }
+            ospiSuccess();
+    }
+    function ospiSuccess(){
+        $.ajax({
+            url: "/status",
+            type: 'GET',
+            dataType: 'json',
+            data: { "cmd": "ospiboot" },
+            success: function (res) {
+                if (!pollactive) { 
+                    clearInterval(pollInterval);
+                    return;
+                }
+                var message = res.data.message;
+                var table = "<table>";
+                for (var key in message) {
+                    table += "<tr><td></td><td>" + " " + key + "</td><td style='text-align:center'>" + message[key] + "</td></tr>";
+                }
+                table += "</table>";
+                popupMessage.innerHTML = table;
+            },
+            error: function () {
+                popupMessage.innerHTML = ErrorStatus
+            }
+        });
+    }
     $('#OSPIselectionOption').change(function(e){
         document.getElementById("loadospiloadid").className = "";
         document.getElementById("loadospistatus").innerHTML = "";
@@ -2426,51 +2530,22 @@ function generateOSPIblock(){
         popupMessage.innerHTML = "<b style='display: flex; justify-content: center; align-items: center;'>Initializing... Please wait</b>";
         closeButton.disabled = true;
         document.body.appendChild(ospipopupmain);
-        var pollactive = true;
-        var pollInterval = setInterval(() => {
-            if (!pollactive) {
-                clearInterval(pollInterval);
-                return;
-            }
-    
-            $.ajax({
-                url: "/status",
-                type: 'GET',
-                dataType: 'json',
-                data: { "cmd": "ospiboot" },
-                success: function (res) {
-                    if (!pollactive) { 
-                        clearInterval(pollInterval);
-                        return;
-                    }
-                    var message = res.data.message;
-                    var table = "<table>";
-                    for (var key in message) {
-                        table += "<tr><td></td><td>" + " " + key + "</td><td style='text-align:center'>" + message[key] + "</td></tr>";
-                    }
-                    table += "</table>";
-                    popupMessage.innerHTML = table;
-                },
-                error: function () {
-                    popupMessage.innerHTML = ErrorStatus
-                }
-            });
-        }, 1000);
+        var pollInterval = setInterval(Timer, 1000);
         document.getElementById("loadospistatus").innerHTML = "";
         document.getElementById("loadospiloadid").className = "";
         document.getElementById("loadospiloadid").classList.add("ministatusloading");
         var ospifile = $('#OSPIselectionOption').val().split("\t")[0]
-
+        pollactive = true;
         $.ajax({
             url: "/scriptrunner",
             type: 'GET',
             dataType: 'json',
             data: { "cmd": "ospiboot", "file": ospifile },
             success: function (res) {
-                pollactive = false;
                 clearInterval(pollInterval);
                 document.getElementById("loadospiloadid").className = "";
                 if (res.status === 'error') {
+                    pollactive = false;
                     document.getElementById("loadospiloadid").classList.add("tooltip");
                     document.getElementById("loadospistatus").innerHTML = res.data.message;
                     document.getElementById("loadospiloadid").classList.add("ministatusfail");
@@ -2481,6 +2556,7 @@ function generateOSPIblock(){
                     document.getElementById("loadospistatus").innerHTML = "Success";
                     document.getElementById("loadospiloadid").classList.add("ministatussuccess");
                     closeButton.disabled = false;
+                    ospiSuccess();
                 }
             },
             error: function () {
@@ -2512,7 +2588,7 @@ function navClick(tid){
     if (tid === "boardsettings") {$("#boardseettings_screen").removeClass('hide'); $("#ttbbackid").removeClass('hide');}
     if (tid === "boardinterfacetest") {$("#testandebug_screen").removeClass('hide'); $("#ttbbackid").removeClass('hide');}
     if (tid === "raucupdate") {$("#raucupdate_screen").removeClass('hide'); $("#ttbbackid").removeClass('hide');}
-    if (tid === "versalimageupdate") {$("#versalimageupdate_screen").removeClass('hide'); $("#ttbbackid").removeClass('hide');}
+    if (tid === "versalimageupdate") {$("#versalimageupdate_screen").removeClass('hide'); }
     
 //    if (tid === "demosdesigns") {$("#dnd_screen").removeClass('hide');}
     if (tid === "cockpit") {launchacap()}
