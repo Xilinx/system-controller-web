@@ -28,15 +28,21 @@ function loadRefreshData(){
             success: function (res){
                 var el = document.getElementById("home_board_temp_id");
                 var tval = 0;
-		tval = res.data.temp > 125 ? 125 : res.data.temp;
-		tval = tval < 0 ? 0 : tval;
-		el.style.setProperty("--temps", tval);
+                tval = res.data.temp > 125 ? 125 : res.data.temp;
+                tval = tval < 0 ? 0 : tval;
+                if (res.data.temp == 256)
+                    tval = '-';
+                el.style.setProperty("--temps", tval);
                 if(res.data.temp < 70) el.style.setProperty("--showc","green");
                 else if(res.data.temp < 90) el.style.setProperty("--showc","orange");
                 else el.style.setProperty("--showc","red");
                 if(tval == '-'){el.style.setProperty("--showc","gray");}
                 if("listtemp" in listsjson_sc){
-                document.getElementById("home_board_temp_id").innerHTML = res.data.temp +" °C";
+                    if (res.data.temp == 256){
+                        document.getElementById("home_board_temp_id").innerHTML = "- °C";
+                    } else{
+                        document.getElementById("home_board_temp_id").innerHTML = res.data.temp +" °C";
+                    }
                 } else {
                 document.getElementById("home_board_temp_id").innerHTML = "NA";
 		}
@@ -412,7 +418,7 @@ function Banner() {
     });
 }
 function startPolling() {
-    pollInterval = setInterval(Banner, 500000);
+    pollInterval = setInterval(Banner, 5000);
   }
   function stopPolling() {
     clearInterval(pollInterval);
@@ -591,12 +597,14 @@ function createTooltipElement(elementId,parentElement) {
     }
 }
 function showSuccessTooltip(elementId, message,parentElement) {
-    // createTooltipElement(elementId, parentElement);
+    createTooltipElement(elementId, parentElement);
     var tip = document.getElementById(elementId + "status");
     var element = document.getElementById(elementId);
     element.className = "";
     element.classList.add("tooltip", "ministatussuccess");
+    element.style.border = "";
     tip.innerHTML = message;
+    tip.style.display = "block";
 }
 
 function showFailureTooltip(elementId, message, parentElement) {
@@ -605,7 +613,9 @@ function showFailureTooltip(elementId, message, parentElement) {
     var element = document.getElementById(elementId);
     element.className = "";
     element.classList.add("tooltip","ministatusfail");
+    element.style.border = "";
     tip.innerHTML = message;
+    tip.style.display = "block";
 }
 function showLoadingTooltip(elementId, parentElement) {
     createTooltipElement(elementId,parentElement);
@@ -613,6 +623,7 @@ function showLoadingTooltip(elementId, parentElement) {
     var element = document.getElementById(elementId);
     element.className = "";
     element.classList.add("tooltip","ministatusloading");
+    tip.style.display = "none";
     if (elementId === "bannerpdistatus") {
         element.style.border = "3px dotted black";
     }

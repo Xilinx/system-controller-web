@@ -21,9 +21,8 @@ if os.path.isfile('/usr/share/raft/xclient/raft_services/pm_client.py'):
 #parse = ParseDataStatic()
 parse = ParseData()
 deviname = ""
-
 sc_app_path = app_config["sc_app_path"]
-
+listtemp = Term.exec_cmd(sc_app_path + " -c listtemp\n")
 def get_base_filename(filename):
     while '.' in filename:
         filename = os.path.splitext(filename)[0]
@@ -88,7 +87,7 @@ class ReqFunctions:
             }
             return resp_json,500
     def bootmode_set(mode):
-        res = BootMode.setBootMode(mode);
+        res = BootMode.setBootMode(mode)
         return res,200
     def jnlink():
         jnu = jnurl()
@@ -450,12 +449,12 @@ class Notif:
 
     def notification_load():
         Notif(notif_id="PDI_NOT_LOADED"
-              , command=sc_app_path + " -c gettemp -t Versal"
+              , command=sc_app_path + " -c gettemp -t "+listtemp
               , mode=Notif.MODE_REALTIME
               , noti_type=Notif.TYPE_CMD
               , priority=Notif.Priority.PDI.value
-              , conditionsToCompare=lambda x: x.startswith("ERROR: temperature is not available")
-              , message="⚠ PDI is not programmed. Ensure to program versal to view temperature value and fan control. click to  <a href='#' onclick ='/cmdquery?sc_cmd=loadPDI&target=default.pdi&params='>Load PDI</a>"
+              , conditionsToCompare=lambda x: x.startswith("ERROR: temperature is not available") or "256" in x
+              , message='⚠ PDI is not programmed. Ensure to program versal to view temperature value and fan control. Click on "Load PDI" button to load default PDI. '
               , components={
                            "components":["B0"]
                            ,"B0":"Load PDI"
