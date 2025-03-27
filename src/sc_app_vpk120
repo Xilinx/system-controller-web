@@ -113,7 +113,7 @@ zQSFP - Connection unknown"
     fi
 if [ $2 == "board" ]
     then
-        echo "VHK158"
+        echo "VEK385"
     fi
     if [ $2 == "listpower" ]
     then
@@ -557,11 +557,11 @@ sd1_ls	0xe
     fi
         if [ $2 == "BIT" ]
     then
-        echo "1- Connect to the 1st com port (Versal console), baud rate 115200
-2- Set SW1 to 0100 (Up, Down, Up, Up, left to right) for testing QSPI.
-3- Cycle Board Power.
-4- Click 'Pass' when this is done.
-Check Clocks: PASS"
+        echo "1- Did you see the LEDs sequencing and blinking? 
+        2- Click 'Pass' if you observe it. 
+        3- Image location=2047,1510, size=99,113."
+        # 3- Image location=264,526, size=43,35."
+        # 3- Image location=2047,1510, size=99,113."
     fi
         if [ $2 == "listBIT" ]
     then

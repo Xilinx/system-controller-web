@@ -11,7 +11,7 @@ app_config = {
     ,"major_version":"1"
     ,"minor_version" : "5"
     ,"dev_for_major_ver" : "1"
-    ,"dev_minor_ver" : "3"
+    ,"dev_minor_ver" : "4"
     ,"sc_app_path":"sc_app"
     ,"scriptfile":"/usr/bin/collect_logs.sh"
     ,"boardsetupfile":"/usr/bin/setup_board.sh"
@@ -34,4 +34,3 @@ app_config = {
     ,"PDIFilePath":"/data/PDIs/"
     ,"allowed_clock_files":['txt', 'tcs', 'bin']
 }
-

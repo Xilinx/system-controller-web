@@ -1342,7 +1342,7 @@ color: white;
   border: 1px solid black;
 }
 /* manual test popup images */
-.popup_image_bg_div {
+/* .popup_image_bg_div {
     display: inline-block;
     position: relative;
     overflow: hidden;
@@ -1364,7 +1364,7 @@ color: white;
     width: 100%;
     height: 100%;
     scrollbar-width: thin;
-}
+} */
 #versionLabel{
     float: right;
     /*margin-top: 20px;*/
@@ -1455,7 +1455,6 @@ margin: 25px auto;
   margin: auto;
   padding: 0px;
   width: auto;
-  zoom: 75%;
   /*min-width: 350px;
   padding-bottom:.45vw;
 box-shadow: 0 4px 8px 0 rgba(250, 250, 250, 0.2), 0 6px 20px 0 rgba(250, 250, 250, 0.19);
@@ -1537,7 +1536,7 @@ float: right;
     max-height: 100vh;
     overflow-y: auto;
     overflow-x: hidden;
-    width: 99%;
+    /* width: 99%; */
     scrollbar-width: thin;
 }
 select{
