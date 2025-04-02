@@ -1,4 +1,11 @@
 #!/bin/sh
+
+#
+# Copyright (c) 2025 Advanced Micro Devices, Inc.  All rights reserved.
+#
+# SPDX-License-Identifier: MIT
+#
+
 echo "Detected board type vek385"
 sleep 1
 echo "Size of bin file to program is 0x003db370"
