@@ -255,6 +255,7 @@ class ClockFilesList(Resource):
 class MultiCmdQuery(Resource):
     def get(self,):
         try:
+            result = {}
             if checkJNK() >= 1:
                 resp_json = {
                     "status":"error"
@@ -268,7 +269,10 @@ class MultiCmdQuery(Resource):
             etar = json.loads(tara)
             params_req = request.args.get('params')
             eparams = json.loads(params_req)
-            result = {}
+            extraparams_req = request.args.get('extraparams')
+            e_extraparams_req = []
+            if extraparams_req:
+                e_extraparams_req = json.loads(extraparams_req)
             isFail = False
             isSuccess = False
             for i,a in enumerate(ereq):
@@ -300,7 +304,10 @@ class MultiCmdQuery(Resource):
                     isFail = True
 
                 else :
-                    result1 = parse.parse_cmd_resp(response, req, tar, params)
+                    if len(e_extraparams_req) > i:
+                        result1 = parse.parse_cmd_resp(response, req, tar, params, e_extraparams_req[i])
+                    else:
+                        result1 = parse.parse_cmd_resp(response, req, tar, params)
                     result.update(result1)
                     isSuccess = True
                     if "error" not in result.keys():
@@ -454,7 +461,7 @@ class Notif:
               , noti_type=Notif.TYPE_CMD
               , priority=Notif.Priority.PDI.value
               , conditionsToCompare=lambda x: x.startswith("ERROR: temperature is not available") or "256" in x
-              , message='⚠ PDI is not programmed. Ensure to program versal to view temperature value and fan control. Click on "Load PDI" button to load default PDI. '
+              , message='⚠ PDI is not programmed. Ensure to program Versal to view temperature values and control the fan. Click on the "Load PDI" button to load the default PDI. Note that clicking "Load PDI" will reset Versal, terminating any software currently running. '
               , components={
                            "components":["B0"]
                            ,"B0":"Load PDI"

@@ -235,6 +235,8 @@ var theadcomp = document.createElement("thead");
                        em.setAttribute("sc_cmd",c[elem+"sc_cmd"]);
                        em.setAttribute("target",c[elem+"target"]);
                        em.setAttribute("params",c[elem+"params"]);
+                       if(c[elem+"extraparams"])
+                       em.setAttribute("extraparams",c[elem+"extraparams"]);
                        em.addEventListener("click",cmdBtnonclick);
                        if(c[elem+"dontcare"])
                        em.setAttribute("dontcare",c[elem+"dontcare"]);
@@ -820,11 +822,18 @@ function cmdBtnonclick(e){
       if(setparams.indexOf(' ') >= 0){
           setparams = "'"+setparams.trim()+"'";
       }
+      var extraparameter = e.target.getAttribute("extraparams")
+      if (extraparameter){
+        cmdData = {"sc_cmd":e.target.getAttribute("sc_cmd"), "target":e.target.getAttribute("target"), "params":setparams, "extraparams":e.target.getAttribute("extraparams")}
+      }
+      else{
+        cmdData = {"sc_cmd":e.target.getAttribute("sc_cmd"), "target":e.target.getAttribute("target"), "params":setparams}
+      }
     $.ajax({
             url: tar,
             type: 'GET',
             dataType: 'json',
-            data:{"sc_cmd":e.target.getAttribute("sc_cmd"), "target":e.target.getAttribute("target"), "params":setparams},
+            data:cmdData,
             success: function (res){
             if (e.target.getAttribute("sc_cmd").startsWith("list")){
             listsjson_sc.listSFP = res.data;
@@ -1214,7 +1223,7 @@ function displaypopup(title, message,res,e,cn,inprg,count){
     mainDiv.appendChild(box);
     em1.appendChild(zoomButton);
     em1.appendChild(mainDiv);
-    
+
     var trcomp = document.createElement("tr");
     var tdcomp = document.createElement("td");
     trcomp.appendChild(tdcomp);
@@ -1906,7 +1915,6 @@ function generateRAUCblock() {
             $(hideBackground).remove();
         }
     });
-
 
     /* Boot update */
     var bootBtn = document.createElement("button");

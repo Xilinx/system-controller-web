@@ -8,7 +8,7 @@ from config_app import *
 import re
 
 class Parse:
-    def parse_cmd_resp(self, data, component,targ="",params = ""):
+    def parse_cmd_resp(self, data, component,targ="",params = "",extraparams = ""):
         if(component == "getpower" or component == "getcalpower"):
             return self.parseGetPower(data)
         elif(component == "getINA226"):
@@ -17,6 +17,10 @@ class Parse:
             return self.parseList(data)
         elif((component == "getvoltage" or component == "powerdomain") and ("all" not in params)):
             return self.parseGetVoltage(data)
+        elif(extraparams == "Vendor Utility" and component == "getclock"):
+            return self.parseVendorGetClock(data)
+        elif(extraparams == "Vendor Utility" and component == "getmeasuredclock"):
+            return self.parseVendorGetMeasuredClock(data)
         elif(component == "getclock"):
             return self.parseGetClock(data,targ)
         elif(component == "getmeasuredclock"):
@@ -220,6 +224,14 @@ class ParseData(Parse):
             else:
                 res["measuredfrequency"] = "-"
         return res
+    def parseVendorGetClock(self,data):
+        res = {}
+        res["frequency"] = data.replace("\n","</br>")
+        return res
+    def parseVendorGetMeasuredClock(self,data):
+        res = {}
+        res["measuredfrequency"] = data.replace("\n","</br>")
+        return res
     def parsegpio(self,data):
         resar = data.strip().split(":")
         res = {}
@@ -233,7 +245,6 @@ class ParseData(Parse):
     def parseList(self,data):
         res = data.rstrip().split("\n")
         return res
-
 import random
 class ParseDataStatic(Parse):
     def temperature(self,data):

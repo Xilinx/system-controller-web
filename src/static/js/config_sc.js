@@ -564,7 +564,7 @@ function addClockTab(){
         tdsary = tds1.split(" - (");
         tdsfinalary = tdsary[0].split(" - ");
         tds = tdsfinalary[0];
-        if(tds.startsWith("8A34001") == true) {
+        if(tdsary[0].includes("Vendor Utility")) {
         var eachcomp = {
             "type":"list"
             ,"components" : ["C,L0,V0,V1,B0"]    // Checkbox, Label, editfield, info, button, Action
@@ -580,6 +580,7 @@ function addClockTab(){
             ,"B0sc_cmd":JSON.stringify(["getclock","getmeasuredclock"])
             , "B0target": JSON.stringify([tds,tds])
             , "B0params":JSON.stringify(["",""])
+            , "B0extraparams":JSON.stringify([tdsfinalary[1],tdsfinalary[1]])
         };
         innCompsget.push(eachcomp);
 
