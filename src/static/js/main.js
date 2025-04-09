@@ -370,6 +370,10 @@ function hideNavbar() {
 }
 var pollInterval;
 function Banner() {
+    if (general.boardName.toLowerCase() === "vek385") {
+        document.getElementById("navSec").style.display = "none";
+        return;
+    }
     $.ajax({
         url: "/notif",
         type: "GET",
