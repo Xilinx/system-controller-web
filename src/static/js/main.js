@@ -1117,7 +1117,6 @@ function displaypopup(title, message, res, e, cn, inprg, count) {
     var tbodycomp = document.createElement("tbody");
     tbodycomp.classList.add("table_body_pop");
     tbodycomp.setAttribute("id", "popuptbody");
-    
     // popup image locations
     var em1 = document.createElement("div");
     em1.classList.add("popup_image_bg_div");
@@ -2850,7 +2849,9 @@ function layoutDesigns(){
  	}
    }
     if(general.boardName.toLowerCase()==="unknown"){
-        document.getElementById("testtheboard").remove();
+        ["testtheboard", "pmdashboard", "versalimageupdate", "exportCSV"].forEach(id => {
+            document.getElementById(id).remove();
+        });
     }else{
         document.getElementById("boardsupport").remove();
     }
