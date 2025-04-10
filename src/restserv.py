@@ -380,11 +380,12 @@ class CmdQuery(Resource):
                     ,"data":result
                 }
             if req.startswith("BIT") or "BIT" in req:
-                bitLog=SysFactory.exec_cmd("cat "+app_config["bitlogFilePath"],SysFactory.TERMINAL)
-                if bitLog.startswith("cat: can't open") or "cat: can't open" in bitLog:
+                bitlog_path = app_config["bitlogFilePath"]
+                if not os.path.isfile(bitlog_path):
                     resp_json["data"]["bitlogs"] = ""
                 else:
-                    resp_json["data"]["bitlogs"] = bitLog
+                    bitLog = SysFactory.exec_cmd("cat " + bitlog_path, SysFactory.TERMINAL)
+                    resp_json["data"]["bitlogs"] = bitLog if "cat: can't open" not in bitLog else ""
             return resp_json,200
         except Exception as e:
             resp_json = {
