@@ -39,11 +39,15 @@ else
     sudo su - petalinux -c "systemctl --user enable jupyter-setup.service"
 fi
 
+if [ -d /usr/share/embpf-bootfw-update-tool/ospi ]; then
+    mkdir -p /data/OSPI
+    ln -sf /usr/share/embpf-bootfw-update-tool/ospi/* /data/OSPI/
+fi
+
 ## print ip on console
 COUNT=30
 IP=`/sbin/ifconfig end0 | grep 'inet addr' | awk '{print $2}' | awk -F ':' '{print $2}'`
 while [ "$IP" == "" -a "$COUNT" != "0" ]; do
-    echo -n "." | tee -a /dev/console
     sleep 1
     COUNT=`expr $COUNT - 1`
     IP=`/sbin/ifconfig end0 | grep 'inet addr' | awk '{print $2}' | awk -F ':' '{print $2}'`
