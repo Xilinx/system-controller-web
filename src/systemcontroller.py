@@ -22,6 +22,7 @@ from parse import *
 from config_app import *
 from jnservice import *
 import restserv
+from websocket_server import WebsocketSession
 ##  Main that calls other functions and launches the server.
 #
 #
@@ -52,6 +53,16 @@ def index():
     # returning template.
     generate_gen_sc_file(sc_app_path, app_config)
     return render_template("index.html", versioning = ""+ app_config["major_version"]+"."+app_config["minor_version"] + "." + app_config["dev_for_major_ver"]+"."+app_config["dev_minor_ver"])	
+@app.route('/uartconsole')
+def uartconsole():
+    args = request.args.to_dict()
+    if len(args["command"]) and len(args["title"]):
+        return render_template("uart_template.html", versioning = ""+ app_config["major_version"]+"."+app_config["minor_version"] + "." + app_config["dev_for_major_ver"]+"."+app_config["dev_minor_ver"],
+				console_title=args["title"],
+                                socket_rule=":8765/connect?session="+args["command"])	
+    else:
+        return "Invalid Entry. Page Not Found"
+
 ## Resources
 api.add_resource(Poll,"/poll")
 api.add_resource(FuncReq,"/funcreq")
@@ -335,7 +346,8 @@ if __name__ == '__main__':
             return jsonify({'message': 'Some files could not be uploaded. Allowed file types are txt'})
 
         return jsonify({'message': 'Files successfully uploaded'})
-    app.run(host="0.0.0.0", port=80, debug=True)
+    WebsocketSession()
+    app.run(host="0.0.0.0", port=80, debug=False)
 
 
 

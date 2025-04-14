@@ -1,0 +1,30 @@
+<!doctype html>
+  <html>
+    <head>
+      <script type="text/javascript" src="{{ url_for('static', filename='js/xterm/lib/xterm.js') }}?version={{ versioning }}"></script>
+      <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='js/xterm/css/xterm.css') }}?version={{ versioning }}">
+      <title>{{ console_title }}</title>
+    </head>
+  
+<body>
+    <div id="terminal"></div>
+    
+    <script>
+        const websocket = new WebSocket('ws://' + window.location.hostname + '{{ socket_rule }}');
+        const terminal = new Terminal();
+        terminal.open(document.getElementById("terminal"));
+        terminal.focus();
+        terminal.onKey(({ key, domEvent }) => {
+            if (domEvent.code === "Enter") {
+                websocket.send('\n')
+            } else {
+                websocket.send(key)
+            }
+        });
+        websocket.onmessage = (event) => {
+            terminal.write(event.data);
+        };
+
+    </script>
+</body>
+</html>
