@@ -2662,6 +2662,48 @@ function generateOSPIblock(){
         document.getElementById("detectOSPI").remove();
     }
 }
+function generateUARTblock() {
+    if (app_strings.UART_content) {
+        var block = document.getElementById("versal_image_screen_1");
+
+        var em1 = document.createElement("div");
+        em1.classList.add("block_dashboard_1");
+        em1.id = "detectUART";
+        em1.style.width = "50%";
+
+        var es = document.createElement("p");
+        es.classList.add("details_info");
+
+        var title = document.createElement("b");
+        title.textContent = app_strings.UART_content.title;
+        es.appendChild(title);
+
+        em1.appendChild(es);
+        block.appendChild(em1);
+        for (var i = 0; i < app_strings.UART_content.pane.length; i++) {
+            var em2 = document.createElement("p");
+            em2.classList.add("details_info");
+            var es2 = document.createTextNode(app_strings.UART_content.pane[i].title)
+            em2.appendChild(es2);
+            em1.appendChild(em2);
+            var button = document.createElement("input");
+            button.classList.add("buttons");
+            button.classList.add("dash_bm");
+            button.setAttribute("type", "button");
+            button.setAttribute("value", app_strings.UART_content.pane[i].button_title);
+            var link_url = encodeURIComponent(app_strings.UART_content.pane[i].button_link_url);
+            var title = encodeURIComponent(app_strings.UART_content.pane[i].button_link_title);
+            var command = encodeURIComponent(app_strings.UART_content.pane[i].button_link_command);
+            var url = link_url + "?title=" + title + "&command=" + command;
+            (function (url) {
+                button.onclick = function () {
+                    openInNewTab(url);
+                };
+            })(url);
+            em2.appendChild(button);
+        }
+    }
+}
 
 function navClick(tid){
     console.log(tid);
@@ -3052,6 +3094,7 @@ $(document).ready(function () {
     generateRAUCblock();
     generatePDIblock();
     generateOSPIblock();
+    generateUARTblock();
     $('.app-title:empty').hide();
       $('#top_menu li').click(function (e) {
 
