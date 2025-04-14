@@ -24,6 +24,9 @@
         websocket.onmessage = (event) => {
             terminal.write(event.data);
         };
+        websocket.onclose = (event) => {
+             terminal.write('\r\n\r\nDisconnected!!\r\nClose the tab and reopen from BEAM Tool.');
+        };
 
     </script>
 </body>
