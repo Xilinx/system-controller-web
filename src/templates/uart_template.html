@@ -7,17 +7,22 @@
   <html>
     <head>
       <script type="text/javascript" src="{{ url_for('static', filename='js/xterm/lib/xterm.js') }}?version={{ versioning }}"></script>
+      <script type="text/javascript" src="{{ url_for('static', filename='js/xterm/addon-fit/xterm-addon-fit.js') }}?version={{ versioning }}"></script>
       <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='js/xterm/css/xterm.css') }}?version={{ versioning }}">
       <title>{{ console_title }}</title>
     </head>
   
 <body>
-    <div id="terminal"></div>
+    <div id="terminal" style="width: 100%; height: 97vh;"</div>
     
     <script>
         const websocket = new WebSocket('ws://' + window.location.hostname + '{{ socket_rule }}');
         const terminal = new Terminal();
+        const fitAddon = new FitAddon.FitAddon();  
+        terminal.loadAddon(fitAddon);  
+
         terminal.open(document.getElementById("terminal"));
+        fitAddon.fit();  
         terminal.focus();
         terminal.onKey(({ key, domEvent }) => {
             if (domEvent.code === "Enter") {
@@ -32,6 +37,10 @@
         websocket.onclose = (event) => {
              terminal.write('\r\n\r\nDisconnected!!\r\nClose the tab and reopen from BEAM Tool.');
         };
+        function fitTerminal() {  
+             fitAddon.fit();  
+	}  
+        window.addEventListener('resize', fitTerminal);  
 
     </script>
 </body>
