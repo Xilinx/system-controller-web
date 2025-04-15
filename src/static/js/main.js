@@ -2664,28 +2664,22 @@ function generateOSPIblock(){
 }
 function generateUARTblock() {
     if (app_strings.UART_content) {
-        var block = document.getElementById("versal_image_screen_1");
-
-        var em1 = document.createElement("div");
-        em1.classList.add("block_dashboard_1");
-        em1.id = "detectUART";
-        em1.style.width = "50%";
-
-        var es = document.createElement("p");
-        es.classList.add("details_info");
+        var block = document.getElementById("detectUART");
+        block.classList.add("block_dashboard_1");
+        var em1 = document.createElement("p");
+        em1.classList.add("details_info");
+        block.appendChild(em1);
 
         var title = document.createElement("b");
         title.textContent = app_strings.UART_content.title;
-        es.appendChild(title);
+        em1.appendChild(title);
 
-        em1.appendChild(es);
-        block.appendChild(em1);
         for (var i = 0; i < app_strings.UART_content.pane.length; i++) {
             var em2 = document.createElement("p");
             em2.classList.add("details_info");
             var es2 = document.createTextNode(app_strings.UART_content.pane[i].title)
             em2.appendChild(es2);
-            em1.appendChild(em2);
+            block.appendChild(em2);
             var button = document.createElement("input");
             button.classList.add("buttons");
             button.classList.add("dash_bm");
