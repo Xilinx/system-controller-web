@@ -3109,7 +3109,7 @@ $(document).ready(function () {
 
 	setInterval(() => {
             if(!document.hidden && pollresp)
-	    if($("#home_screen_db").hasClass("hide") == false){
+	    if($("#home_screen_db").hasClass("hide") == false || $("#versalimageupdate_screen").hasClass("hide") == false){
 		    pollresp = false;
 	            loadRefreshData();
 

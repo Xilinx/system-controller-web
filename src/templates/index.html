@@ -90,7 +90,7 @@
              <button class="navopt_btn" id="developusingtools" onclick=navClick(this.id)>DESIGN EXAMPLES</button>
          </div>
          <div>
-           <button class="navopt_btn" id="versalimageupdate" onclick=navClick(this.id)>VERSAL IMAGE UPLOAD</button>
+           <button class="navopt_btn" id="versalimageupdate" onclick=navClick(this.id)>VERSAL DEIVCE CONTROL</button>
            </div>
     </span>
 <!--    <span style="display: block; clear: both;">
@@ -136,13 +136,7 @@
           <a class="logo-align align-center" href="#"><img
             src="{{url_for('static',filename='images/versal.png')}}" alt="logo" height="38" style="padding-top:30px; padding-bottom:10px"/></a>
       </div>
-        <div class= "block_dashboard_1" id="detectBootModeID">
-           <p class='details_info'> <b>Boot Mode:</b></p>
-          <!--<p class='details_info'>JTAG : [0000]</p>
-          <p class='details_info'>Boot Module : [0010]</p>
-          <p class='details_info'>SD1_3.0 : [1110]</p>-->
-
-      </div>
+        
     </span>
   </div>
 <!-- Help Screen-->
@@ -412,7 +406,7 @@
     </div>
 </div>
 <div class="homelandingrow hide" id="versalimageupdate_screen">
-  <div class="app-title">Versal Image Upload</div>
+  <div class="app-title">Versal Device</div>
   <div id="versal_image_screen" style="display: flex; flex-wrap: wrap; margin-left: 3%;">
     <div class="block_dashboard_1" id="detectPDI" style="width: 47%;">
       <p class='details_info'> <b>Upload PDI:</b></p>
@@ -422,6 +416,13 @@
     </div>
     <div class="" id="detectUART" style="width: 47%;">
     </div>
+    <div class= "block_dashboard_1" id="detectBootModeID" style="width: 47%;">
+      <p class='details_info'> <b>Boot Mode:</b></p>
+     <!--<p class='details_info'>JTAG : [0000]</p>
+     <p class='details_info'>Boot Module : [0010]</p>
+     <p class='details_info'>SD1_3.0 : [1110]</p>-->
+
+ </div>
   </div>
 </div>
   <section class="content_sec ">
