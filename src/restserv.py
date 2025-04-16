@@ -636,7 +636,7 @@ class exportCSV(Resource):
             if not os.path.exists(output_dir):
                 os.makedirs(output_dir)
             cmd = f"{app_config['csvFIlePath']} {duration} 1"
-            result = Term.exec_cmd(f"python3 {cmd}")
+            result = SysFactory.exec_cmd(f"python3 {cmd}", SysFactory.SCRIPT)
             resp_json = {
                 "status":"success"
                 ,"data": result.strip().split(" - ")[-1]
