@@ -7,62 +7,44 @@
 import asyncio
 import websockets
 import threading
-import subprocess
-import os
 import shutil
+import socket
 from urllib.parse import urlparse, parse_qs
 
 class UartConnect:
     def __init__(self):
+        self.sock = None
         self.sessions = set()
-        self.master = None
-        self.slave = None
-        self.process = None
+
     def close(self):
-        self.process.kill()
-        self.process.wait()
-        self.process = None
-        if self.master is not None:
-            os.close(self.master)
-            self.master = None
-        if self.slave is not None:
-            os.close(self.slave)
-            self.slave = None
+        if self.sock is not None:
+            self.sock.close()
     
     def establishProcessconnection(self,cmd):
-        if self.process:
-            self.process.terminate()
-            self.process.wait()
-        self.master, self.slave = os.openpty()
-        os.set_blocking(self.master, False)  # Make the master file descriptor non-blocking
-        cmd_sp = cmd.split(' ')
-        self.process = subprocess.Popen(
-                    cmd_sp,
-		    stdin=self.slave,
-		    stdout=self.slave,
-		    stderr=self.slave,
-		    close_fds=True,
-		    start_new_session=True
-		)
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.sock.connect(("127.0.0.1", cmd))
+        self.sock.setblocking(False)
+
     async def recv_task(self,websocket,path):
         while True:
-            if self.master == None:
-                await asyncio.sleep(0.1)  # You can adjust the sleep time as needed
+            if self.sock == None:
+                await asyncio.sleep(0.1)  
             message = await websocket.recv()
-            os.write(self.master, (message).encode())
+            self.sock.send(message.encode())
 
     async def send_task(self,websocket,path):
         while True:
-            if self.master == None:
-                await asyncio.sleep(0.1)  # You can adjust the sleep time as needed
+            if self.sock == None:
+                await asyncio.sleep(0.1)  
+
             try:
-                output = os.read(self.master, 4096).decode()
+                output = self.sock.recv(4096).decode()
                 if output:
                     for ws in self.sessions:
                         await ws.send(f"{output}")
-            except BlockingIOError:
+            except:
                 pass
-            await asyncio.sleep(0.1)  # You can adjust the sleep time as needed
+            await asyncio.sleep(0.1)
 
 class WebsocketSession:
     def __init__(self):
@@ -71,6 +53,7 @@ class WebsocketSession:
         self.ws_thread.start()
 
     async def handler(self, websocket, path):
+        ts = None
         uri = urlparse(path)
         params = parse_qs(uri.query)
         key_value = params.get('session', [None])[0]
@@ -78,7 +61,7 @@ class WebsocketSession:
             try:
                 if key_value not in self.sessions.keys() :
                     self.sessions[key_value] = UartConnect()
-                    self.sessions[key_value].establishProcessconnection(key_value)
+                    self.sessions[key_value].establishProcessconnection(int(key_value))
                 ts = self.sessions[key_value]
                 ts.sessions.add(websocket)
                 recv_task_future = asyncio.create_task(ts.recv_task(websocket,key_value))
@@ -91,7 +74,7 @@ class WebsocketSession:
                 pass
             finally:
                 await websocket.close(code=1000, reason="Connection closed by the server")
-                if ts:
+                if ts is not None:
                     ts.sessions.remove(websocket)
                     if len(ts.sessions) == 0 :
                         ts.close()
