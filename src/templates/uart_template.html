@@ -10,10 +10,11 @@
       <script type="text/javascript" src="{{ url_for('static', filename='js/xterm/addon-fit/xterm-addon-fit.js') }}?version={{ versioning }}"></script>
       <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='js/xterm/css/xterm.css') }}?version={{ versioning }}">
       <title>{{ console_title }}</title>
+      <link rel="icon" type="image/x-icon" href="{{url_for('static',filename='images/icon.png')}}">
     </head>
   
 <body>
-    <div id="terminal" style="width: 100%; height: 97vh;"</div>
+    <div id="terminal" style="width: 100%; height: 97vh;"></div>
     
     <script>
         const websocket = new WebSocket('ws://' + window.location.hostname + '{{ socket_rule }}');

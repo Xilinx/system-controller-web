@@ -370,58 +370,61 @@ function hideNavbar() {
 }
 var pollInterval;
 function Banner() {
-    if (general.boardName.toLowerCase() === "vek385") {
-        document.getElementById("navSec").style.display = "none";
-        return;
-    }
-    $.ajax({
-        url: "/notif",
-        type: "GET",
-        dataType: "json",
-        success: function (res) {
-            var Nav = document.getElementById("navSec");
-            if (res.data.length == []) {
-                Nav.style.display = "none";
-            }
-            else {
-                Nav.style.display = "block";
-                var bannerId = document.getElementById("navLink");
-                bannerId.innerHTML = res.data[0].message;
-                if (Object.keys(res.data[0].components).length) {
-                    jQuery.each(res.data[0].components.components, function (l, elem) {
-                        switch (elem.split("")[0]) {
-                            case "B":
-                                var em = document.createElement("input");
-                                em.classList.add("buttons");
-                                em.setAttribute("value", res.data[0].components[elem]);
-                                em.setAttribute("type", "button");
-                                em.onclick = function () {
-                                    showLoadingTooltip("bannerpdistatus",bannerId);
-                                    $.ajax({
-                                        url: res.data[0].components[elem + "A"],
-                                        method: "GET",
-                                        data: "",
-                                        contentType: "application/json",
-                                        success: function (res) {
-                                            showSuccessTooltip("bannerpdistatus",res.status,bannerId);
-                                        },
-                                        error: function (res) {
-                                            showFailureTooltip("bannerpdistatus",res.status,bannerId);
-                                        }
-                                    });
-                                }
-                                bannerId.appendChild(em);
-                                break;
-                        }
-                    });
-                }
-            }
-        },
-        error: function (res) {
-            console.log(res)
-            stopPolling();
+    if (app_strings.hasOwnProperty('Notification_banner')) {
+        if (app_strings.Notification_banner.isSuppot == false) {
+            document.getElementById("navSec").style.display = "none";
         }
-    });
+    }
+    else {
+        $.ajax({
+            url: "/notif",
+            type: "GET",
+            dataType: "json",
+            success: function (res) {
+                var Nav = document.getElementById("navSec");
+                if (res.data.length == []) {
+                    Nav.style.display = "none";
+                }
+                else {
+                    Nav.style.display = "block";
+                    var bannerId = document.getElementById("navLink");
+                    bannerId.innerHTML = res.data[0].message;
+                    if (Object.keys(res.data[0].components).length) {
+                        jQuery.each(res.data[0].components.components, function (l, elem) {
+                            switch (elem.split("")[0]) {
+                                case "B":
+                                    var em = document.createElement("input");
+                                    em.classList.add("buttons");
+                                    em.setAttribute("value", res.data[0].components[elem]);
+                                    em.setAttribute("type", "button");
+                                    em.onclick = function () {
+                                        showLoadingTooltip("bannerpdistatus", bannerId);
+                                        $.ajax({
+                                            url: res.data[0].components[elem + "A"],
+                                            method: "GET",
+                                            data: "",
+                                            contentType: "application/json",
+                                            success: function (res) {
+                                                showSuccessTooltip("bannerpdistatus", res.status, bannerId);
+                                            },
+                                            error: function (res) {
+                                                showFailureTooltip("bannerpdistatus", res.status, bannerId);
+                                            }
+                                        });
+                                    }
+                                    bannerId.appendChild(em);
+                                    break;
+                            }
+                        });
+                    }
+                }
+            },
+            error: function (res) {
+                console.log(res)
+                stopPolling();
+            }
+        });
+    }
 }
 function startPolling() {
     pollInterval = setInterval(Banner, 5000);
@@ -2658,12 +2661,12 @@ function generateOSPIblock(){
         });
     });
     
-    if (general.boardName.toLowerCase()!="vek385"){
+    if (!app_strings.hasOwnProperty('OSPI_feature')){
         document.getElementById("detectOSPI").remove();
     }
 }
 function generateUARTblock() {
-    if (app_strings.UART_content) {
+    if (app_strings.hasOwnProperty('UART_content')) {
         var block = document.getElementById("detectUART");
         block.classList.add("block_dashboard_1");
         var em1 = document.createElement("p");
@@ -2696,6 +2699,9 @@ function generateUARTblock() {
             })(url);
             em2.appendChild(button);
         }
+    }
+    else{
+        document.getElementById("detectUART").remove();
     }
 }
 
