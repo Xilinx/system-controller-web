@@ -370,58 +370,61 @@ function hideNavbar() {
 }
 var pollInterval;
 function Banner() {
-    if (general.boardName.toLowerCase() === "vek385") {
-        document.getElementById("navSec").style.display = "none";
-        return;
-    }
-    $.ajax({
-        url: "/notif",
-        type: "GET",
-        dataType: "json",
-        success: function (res) {
-            var Nav = document.getElementById("navSec");
-            if (res.data.length == []) {
-                Nav.style.display = "none";
-            }
-            else {
-                Nav.style.display = "block";
-                var bannerId = document.getElementById("navLink");
-                bannerId.innerHTML = res.data[0].message;
-                if (Object.keys(res.data[0].components).length) {
-                    jQuery.each(res.data[0].components.components, function (l, elem) {
-                        switch (elem.split("")[0]) {
-                            case "B":
-                                var em = document.createElement("input");
-                                em.classList.add("buttons");
-                                em.setAttribute("value", res.data[0].components[elem]);
-                                em.setAttribute("type", "button");
-                                em.onclick = function () {
-                                    showLoadingTooltip("bannerpdistatus",bannerId);
-                                    $.ajax({
-                                        url: res.data[0].components[elem + "A"],
-                                        method: "GET",
-                                        data: "",
-                                        contentType: "application/json",
-                                        success: function (res) {
-                                            showSuccessTooltip("bannerpdistatus",res.status,bannerId);
-                                        },
-                                        error: function (res) {
-                                            showFailureTooltip("bannerpdistatus",res.status,bannerId);
-                                        }
-                                    });
-                                }
-                                bannerId.appendChild(em);
-                                break;
-                        }
-                    });
-                }
-            }
-        },
-        error: function (res) {
-            console.log(res)
-            stopPolling();
+    if (app_strings.hasOwnProperty('Notification_banner')) {
+        if (app_strings.Notification_banner.isSuppot == false) {
+            document.getElementById("navSec").style.display = "none";
         }
-    });
+    }
+    else {
+        $.ajax({
+            url: "/notif",
+            type: "GET",
+            dataType: "json",
+            success: function (res) {
+                var Nav = document.getElementById("navSec");
+                if (res.data.length == []) {
+                    Nav.style.display = "none";
+                }
+                else {
+                    Nav.style.display = "block";
+                    var bannerId = document.getElementById("navLink");
+                    bannerId.innerHTML = res.data[0].message;
+                    if (Object.keys(res.data[0].components).length) {
+                        jQuery.each(res.data[0].components.components, function (l, elem) {
+                            switch (elem.split("")[0]) {
+                                case "B":
+                                    var em = document.createElement("input");
+                                    em.classList.add("buttons");
+                                    em.setAttribute("value", res.data[0].components[elem]);
+                                    em.setAttribute("type", "button");
+                                    em.onclick = function () {
+                                        showLoadingTooltip("bannerpdistatus", bannerId);
+                                        $.ajax({
+                                            url: res.data[0].components[elem + "A"],
+                                            method: "GET",
+                                            data: "",
+                                            contentType: "application/json",
+                                            success: function (res) {
+                                                showSuccessTooltip("bannerpdistatus", res.status, bannerId);
+                                            },
+                                            error: function (res) {
+                                                showFailureTooltip("bannerpdistatus", res.status, bannerId);
+                                            }
+                                        });
+                                    }
+                                    bannerId.appendChild(em);
+                                    break;
+                            }
+                        });
+                    }
+                }
+            },
+            error: function (res) {
+                console.log(res)
+                stopPolling();
+            }
+        });
+    }
 }
 function startPolling() {
     pollInterval = setInterval(Banner, 5000);
@@ -678,6 +681,10 @@ function exportCSV() {
     tip.classList.add("tooltiptext");
     smload.append(tip);
 
+    var exportBtn = document.getElementById("exportCSV");
+    var statustip = document.getElementById("loadingtip");
+    statustip.append(smload);
+    statustip.style.display = "";
     var popupFooter = document.createElement('div');
     popupFooter.classList.add('popup-footer');
     var span = document.createElement('span');
@@ -689,60 +696,54 @@ function exportCSV() {
         document.body.removeChild(popupmain);
     };
     popupMessage.appendChild(inputField);
-    popupMessage.append(smload);
+    popupMessage.innerHTML += "<br><b>Note:</b>The Power, Voltage, and Current rail values are recorded at selected intervals after clicking the Download button.";
     var downloadbtn = document.createElement('button');
     downloadbtn.textContent = 'Download';
     downloadbtn.style.marginRight = "10px";
     downloadbtn.classList.add('popupbuttons');
     downloadbtn.onclick = function () {
-        document.getElementById("downloadCSVstatus").innerHTML = "";
-        document.getElementById("downloadCSVid").className = "";
-        document.getElementById("downloadCSVid").style.border = "3px dotted black";
-        document.getElementById("downloadCSVid").classList.add("ministatusloading");
+        popup.style.display="none";
+        popupmain.style.display = "none";
+        smload.style.border = "3px dotted black";
+        smload.classList.add("ministatusloading");
         var fileDuration = document.getElementById('file_duration_input').value;
         console.log('Selected duration:', fileDuration);
-        var originalText = downloadbtn.innerHTML;
-        downloadbtn.innerHTML = "Please wait..";
+        exportBtn.disabled = true;
         downloadbtn.disabled = true;
         closeButton.disabled = true;
+        statustip.disabled = false;
         $.ajax({
             url: "/exportcsv",
             method: "GET",
             data: { file_duration: fileDuration },
             contentType: "json",
             success: function (res) {
-                document.getElementById("downloadCSVid").className = "";
+                smload.className = "";
                 if (res.status === 'error' || !(res.data && res.data.endsWith(".csv"))) {
-                    document.getElementById("downloadCSVid").classList.add("tooltip");
-                    document.getElementById("downloadCSVid").style.border = "3px dotted white";
-                    document.getElementById("downloadCSVstatus").innerHTML = "Network Error";
-                    document.getElementById("downloadCSVid").classList.add("ministatusfail");
+                    smload.style.border = "";
+                    document.body.removeChild(popupmain);
                     alert("Failed to export CSV File");
                 } else {
-                    document.getElementById("downloadCSVid").classList.add("tooltip");
-                    document.getElementById("downloadCSVstatus").innerHTML = "Success";
-                    document.getElementById("downloadCSVid").classList.add("ministatussuccess");
-
+                    smload.style.border = "";
                     var link = document.createElement('a');
                     link.href = res.data;
                     link.click();
                     document.body.removeChild(popupmain);
                     alert("CSV File exported successfully");
                 }
-                downloadbtn.innerHTML = originalText;
+                exportBtn.disabled = false;
                 downloadbtn.disabled = false;
                 closeButton.disabled = false;
+                statustip.style.display = "none";
             },
             error: function () {
-                document.getElementById("downloadCSVid").className = "";
-                document.getElementById("downloadCSVid").style.border = "3px dotted white";
-                document.getElementById("downloadCSVid").classList.add("ministatusfail");
-                document.getElementById("downloadCSVid").classList.add("tooltip");
-                document.getElementById("downloadCSVstatus").innerHTML = "Network Error";
+                smload.className = "";
+                smload.style.border = "";
                 console.log("Failed to export CSV.");
-                downloadbtn.innerHTML = originalText;
+                exportBtn.disabled = false;
                 downloadbtn.disabled = false;
                 closeButton.disabled = false;
+                statustip.style.display = "none";
                 alert("Failed to export CSV File");
             }
 
@@ -2658,8 +2659,47 @@ function generateOSPIblock(){
         });
     });
     
-    if (general.boardName.toLowerCase()!="vek385"){
+    if (!app_strings.hasOwnProperty('OSPI_feature')){
         document.getElementById("detectOSPI").remove();
+    }
+}
+function generateUARTblock() {
+    if (app_strings.hasOwnProperty('UART_content')) {
+        var block = document.getElementById("detectUART");
+        block.classList.add("block_dashboard_1");
+        var em1 = document.createElement("p");
+        em1.classList.add("details_info");
+        block.appendChild(em1);
+
+        var title = document.createElement("b");
+        title.textContent = app_strings.UART_content.title;
+        em1.appendChild(title);
+
+        for (var i = 0; i < app_strings.UART_content.pane.length; i++) {
+            var em2 = document.createElement("p");
+            em2.classList.add("details_info");
+            var es2 = document.createTextNode(app_strings.UART_content.pane[i].title)
+            em2.appendChild(es2);
+            block.appendChild(em2);
+            var button = document.createElement("input");
+            button.classList.add("buttons");
+            button.classList.add("dash_bm");
+            button.setAttribute("type", "button");
+            button.setAttribute("value", app_strings.UART_content.pane[i].button_title);
+            var link_url = encodeURIComponent(app_strings.UART_content.pane[i].button_link_url);
+            var title = encodeURIComponent(app_strings.UART_content.pane[i].button_link_title);
+            var command = encodeURIComponent(app_strings.UART_content.pane[i].button_link_command);
+            var url = link_url + "?title=" + title + "&command=" + command;
+            (function (url) {
+                button.onclick = function () {
+                    openInNewTab(url);
+                };
+            })(url);
+            em2.appendChild(button);
+        }
+    }
+    else{
+        document.getElementById("detectUART").remove();
     }
 }
 
@@ -3052,6 +3092,7 @@ $(document).ready(function () {
     generateRAUCblock();
     generatePDIblock();
     generateOSPIblock();
+    generateUARTblock();
     $('.app-title:empty').hide();
       $('#top_menu li').click(function (e) {
 
@@ -3072,7 +3113,7 @@ $(document).ready(function () {
 
 	setInterval(() => {
             if(!document.hidden && pollresp)
-	    if($("#home_screen_db").hasClass("hide") == false){
+	    if($("#home_screen_db").hasClass("hide") == false || $("#versalimageupdate_screen").hasClass("hide") == false){
 		    pollresp = false;
 	            loadRefreshData();
 
