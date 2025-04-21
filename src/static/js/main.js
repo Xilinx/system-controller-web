@@ -681,6 +681,10 @@ function exportCSV() {
     tip.classList.add("tooltiptext");
     smload.append(tip);
 
+    var exportBtn = document.getElementById("exportCSV");
+    var statustip = document.getElementById("loadingtip");
+    statustip.append(smload);
+    statustip.style.display = "";
     var popupFooter = document.createElement('div');
     popupFooter.classList.add('popup-footer');
     var span = document.createElement('span');
@@ -692,60 +696,54 @@ function exportCSV() {
         document.body.removeChild(popupmain);
     };
     popupMessage.appendChild(inputField);
-    popupMessage.append(smload);
+    popupMessage.innerHTML += "<br><b>Note:</b>The Power, Voltage, and Current rail values are recorded at selected intervals after clicking the Download button.";
     var downloadbtn = document.createElement('button');
     downloadbtn.textContent = 'Download';
     downloadbtn.style.marginRight = "10px";
     downloadbtn.classList.add('popupbuttons');
     downloadbtn.onclick = function () {
-        document.getElementById("downloadCSVstatus").innerHTML = "";
-        document.getElementById("downloadCSVid").className = "";
-        document.getElementById("downloadCSVid").style.border = "3px dotted black";
-        document.getElementById("downloadCSVid").classList.add("ministatusloading");
+        popup.style.display="none";
+        popupmain.style.display = "none";
+        smload.style.border = "3px dotted black";
+        smload.classList.add("ministatusloading");
         var fileDuration = document.getElementById('file_duration_input').value;
         console.log('Selected duration:', fileDuration);
-        var originalText = downloadbtn.innerHTML;
-        downloadbtn.innerHTML = "Please wait..";
+        exportBtn.disabled = true;
         downloadbtn.disabled = true;
         closeButton.disabled = true;
+        statustip.disabled = false;
         $.ajax({
             url: "/exportcsv",
             method: "GET",
             data: { file_duration: fileDuration },
             contentType: "json",
             success: function (res) {
-                document.getElementById("downloadCSVid").className = "";
+                smload.className = "";
                 if (res.status === 'error' || !(res.data && res.data.endsWith(".csv"))) {
-                    document.getElementById("downloadCSVid").classList.add("tooltip");
-                    document.getElementById("downloadCSVid").style.border = "3px dotted white";
-                    document.getElementById("downloadCSVstatus").innerHTML = "Network Error";
-                    document.getElementById("downloadCSVid").classList.add("ministatusfail");
+                    smload.style.border = "";
+                    document.body.removeChild(popupmain);
                     alert("Failed to export CSV File");
                 } else {
-                    document.getElementById("downloadCSVid").classList.add("tooltip");
-                    document.getElementById("downloadCSVstatus").innerHTML = "Success";
-                    document.getElementById("downloadCSVid").classList.add("ministatussuccess");
-
+                    smload.style.border = "";
                     var link = document.createElement('a');
                     link.href = res.data;
                     link.click();
                     document.body.removeChild(popupmain);
                     alert("CSV File exported successfully");
                 }
-                downloadbtn.innerHTML = originalText;
+                exportBtn.disabled = false;
                 downloadbtn.disabled = false;
                 closeButton.disabled = false;
+                statustip.style.display = "none";
             },
             error: function () {
-                document.getElementById("downloadCSVid").className = "";
-                document.getElementById("downloadCSVid").style.border = "3px dotted white";
-                document.getElementById("downloadCSVid").classList.add("ministatusfail");
-                document.getElementById("downloadCSVid").classList.add("tooltip");
-                document.getElementById("downloadCSVstatus").innerHTML = "Network Error";
+                smload.className = "";
+                smload.style.border = "";
                 console.log("Failed to export CSV.");
-                downloadbtn.innerHTML = originalText;
+                exportBtn.disabled = false;
                 downloadbtn.disabled = false;
                 closeButton.disabled = false;
+                statustip.style.display = "none";
                 alert("Failed to export CSV File");
             }
 
