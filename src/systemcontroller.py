@@ -260,7 +260,19 @@ def generate_gen_sc_file(sc_app_path, app_config):
     else:
         rauc_status = "yes"
     f.write('"rauc":''"' + rauc_status + '"')
-    f.write("\n};")
+    f.write("\n};\n")
+    f.close()
+
+    #get the IP
+    f = open("./static/js/gen_sc.js", "a")
+    f.write("var ip_add = {\n")
+    ip_add = Term.exec_cmd("ifconfig end0 | grep 'inet addr' | awk -F: '{print $2}' | awk '{print $1}'").strip()  # Strip newline characters
+    if "command not found" in ip_add:
+        ip_address = "-"
+    else:
+        ip_address = ip_add
+    f.write('"Ip": "' + ip_address + '"\n')
+    f.write("};\n")
     f.close()
 
     #   bit tab components
