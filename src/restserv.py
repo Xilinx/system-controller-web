@@ -618,7 +618,7 @@ class ScriptRunner(Resource):
                     ,"data": result.strip().split("\n")[-1]
                 }
                 return resp_jon
-            elif funq == "versalconnect":
+            elif funq == "versalUSBconnect":
                 file = request.args.get('file')
                 cmd = app_config["versalconnectscript"]+file
                 result = Term.exec_cmd(cmd)
@@ -627,7 +627,7 @@ class ScriptRunner(Resource):
                     ,"data": result.strip().split("\n")[-1]
                 }
                 return resp_jon
-            elif funq == "versaldisconnect":
+            elif funq == "versalUSBdisconnect":
                 cmd = app_config["versaldisconnectscript"]
                 result = Term.exec_cmd(cmd)
                 resp_jon = {

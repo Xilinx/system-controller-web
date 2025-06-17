@@ -24,7 +24,7 @@ app_config = {
     ,'ospirunstatusfile': "./ospi_flash_status.txt"
     ,'ospirunstatusfile_getstatus':"[ -f ./ospi_flash_status.txt ] && cat ./ospi_flash_status.txt" #"[ -f ./ospi_flash_status.txt ] && tail -n 1 ./ospi_flash_status.txt"
     ,"VersalUSBImagePath":"/data/usb/"
-    ,"versalconnectscript":"/usr/share/scweb/usb_gadget_connect.sh"
+    ,"versalconnectscript":"/usr/share/scweb/usb_gadget_connect.sh /data/usb/"
     ,"versaldisconnectscript":"/usr/share/scweb/usb_gadget_disconnect.sh"
     ,"versalstatusscript":"/usr/share/scweb/usb_gadget_is_connected.sh"
     ,"config_sc_list_cmds":["listpower","listclock","listvoltage","listFMCvoltage","listgpio","listSFP","listpowerdomain","listQSFP","listFMC"]

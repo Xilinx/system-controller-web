@@ -2788,7 +2788,7 @@ function generateVersalFlashblock() {
             url: "/scriptrunner",
             type: 'GET',
             dataType: 'json',
-            data: { "cmd": "versalconnect", "file": versalwic },
+            data: { "cmd": "versalUSBconnect", "file": versalwic },
             success: function (res) {
                 showSuccessTooltip("versalstatus", res.status, versalID)
             },
@@ -2812,7 +2812,7 @@ function generateVersalFlashblock() {
             url: "/scriptrunner",
             type: 'GET',
             dataType: 'json',
-            data: { "cmd": "versaldisconnect"},
+            data: { "cmd": "versalUSBdisconnect"},
             success: function (res) {
                 showSuccessTooltip("versalstatus", res.status, versalID)
             },
@@ -2821,6 +2821,10 @@ function generateVersalFlashblock() {
             }
         });
     });
+    
+    if (!app_strings.hasOwnProperty('versal_usb_boot')){
+        document.getElementById("detectVersalFlash").remove();
+    }
     
 }
 
