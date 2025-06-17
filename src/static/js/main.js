@@ -508,6 +508,16 @@ function upload_clock_files(funcType) {
                     });
                     
                 });
+            }else if (funcType === "versal"){
+                document.querySelectorAll('#VersalselectionOption').forEach((em, i) => {
+                    while (em.length > 0) em.remove(em.length - 1);
+                    jQuery.each(res["data"]["versal"]["versal_files"], function (k, d) {
+                        var g = document.createElement("option");
+                        g.setAttribute('value', d);
+                        g.innerHTML = d
+                        em.appendChild(g);
+                    });
+                });
             }
         },
         error: function (res) {
@@ -521,7 +531,7 @@ function fileUploder(formdata, fileObj, select_id, funcType) {
         return;
     }
     var dupFound = false;
-    var sIds = ["selectElementId0", "selectElementId1", "PDIselectionOption1", "PDIselectionOption2", "rauc_file_name", "OSPIselectionOption"]
+    var sIds = ["selectElementId0", "selectElementId1", "PDIselectionOption1", "PDIselectionOption2", "rauc_file_name", "OSPIselectionOption", "VersalselectionOption"]
     jQuery.each(sIds, function (t, l) {
 
         document.querySelectorAll('#' + l).forEach((em, i) => {
@@ -544,7 +554,7 @@ function fileUploder(formdata, fileObj, select_id, funcType) {
         .then(response => {
             if (response.status == 200) {
                 console.log('File uploaded successfully.');
-                if (["clock", "pdi", "rauc", "ospi"].includes(funcType)) {
+                if (["clock", "pdi", "rauc", "ospi", "versal"].includes(funcType)) {
                     upload_clock_files(funcType);
                 }
                 return "Success";
@@ -2612,6 +2622,7 @@ function generateOSPIblock(){
         document.getElementById("loadospiloadid").className = "";
         document.getElementById("loadospistatus").innerHTML = "";
     });
+
     $('#loadospibuttonid').click(function (e) {
         popupMessage.innerHTML = "<b style='display: flex; justify-content: center; align-items: center;'>Initializing... Please wait</b>";
         closeButton.disabled = true;
@@ -2702,6 +2713,117 @@ function generateUARTblock() {
         document.getElementById("detectUART").remove();
     }
 }
+function generateVersalFlashblock() {
+    var block = $("#detectVersalFlash");
+    var em0 = document.createElement("p");
+    em0.classList.add("details_info");
+    em0.id = "versalusbstatus";
+    block.append(em0)
+    var es0 = document.createTextNode("Status:");
+    em0.appendChild(es0);
+    var em1 = document.createElement("div");
+    em1.classList.add("details_info");
+    block.append(em1)
+    var es = document.createTextNode("Browse USB Image:");
+    em1.appendChild(es);
+
+    var button = document.createElement("input");
+    button.classList.add("buttons");
+    button.classList.add("dash_bm");
+    button.style.width = '60%';
+    button.id="uploadVersal";
+    button.setAttribute("value", "Browse");
+    button.setAttribute("type", "file");
+    button.addEventListener("change", function (event) {
+      document.getElementById("uploadversalwicid").className = "";
+      document.getElementById("uploadversalstatus").innerHTML = "";
+      var file = event.target.files[0];
+      if (file) {
+        var formData = new FormData();
+            formData.append("file", file);
+            document.getElementById("uploadversalwicid").className = "ministatusloading";
+            fileUploder(formData, file, "VersalselectionOption", "versal").then(() => {
+                document.getElementById("uploadversalwicid").className = "ministatussuccess";
+                document.getElementById("uploadversalstatus").innerHTML = "Upload Success";
+            }).catch(() => {
+                document.getElementById("uploadversalwicid").className = "ministatusfail";
+                document.getElementById("uploadversalstatus").innerHTML = "Upload Failed";
+            });
+      }
+    });
+    em1.appendChild(button);
+    var smload2 = document.createElement("div");
+    smload2.id="uploadversalwicid";
+    smload2.style.display = 'inline-block';
+    smload2.style.marginLeft = '15px';
+    em1.append(smload2);
+    var tip2 = document.createElement("a");
+    tip2.id="uploadversalstatus";
+    tip2.classList.add("tooltiptext");
+    smload2.append(tip2);
+//Upload Versal wic    
+    var em3 = document.createElement("p");
+    em3.classList.add("details_info");
+//    em3.style.borderBottom = 'none';
+    em3.id="loadversal";
+    block.append(em3);
+    var es2 = document.createTextNode(" USB Image:");
+    em3.append(es2);
+    var m = document.createElement("select");
+    m.id = "VersalselectionOption";
+    m.classList.add("dash_bm");
+    em3.appendChild(m);    
+    var button1 = document.createElement("input");
+    button1.classList.add("buttons");
+    button1.classList.add("dash_bm");
+    button1.id="connectversalbuttonid";
+    button1.setAttribute("value", "Connect");
+    button1.setAttribute("type", "button");
+    em3.appendChild(button1);
+    var versalID = document.getElementById("loadversal");
+    $('#connectversalbuttonid').click(function (e){
+        var versalwic = $('#VersalselectionOption').val().split("\t")[0]
+        showLoadingTooltip("versalstatus", versalID);
+        $.ajax({
+            url: "/scriptrunner",
+            type: 'GET',
+            dataType: 'json',
+            data: { "cmd": "versalconnect", "file": versalwic },
+            success: function (res) {
+                showSuccessTooltip("versalstatus", res.status, versalID)
+            },
+            error: function () {
+                showFailureTooltip("versalstatus", res.status, versalID);
+            }
+        });
+    });
+    
+    var button2 = document.createElement("input");
+    button2.classList.add("buttons");
+    button2.classList.add("dash_bm");
+    button2.id="disconnectversalbuttonid";
+    button2.setAttribute("value", "Disconnect");
+    button2.setAttribute("type", "button");
+    em3.appendChild(button2);
+    $('#disconnectversalbuttonid').click(function (e){
+        // var versalwic = $('#VersalselectionOption').val().split("\t")[0]
+        showLoadingTooltip("versalstatus", versalID);
+        $.ajax({
+            url: "/scriptrunner",
+            type: 'GET',
+            dataType: 'json',
+            data: { "cmd": "versaldisconnect"},
+            success: function (res) {
+                showSuccessTooltip("versalstatus", res.status, versalID)
+            },
+            error: function () {
+                showFailureTooltip("versalstatus", res.status, versalID);
+            }
+        });
+    });
+    
+}
+
 
 function navClick(tid){
     console.log(tid);
@@ -2720,8 +2842,6 @@ function navClick(tid){
     if (tid === "pmdashboard") {launchpmtool()}    
     if (tid === "developusingtools") {$("#tools_screen").removeClass('hide');}
     if (tid === "linuxprompts") {$("#linuxprompt_screen").removeClass('hide');}
-
-
 }
 function layoutDesigns(){
     document.title = app_strings.tab_title;
@@ -3093,6 +3213,7 @@ $(document).ready(function () {
     generatePDIblock();
     generateOSPIblock();
     generateUARTblock();
+    generateVersalFlashblock();
     $('.app-title:empty').hide();
       $('#top_menu li').click(function (e) {
 
@@ -3126,6 +3247,7 @@ $(document).ready(function () {
 	upload_clock_files("clock");
 	upload_clock_files("rauc");
 	upload_clock_files("ospi");
+	upload_clock_files("versal");
         if(!listsjson_sc.listfeature.includes("listBIT")){
         	$("#boardinterfacetest").remove();
     	}

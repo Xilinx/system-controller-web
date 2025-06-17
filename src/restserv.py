@@ -238,6 +238,17 @@ class ClockFilesList(Resource):
                     }
                 }
                 return resp_json,200
+            elif req == "versal":
+                versalfiles = os.listdir(app_config["VersalUSBImagePath"]) if os.path.exists(app_config["VersalUSBImagePath"]) else []
+                resp_json = {
+                    "status": "success"
+                    , "data": {
+                        "versal": {
+                            "versal_files": versalfiles
+                        }
+                    }
+                }
+                return resp_json,200
             else:
                 resp_json = {
                     "status": "error",
@@ -601,6 +612,23 @@ class ScriptRunner(Resource):
                  # api should be 
                 # /scriptrunner?cmd=getlogs
                 cmd = app_config["scriptfile"]
+                result = Term.exec_cmd(cmd)
+                resp_jon = {
+                    "status":"success"
+                    ,"data": result.strip().split("\n")[-1]
+                }
+                return resp_jon
+            elif funq == "versalconnect":
+                file = request.args.get('file')
+                cmd = app_config["versalconnectscript"]+file
+                result = Term.exec_cmd(cmd)
+                resp_jon = {
+                    "status":"success"
+                    ,"data": result.strip().split("\n")[-1]
+                }
+                return resp_jon
+            elif funq == "versaldisconnect":
+                cmd = app_config["versaldisconnectscript"]
                 result = Term.exec_cmd(cmd)
                 resp_jon = {
                     "status":"success"

@@ -40,6 +40,8 @@ def allowed_rauc_file(filename):
     return True
 def allowed_ospi_file(filename):
     return True
+def allowed_versal_file(filename):
+    return True
 
 @app.route('/')
 def index():
@@ -49,6 +51,8 @@ def index():
         os.makedirs(app_config["PDIFilePath"])
     if not os.path.exists(app_config["ospiFilepath"]):
         os.makedirs(app_config["ospiFilepath"])
+    if not os.path.exists(app_config["VersalUSBImagePath"]):
+        os.makedirs(app_config["VersalUSBImagePath"])
         
     # returning template.
     generate_gen_sc_file(sc_app_path, app_config)
@@ -347,9 +351,12 @@ if __name__ == '__main__':
             elif req == 'rauc' and file and allowed_rauc_file(file.filename):
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(app_config["raucFilepath"], filename))
-            elif req == 'ospi' and file and allowed_rauc_file(file.filename):
+            elif req == 'ospi' and file and allowed_ospi_file(file.filename):
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(app_config["ospiFilepath"], filename))
+            elif req == 'versal' and file and allowed_versal_file(file.filename):
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app_config["VersalUSBImagePath"], filename))
             else:
                 errors = True
 
