@@ -54,6 +54,34 @@ function loadRefreshData(){
  		pollresp = true;
             }
     });
+    if (app_strings.hasOwnProperty('versal_usb_boot')){
+        $.ajax({
+            url: "/funcreq",
+            type: "GET",
+            data: { "func": "usbstatus", "params":"" },
+            dataType: "json",
+            success: function (res) {
+                if (res.data == 0) {
+                    document.getElementById("versalusbstatus").innerHTML = "Status : <b>Disconnected</b>";
+                    document.getElementById("connectversalbuttonid").style.display = "inline-block";
+                    document.getElementById("disconnectversalbuttonid").style.display = "none";
+                }
+                else if (res.data == 1){
+                    document.getElementById("versalusbstatus").innerHTML = "Status : <b>Connected</b>";
+                    document.getElementById("connectversalbuttonid").style.display = "none";
+                    document.getElementById("disconnectversalbuttonid").style.display = "inline-block";
+                }
+                else{
+                    document.getElementById("versalusbstatus").innerHTML = "Status : -";
+                }
+                pollresp = true;
+            },
+            error: function () {
+                console.log("mthod call");
+                pollresp = true;
+            },
+    });
+    }
 }
 function filleepromdetails(){
     targ = ""
@@ -2719,8 +2747,6 @@ function generateVersalFlashblock() {
     em0.classList.add("details_info");
     em0.id = "versalusbstatus";
     block.append(em0)
-    var es0 = document.createTextNode("Status:");
-    em0.appendChild(es0);
     var em1 = document.createElement("div");
     em1.classList.add("details_info");
     block.append(em1)

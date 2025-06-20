@@ -114,6 +114,14 @@ class FuncReq(Resource):
 
             if len(params):
                 return ReqFunctions.bootmode_set(params[0])
+        if req.startswith('usbstatus'):
+            cmd = app_config["versalstatusscript"]
+            result = Term.exec_cmd(cmd)
+            resp_json = {
+                    "status": "success"
+                    , "data": result
+                }
+            return resp_json
         resp_json = {
             "status":"error"
             ,"data":{"error":"Fail"}
@@ -622,17 +630,26 @@ class ScriptRunner(Resource):
                 file = request.args.get('file')
                 cmd = app_config["versalconnectscript"]+file
                 result = Term.exec_cmd(cmd)
-                resp_jon = {
-                    "status":"success"
-                    ,"data": result.strip().split("\n")[-1]
-                }
-                return resp_jon
+                if "No usb device controllers" in result or "Must specify usb disk image file" in result or "Unable to open" in result:
+                    resp_json = {
+                        "status": "error"
+                        , "data":{
+                            "message": result
+                        }
+                    }
+                    return resp_json
+                else:   
+                    resp_jon = {
+                        "status":"success"
+                        ,"data": result
+                    }
+                    return resp_jon
             elif funq == "versalUSBdisconnect":
                 cmd = app_config["versaldisconnectscript"]
                 result = Term.exec_cmd(cmd)
                 resp_jon = {
                     "status":"success"
-                    ,"data": result.strip().split("\n")[-1]
+                    ,"data": result
                 }
                 return resp_jon
         except Exception as e:
