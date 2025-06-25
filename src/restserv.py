@@ -60,6 +60,7 @@ class BootMode:
                 ,"data":res
             } 
         return resp_json
+
 class ReqFunctions:
     global sc_app_path
     @staticmethod
@@ -67,6 +68,7 @@ class ReqFunctions:
         gtemp_targ = ""
         if len(params) > 0:
             gtemp_targ = params[0]
+        status_keys = request.args.getlist("status")
         try:
             result = {"temp":"-"}
             stat = "error"
@@ -75,6 +77,9 @@ class ReqFunctions:
                 response = Term.exec_cmd(sc_app_path+" -c gettemp -t "+gtemp_targ)
                 result = parse.temperature(response)
             result["active_bootmode"] = BootMode.getActiveBootMode()
+            if "usbstatus" in status_keys:
+                usb_status_result = Term.exec_cmd(app_config["versalstatusscript"]).strip()
+                result["usbstatus"] = usb_status_result
             resp_json = {
                 "status":stat
                 ,"data":result
@@ -114,14 +119,6 @@ class FuncReq(Resource):
 
             if len(params):
                 return ReqFunctions.bootmode_set(params[0])
-        if req.startswith('usbstatus'):
-            cmd = app_config["versalstatusscript"]
-            result = Term.exec_cmd(cmd)
-            resp_json = {
-                    "status": "success"
-                    , "data": result
-                }
-            return resp_json
         resp_json = {
             "status":"error"
             ,"data":{"error":"Fail"}
@@ -647,15 +644,24 @@ class ScriptRunner(Resource):
             elif funq == "versalUSBdisconnect":
                 cmd = app_config["versaldisconnectscript"]
                 result = Term.exec_cmd(cmd)
-                resp_jon = {
-                    "status":"success"
-                    ,"data": result
-                }
-                return resp_jon
+                if "No such file or directory" in result or "Must specify usb disk image file" in result or "Unable to open" in result:
+                    resp_json = {
+                        "status": "error"
+                        , "data":{
+                            "message": result
+                        }
+                    }
+                    return resp_json
+                else:   
+                    resp_jon = {
+                        "status":"success"
+                        ,"data": result
+                    }
+                    return resp_jon
         except Exception as e:
             resp_json = {
                 "status":"error"
-                ,"data":{"error":"%s"%e}
+                ,"data":{"message":"%s"%e}
             }
             return resp_json,500
 class InstallBoard(Resource):

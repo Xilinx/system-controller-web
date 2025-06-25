@@ -20,10 +20,15 @@ function showPage() {
 * API calls and rendering data to html pages.
 */
 function loadRefreshData(){
+    var ajaxData =  {
+        func: "poll",
+        params: "" + listsjson_sc.listtemp,
+        status: app_strings.hasOwnProperty("versal_usb_boot") ? "usbstatus" : ""
+    };
     $.ajax({
             url: "/funcreq",
             type: 'GET',
-            data:{"func":"poll","params":""+listsjson_sc.listtemp},
+            data:ajaxData,
             dataType: 'json',
             success: function (res){
                 var el = document.getElementById("home_board_temp_id");
@@ -45,8 +50,23 @@ function loadRefreshData(){
                     }
                 } else {
                 document.getElementById("home_board_temp_id").innerHTML = "NA";
-		}
-                document.getElementById("active_bootmode").innerHTML = "Active:<b>"+res.data.active_bootmode+"</b>"
+		        }
+                document.getElementById("active_bootmode").innerHTML = "Active:<b>"+res.data.active_bootmode+"</b>";
+                if (app_strings.hasOwnProperty("versal_usb_boot")){
+                    if (res.data.usbstatus == 0) {
+                        document.getElementById("versalusbstatus").innerHTML = "Status : <b>Disconnected</b>";
+                        document.getElementById("connectversalbuttonid").style.display = "inline-block";
+                        document.getElementById("disconnectversalbuttonid").style.display = "none";
+                    }
+                    else if (res.data.usbstatus == 1){
+                        document.getElementById("versalusbstatus").innerHTML = "Status : <b>Connected</b>";
+                        document.getElementById("connectversalbuttonid").style.display = "none";
+                        document.getElementById("disconnectversalbuttonid").style.display = "inline-block";
+                    }
+                    else{
+                        document.getElementById("versalusbstatus").innerHTML = "Status : -";
+                    }
+                }
  		pollresp = true;
             },
             error: function(){
@@ -54,34 +74,6 @@ function loadRefreshData(){
  		pollresp = true;
             }
     });
-    if (app_strings.hasOwnProperty('versal_usb_boot')){
-        $.ajax({
-            url: "/funcreq",
-            type: "GET",
-            data: { "func": "usbstatus", "params":"" },
-            dataType: "json",
-            success: function (res) {
-                if (res.data == 0) {
-                    document.getElementById("versalusbstatus").innerHTML = "Status : <b>Disconnected</b>";
-                    document.getElementById("connectversalbuttonid").style.display = "inline-block";
-                    document.getElementById("disconnectversalbuttonid").style.display = "none";
-                }
-                else if (res.data == 1){
-                    document.getElementById("versalusbstatus").innerHTML = "Status : <b>Connected</b>";
-                    document.getElementById("connectversalbuttonid").style.display = "none";
-                    document.getElementById("disconnectversalbuttonid").style.display = "inline-block";
-                }
-                else{
-                    document.getElementById("versalusbstatus").innerHTML = "Status : -";
-                }
-                pollresp = true;
-            },
-            error: function () {
-                console.log("mthod call");
-                pollresp = true;
-            },
-    });
-    }
 }
 function filleepromdetails(){
     targ = ""
@@ -2816,10 +2808,14 @@ function generateVersalFlashblock() {
             dataType: 'json',
             data: { "cmd": "versalUSBconnect", "file": versalwic },
             success: function (res) {
-                showSuccessTooltip("versalstatus", res.status, versalID)
+                if (res.status === 'error'){
+                     showFailureTooltip("versalstatus", res.data.message, versalID);
+                }else{
+                    showSuccessTooltip("versalstatus", res.status, versalID);
+                }
             },
-            error: function () {
-                showFailureTooltip("versalstatus", res.status, versalID);
+            error: function (res) {
+                showFailureTooltip("versalstatus", res.data.message, versalID);
             }
         });
     });
@@ -2840,10 +2836,14 @@ function generateVersalFlashblock() {
             dataType: 'json',
             data: { "cmd": "versalUSBdisconnect"},
             success: function (res) {
-                showSuccessTooltip("versalstatus", res.status, versalID)
+                 if (res.status === 'error'){
+                     showFailureTooltip("versalstatus", res.data.message, versalID);
+                }else{
+                    showSuccessTooltip("versalstatus", res.status, versalID);
+                }
             },
-            error: function () {
-                showFailureTooltip("versalstatus", res.status, versalID);
+            error: function (res) {
+                showFailureTooltip("versalstatus", res.data.message, versalID);
             }
         });
     });
