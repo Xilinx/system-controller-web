@@ -611,7 +611,6 @@ class ScriptRunner(Resource):
                     cmd += " -e"
                 if file:
                     cmd += file
-                    print("cmd",cmd)
                 result = SysFactory.exec_cmd(cmd,SysFactory.SCRIPT,app_config["ospirunstatusfile"])
                 if "Verification successful" in result:
                     resp_json = {
