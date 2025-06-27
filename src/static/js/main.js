@@ -2529,6 +2529,7 @@ function generateOSPIblock(){
     var ospipopupmain = document.createElement('div');
     ospipopupmain.className = 'popup-background';
     ospipopupmain.style.display = "block";
+    ospipopupmain.setAttribute('id', 'popupmain');
 
     var popup = document.createElement('div');
     popup.setAttribute('id', 'popup');
@@ -2582,13 +2583,6 @@ function generateOSPIblock(){
     m.id = "OSPIselectionOption";
     m.classList.add("dash_bm");
     em2.appendChild(m);
-    var button2 = document.createElement("input");
-    button2.classList.add("buttons");
-    button2.classList.add("dash_bm");
-    button2.id="loadospibuttonid";
-    button2.setAttribute("value", "Load");
-    button2.setAttribute("type", "button");
-    em2.appendChild(button2);
 
     var smload1 = document.createElement("div");
     smload1.id="loadospiloadid";
@@ -2642,22 +2636,79 @@ function generateOSPIblock(){
         document.getElementById("loadospiloadid").className = "";
         document.getElementById("loadospistatus").innerHTML = "";
     });
+    
+    var em3 = document.createElement("p");
+    em3.classList.add("details_info");
+    em3.id="loadospi";
+    block.append(em3);
+    var label1 = document.createElement("label");
+    label1.textContent = "Verify";
+    label1.style.margin = "0 20px 0 5px";
+    var checkBox1 = document.createElement("input");
+    checkBox1.id="verifyospibuttonid";
+    checkBox1.setAttribute("type", "checkbox");
+    em3.appendChild(checkBox1);
+    em3.appendChild(label1);
+    
+    var label2 = document.createElement("label");
+    label2.textContent = "Program";
+    label2.style.margin = "0 20px 0 5px";
+    var checkBox2 = document.createElement("input");
+    checkBox2.id="programospibuttonid";
+    checkBox2.setAttribute("type", "checkbox");
+    em3.appendChild(checkBox2);
+    em3.appendChild(label2);
+    
+    var em4 = document.createElement("p");
+    em4.classList.add("details_info");
+    em4.id="applyospi";
+    block.append(em4);
+    var button3 = document.createElement("input");
+    button3.classList.add("buttons");
+    button3.classList.add("dash_bm");
+    button3.style.margin = "0px";
+    button3.id="applyospibuttonid";
+    button3.setAttribute("value", "Apply");
+    button3.setAttribute("type", "button");
+    em4.appendChild(button3);
 
-    $('#loadospibuttonid').click(function (e) {
+    var button4 = document.createElement("input");
+    button4.classList.add("buttons");
+    button4.classList.add("dash_bm");
+    button4.id="eraseospibuttonid";
+    button4.setAttribute("value", "Erase OSPI");
+    button4.setAttribute("type", "button");
+    em4.appendChild(button4);
+
+    $('#applyospibuttonid').click(function (e) {
         popupMessage.innerHTML = "<b style='display: flex; justify-content: center; align-items: center;'>Initializing... Please wait</b>";
         closeButton.disabled = true;
         document.body.appendChild(ospipopupmain);
+        var verifyChecked = document.getElementById("verifyospibuttonid").checked;
+        var programChecked = document.getElementById("programospibuttonid").checked;
+        if (!verifyChecked && !programChecked) {
+            alert("Please select an option (Verify and/or Program)");
+            document.getElementById("popupmain").style.display = "none";
+        return;
+        }
         var pollInterval = setInterval(Timer, 1000);
         document.getElementById("loadospistatus").innerHTML = "";
         document.getElementById("loadospiloadid").className = "";
         document.getElementById("loadospiloadid").classList.add("ministatusloading");
-        var ospifile = $('#OSPIselectionOption').val().split("\t")[0]
+        var ospifile = $('#OSPIselectionOption').val().split("\t")[0];
+        var ospidata = {"cmd": "ospiboot","file": " -i /data/OSPI/" + ospifile};
+        if (verifyChecked) {
+        ospidata.verify = "true";
+        }
+        if (programChecked) {
+            ospidata.program = "true";
+        }
         pollactive = true;
         $.ajax({
             url: "/scriptrunner",
             type: 'GET',
             dataType: 'json',
-            data: { "cmd": "ospiboot", "file": ospifile },
+            data: ospidata,
             success: function (res) {
                 clearInterval(pollInterval);
                 document.getElementById("loadospiloadid").className = "";
@@ -2671,6 +2722,58 @@ function generateOSPIblock(){
                 } else {
                     document.getElementById("loadospiloadid").classList.add("tooltip");
                     document.getElementById("loadospistatus").innerHTML = "Success";
+                    document.getElementById("loadospiloadid").classList.add("ministatussuccess");
+                    closeButton.disabled = false;
+                    ospiSuccess();
+                }
+            },
+            error: function () {
+                pollactive = false;
+                clearInterval(pollInterval);
+                document.body.appendChild(ospipopupmain);
+                document.getElementById("loadospiloadid").className = "";
+                document.getElementById("loadospiloadid").classList.add("ministatusfail");
+                document.getElementById("loadospiloadid").classList.add("tooltip");
+                document.getElementById("loadospistatus").innerHTML = ErrorStatus;
+                popupMessage.innerHTML = ErrorStatus;
+                closeButton.disabled = false;
+            }
+        });
+    });
+    $('#eraseospibuttonid').click(function (e) {
+        popupMessage.innerHTML = "<b style='display: flex; justify-content: center; align-items: center;'>Erasing OSPI... Please wait</b>";
+        closeButton.disabled = true;
+        document.body.appendChild(ospipopupmain);
+
+        var pollInterval = setInterval(Timer, 1000);
+        document.getElementById("loadospistatus").innerHTML = "";
+        document.getElementById("loadospiloadid").className = "";
+        document.getElementById("loadospiloadid").classList.add("ministatusloading");
+
+        var ospidata = {
+            "cmd": "ospiboot",
+            "erase": "true"
+        };
+
+        pollactive = true;
+        $.ajax({
+            url: "/scriptrunner",
+            type: 'GET',
+            dataType: 'json',
+            data: ospidata,
+            success: function (res) {
+                clearInterval(pollInterval);
+                document.getElementById("loadospiloadid").className = "";
+                if (res.status === 'error') {
+                    pollactive = false;
+                    document.getElementById("loadospiloadid").classList.add("tooltip");
+                    document.getElementById("loadospistatus").innerHTML = res.data.message;
+                    document.getElementById("loadospiloadid").classList.add("ministatusfail");
+                    popupMessage.innerHTML = ErrorStatus;
+                    closeButton.disabled = false;
+                } else {
+                    document.getElementById("loadospiloadid").classList.add("tooltip");
+                    document.getElementById("loadospistatus").innerHTML = "Erase Success";
                     document.getElementById("loadospiloadid").classList.add("ministatussuccess");
                     closeButton.disabled = false;
                     ospiSuccess();

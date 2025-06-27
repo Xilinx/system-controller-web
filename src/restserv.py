@@ -596,8 +596,22 @@ class ScriptRunner(Resource):
                     pass
                 # api should be 
                 # /scriptrunner?cmd=ospiboot,file=<ospifile>
+                verify_flag = request.args.get('verify')
+                program_flag = request.args.get('program')
+                erase_flag = request.args.get('erase')
                 file = request.args.get('file')
-                cmd = app_config["ospirunscript"]+file
+                script = app_config["ospirunscript"]
+
+                cmd = script
+                if verify_flag:
+                    cmd += " -v"
+                if program_flag:
+                    cmd += " -p"
+                if erase_flag:
+                    cmd += " -e"
+                if file:
+                    cmd += file
+                    print("cmd",cmd)
                 result = SysFactory.exec_cmd(cmd,SysFactory.SCRIPT,app_config["ospirunstatusfile"])
                 if "Verification successful" in result:
                     resp_json = {
