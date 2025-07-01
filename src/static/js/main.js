@@ -2574,7 +2574,6 @@ function generateOSPIblock(){
     var em2 = document.createElement("p");
     em2.classList.add("details_info");
 //    em2.style.borderBottom = 'none';
-    em2.id="loadospi";
     block.append(em2);
 
     var es2 = document.createTextNode(" Load OSPI:");
@@ -2583,16 +2582,6 @@ function generateOSPIblock(){
     m.id = "OSPIselectionOption";
     m.classList.add("dash_bm");
     em2.appendChild(m);
-
-    var smload1 = document.createElement("div");
-    smload1.id="loadospiloadid";
-    smload1.style.display = 'inline-block';
-    smload1.style.marginLeft = '15px';
-    em2.append(smload1);
-    var tip1=document.createElement("a");
-    tip1.id="loadospistatus";
-    tip1.classList.add("tooltiptext");
-    smload1.append(tip1);
 
     var ErrorStatus = "OSPI Flash Failure: The OSPI flash process has encountered an error. Please try the following steps to resolve the issue:\
 <br>&emsp;1.Retry the flashing process.\
@@ -2639,30 +2628,28 @@ function generateOSPIblock(){
     
     var em3 = document.createElement("p");
     em3.classList.add("details_info");
-    em3.id="loadospi";
+    em3.id="applyospi";
     block.append(em3);
-    var label1 = document.createElement("label");
-    label1.textContent = "Verify";
-    label1.style.margin = "0 20px 0 5px";
     var checkBox1 = document.createElement("input");
     checkBox1.id="verifyospibuttonid";
     checkBox1.setAttribute("type", "checkbox");
+    var label1 = document.createElement("label");
+    label1.setAttribute("for", checkBox1.id);
+    label1.textContent = "Verify";
+    label1.style.margin = "0 20px 0 5px";
     em3.appendChild(checkBox1);
     em3.appendChild(label1);
     
-    var label2 = document.createElement("label");
-    label2.textContent = "Program";
-    label2.style.margin = "0 20px 0 5px";
     var checkBox2 = document.createElement("input");
     checkBox2.id="programospibuttonid";
     checkBox2.setAttribute("type", "checkbox");
-    em3.appendChild(checkBox2);
-    em3.appendChild(label2);
+    checkBox2.setAttribute("name", "Program");
     
-    var em4 = document.createElement("p");
-    em4.classList.add("details_info");
-    em4.id="applyospi";
-    block.append(em4);
+    var label2 = document.createElement("label");
+    label2.setAttribute("for", checkBox2.id);
+    label2.style.margin = "0 20px 0 5px";
+    label2.textContent = "Program"; 
+
     var button3 = document.createElement("input");
     button3.classList.add("buttons");
     button3.classList.add("dash_bm");
@@ -2670,15 +2657,27 @@ function generateOSPIblock(){
     button3.id="applyospibuttonid";
     button3.setAttribute("value", "Apply");
     button3.setAttribute("type", "button");
-    em4.appendChild(button3);
+    em3.appendChild(checkBox2);
+    em3.appendChild(label2);
+    em3.appendChild(button3);
+    
+    var em4 = document.createElement("p");
+    em4.classList.add("details_info");
+    em4.id="eraseospi";
+    var es = document.createTextNode("Erase OSPI:");
+    em4.appendChild(es);
+    block.append(em4);
+    
 
     var button4 = document.createElement("input");
     button4.classList.add("buttons");
     button4.classList.add("dash_bm");
     button4.id="eraseospibuttonid";
-    button4.setAttribute("value", "Erase OSPI");
+    button4.setAttribute("value", "Erase");
     button4.setAttribute("type", "button");
     em4.appendChild(button4);
+
+    var applyospiID = document.getElementById("applyospi");
 
     $('#applyospibuttonid').click(function (e) {
         popupMessage.innerHTML = "<b style='display: flex; justify-content: center; align-items: center;'>Initializing... Please wait</b>";
@@ -2692,9 +2691,7 @@ function generateOSPIblock(){
         return;
         }
         var pollInterval = setInterval(Timer, 1000);
-        document.getElementById("loadospistatus").innerHTML = "";
-        document.getElementById("loadospiloadid").className = "";
-        document.getElementById("loadospiloadid").classList.add("ministatusloading");
+        showLoadingTooltip("applyospistatus", applyospiID);
         var ospifile = $('#OSPIselectionOption').val().split("\t")[0];
         var ospidata = {"cmd": "ospiboot","file": " -i /data/OSPI/" + ospifile};
         if (verifyChecked) {
@@ -2711,18 +2708,13 @@ function generateOSPIblock(){
             data: ospidata,
             success: function (res) {
                 clearInterval(pollInterval);
-                document.getElementById("loadospiloadid").className = "";
                 if (res.status === 'error') {
                     pollactive = false;
-                    document.getElementById("loadospiloadid").classList.add("tooltip");
-                    document.getElementById("loadospistatus").innerHTML = res.data.message;
-                    document.getElementById("loadospiloadid").classList.add("ministatusfail");
+                    showFailureTooltip("applyospistatus",res.data.message,applyospiID);
                     popupMessage.innerHTML = ErrorStatus;
                     closeButton.disabled = false;
                 } else {
-                    document.getElementById("loadospiloadid").classList.add("tooltip");
-                    document.getElementById("loadospistatus").innerHTML = "Success";
-                    document.getElementById("loadospiloadid").classList.add("ministatussuccess");
+                    showSuccessTooltip("applyospistatus", "Success", applyospiID);
                     closeButton.disabled = false;
                     ospiSuccess();
                 }
@@ -2731,24 +2723,20 @@ function generateOSPIblock(){
                 pollactive = false;
                 clearInterval(pollInterval);
                 document.body.appendChild(ospipopupmain);
-                document.getElementById("loadospiloadid").className = "";
-                document.getElementById("loadospiloadid").classList.add("ministatusfail");
-                document.getElementById("loadospiloadid").classList.add("tooltip");
-                document.getElementById("loadospistatus").innerHTML = ErrorStatus;
+                showFailureTooltip("applyospistatus", ErrorStatus, applyospiID);
                 popupMessage.innerHTML = ErrorStatus;
                 closeButton.disabled = false;
             }
         });
     });
+    var eraseospiID = document.getElementById("eraseospi");
     $('#eraseospibuttonid').click(function (e) {
         popupMessage.innerHTML = "<b style='display: flex; justify-content: center; align-items: center;'>Erasing OSPI... Please wait</b>";
         closeButton.disabled = true;
         document.body.appendChild(ospipopupmain);
 
         var pollInterval = setInterval(Timer, 1000);
-        document.getElementById("loadospistatus").innerHTML = "";
-        document.getElementById("loadospiloadid").className = "";
-        document.getElementById("loadospiloadid").classList.add("ministatusloading");
+        showLoadingTooltip("eraseospistatus", eraseospiID);
 
         var ospidata = {
             "cmd": "ospiboot",
@@ -2763,18 +2751,13 @@ function generateOSPIblock(){
             data: ospidata,
             success: function (res) {
                 clearInterval(pollInterval);
-                document.getElementById("loadospiloadid").className = "";
                 if (res.status === 'error') {
                     pollactive = false;
-                    document.getElementById("loadospiloadid").classList.add("tooltip");
-                    document.getElementById("loadospistatus").innerHTML = res.data.message;
-                    document.getElementById("loadospiloadid").classList.add("ministatusfail");
+                    showFailureTooltip("eraseospistatus",res.data.message,eraseospiID);
                     popupMessage.innerHTML = ErrorStatus;
                     closeButton.disabled = false;
                 } else {
-                    document.getElementById("loadospiloadid").classList.add("tooltip");
-                    document.getElementById("loadospistatus").innerHTML = "Erase Success";
-                    document.getElementById("loadospiloadid").classList.add("ministatussuccess");
+                    showSuccessTooltip("eraseospistatus", "Success", eraseospiID);
                     closeButton.disabled = false;
                     ospiSuccess();
                 }
@@ -2783,10 +2766,7 @@ function generateOSPIblock(){
                 pollactive = false;
                 clearInterval(pollInterval);
                 document.body.appendChild(ospipopupmain);
-                document.getElementById("loadospiloadid").className = "";
-                document.getElementById("loadospiloadid").classList.add("ministatusfail");
-                document.getElementById("loadospiloadid").classList.add("tooltip");
-                document.getElementById("loadospistatus").innerHTML = ErrorStatus;
+                showFailureTooltip("eraseospistatus", ErrorStatus, eraseospiID);
                 popupMessage.innerHTML = ErrorStatus;
                 closeButton.disabled = false;
             }
