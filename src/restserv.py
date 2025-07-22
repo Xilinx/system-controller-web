@@ -612,7 +612,7 @@ class ScriptRunner(Resource):
                 if file:
                     cmd += file
                 result = SysFactory.exec_cmd(cmd,SysFactory.SCRIPT,app_config["ospirunstatusfile"])
-                if "Verification successful" in result:
+                if "Script completed" in result:
                     resp_json = {
                         "status": "success"
                         , "data": result

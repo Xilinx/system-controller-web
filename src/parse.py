@@ -48,7 +48,7 @@ or component == "geteeprom" or component == "getvoltage"):
     def dashboard_eeprom(self,data):
         # Parse eeprom data for details
         pass
-    def parse_ospi_response(self,data):
+    def parse_program_verify_ospi_response(self,data):
         dict = {
             "Initializing Update":"In progress"
             ,"Booting device over JTAG (step 1/4)":""
@@ -97,6 +97,115 @@ or component == "geteeprom" or component == "getvoltage"):
         # for key, value in dict.items():
         #     html_table += '  <tr><td>{}</td><td>{}</td></tr>\n'.format(key, value)
         # html_table += '</table>'
+        return dict
+    def parse_verify_ospi_response(self,data):
+        dict = {
+            "Initializing Update":"In progress"
+            ,"Booting device over JTAG (step 1/3)":""
+            ,"Booting Status":""
+            ,"Downloading flash image to DDR (step 2/3)":""
+            ,"Download status":""
+            ,"content download to DDR finished.":""
+            ,"Verifying (step 3/3)":""
+        }
+        inprog_key = ""
+        for line in data.split('\n'):
+            if "Booting device over JTAG (step 1/3)" in line:
+                dict["Initializing Update"] = "Done"
+                dict["Booting device over JTAG (step 1/3)"] = "In progress"
+                inprog_key = "Booting Status"
+                continue
+            if "Downloading flash image to DDR (step 2/3)" in line:
+                dict["Booting device over JTAG (step 1/3)"] = "Done"
+                dict["Downloading flash image to DDR (step 2/3)"] = "In progress"
+                dict["Booting Status"] = "Done"
+                inprog_key = "Download status"
+                continue
+            if "content download to DDR finished" in line:
+                dict["Downloading flash image to DDR (step 2/3)"] = "Done"
+                dict["content download to DDR finished"] = "Done"
+                dict["Verifying (step 3/3)"] = "In progress"
+                dict["Flashing"] = "Done"
+                inprog_key = ""
+                continue
+            if "Verification successful" in line:
+                dict["Verifying (step 3/3)"] = "Done"
+                continue
+            percentage_match = re.search(r'(\d{1,3})%', line)
+            if percentage_match and len(inprog_key):
+                dict[inprog_key] = percentage_match.group()
+        return dict
+    def parse_program_ospi_response(self,data):
+        dict = {
+            "Initializing Update":"In progress"
+            ,"Booting device over JTAG (step 1/4)":""
+            ,"Booting Status":""
+            ,"Downloading flash image to DDR (step 2/4)":""
+            ,"Download status":""
+            ,"SPI Erasing and programming...this could take up to 5 minutes (step 3/4)":""
+            ,"Flashing":""
+            ,"SPI written successfully.":""
+        }
+        inprog_key = ""
+        for line in data.split('\n'):
+            if "Booting device over JTAG (step 1/3)" in line:
+                dict["Initializing Update"] = "Done"
+                dict["Booting device over JTAG (step 1/3)"] = "In progress"
+                inprog_key = "Booting Status"
+                continue
+            if "Downloading flash image to DDR (step 2/3)" in line:
+                dict["Booting device over JTAG (step 1/3)"] = "Done"
+                dict["Downloading flash image to DDR (step 2/3)"] = "In progress"
+                dict["Booting Status"] = "Done"
+                inprog_key = "Download status"
+                continue
+            if "SPI Erasing and programming...this could take up to 5 minutes (step 3/3)" in line:
+                dict["Downloading flash image to DDR (step 2/3)"] = "Done"
+                dict["SPI Erasing and programming...this could take up to 5 minutes (step 3/3)"] = "In progress"
+                dict["Download status"] = "Done"
+                inprog_key = "Flashing"
+                continue
+            if "SPI written successfully." in line:
+                dict["SPI Erasing and programming...this could take up to 5 minutes (step 3/3)"] = "Done"
+                dict["SPI written successfully."] = "Done"
+                dict["Flashing"] = "Done"
+                inprog_key = ""
+                continue
+            percentage_match = re.search(r'(\d{1,3})%', line)
+            if percentage_match and len(inprog_key):
+                dict[inprog_key] = percentage_match.group()
+        return dict
+    def parse_erase_ospi_response(self,data):
+        dict = {
+            "Initializing Update":"In progress"
+            ,"Booting device over JTAG (step 1/2)":""
+            ,"Booting Status":""
+            ,"Erase Flash (step 2/2)":""
+            ,"Erasing":""
+            ,"SPI Erasing and programming...this could take up to 5 minutes (step 3/4)":""
+            ,"Flashing":""
+            ,"SPI written successfully.":""
+            ,"Verifying (step 4/4)":""
+        }
+        inprog_key = ""
+        for line in data.split('\n'):
+            if "Booting device over JTAG (step 1/2)" in line:
+                dict["Initializing Update"] = "Done"
+                dict["Booting device over JTAG (step 1/2)"] = "In progress"
+                inprog_key = "Booting Status"
+                continue
+            if "Erase Flash (step 2/2)" in line:
+                dict["Booting device over JTAG (step 1/2)"] = "Done"
+                dict["Erase Flash (step 2/2)"] = "In progress"
+                dict["Booting Status"] = "Done"
+                inprog_key = "Erasing"
+                continue
+            if "Erase successful" in line:
+                dict["Erase Flash (step 2/2)"] = "Done"
+                continue
+            percentage_match = re.search(r'(\d{1,3})%', line)
+            if percentage_match and len(inprog_key):
+                dict[inprog_key] = percentage_match.group()
         return dict
 
 import json
