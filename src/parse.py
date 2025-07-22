@@ -105,7 +105,7 @@ or component == "geteeprom" or component == "getvoltage"):
             ,"Booting Status":""
             ,"Downloading flash image to DDR (step 2/3)":""
             ,"Download status":""
-            ,"content download to DDR finished.":""
+            ,"content download to DDR finished":""
             ,"Verifying (step 3/3)":""
         }
         inprog_key = ""
@@ -125,7 +125,7 @@ or component == "geteeprom" or component == "getvoltage"):
                 dict["Downloading flash image to DDR (step 2/3)"] = "Done"
                 dict["content download to DDR finished"] = "Done"
                 dict["Verifying (step 3/3)"] = "In progress"
-                dict["Flashing"] = "Done"
+                dict["Download status"] = "Done"
                 inprog_key = ""
                 continue
             if "Verification successful" in line:
@@ -138,11 +138,11 @@ or component == "geteeprom" or component == "getvoltage"):
     def parse_program_ospi_response(self,data):
         dict = {
             "Initializing Update":"In progress"
-            ,"Booting device over JTAG (step 1/4)":""
+            ,"Booting device over JTAG (step 1/3)":""
             ,"Booting Status":""
-            ,"Downloading flash image to DDR (step 2/4)":""
+            ,"Downloading flash image to DDR (step 2/3)":""
             ,"Download status":""
-            ,"SPI Erasing and programming...this could take up to 5 minutes (step 3/4)":""
+            ,"SPI Erasing and programming...this could take up to 5 minutes (step 3/3)":""
             ,"Flashing":""
             ,"SPI written successfully.":""
         }
@@ -182,10 +182,6 @@ or component == "geteeprom" or component == "getvoltage"):
             ,"Booting Status":""
             ,"Erase Flash (step 2/2)":""
             ,"Erasing":""
-            ,"SPI Erasing and programming...this could take up to 5 minutes (step 3/4)":""
-            ,"Flashing":""
-            ,"SPI written successfully.":""
-            ,"Verifying (step 4/4)":""
         }
         inprog_key = ""
         for line in data.split('\n'):
@@ -202,6 +198,7 @@ or component == "geteeprom" or component == "getvoltage"):
                 continue
             if "Erase successful" in line:
                 dict["Erase Flash (step 2/2)"] = "Done"
+                dict["Erasing"] = "Done"
                 continue
             percentage_match = re.search(r'(\d{1,3})%', line)
             if percentage_match and len(inprog_key):
