@@ -267,7 +267,64 @@ class ClockFilesList(Resource):
             }
             print('e',e)
             return resp_json,500
-
+class RemoveFile(Resource):
+    def delete(self):
+        try:
+            func = request.args.get('func')
+            filename = request.args.get('filename')
+            
+            if not func or not filename:
+                return {
+                    "status": "error",
+                    "data": {"error": "Missing required parameters: func and filename"}
+                }, 400
+            
+            # Determine the file path based on function type
+            file_path = None
+            
+            if func == "ospi":
+                file_path = os.path.join(app_config["ospiFilepath"], filename)
+            elif func == "pdi":
+                file_path = os.path.join(app_config["PDIFilePath"], filename)
+            elif func == "rauc":
+                file_path = os.path.join(app_config["raucFilepath"], filename)
+            elif func == "versal":
+                file_path = os.path.join(app_config["VersalUSBImagePath"], filename)
+            elif func == "clock":
+                # For clock files, only allow deletion from uploaded files
+                file_path = os.path.join(app_config["uploaded_files_path"], filename)
+                # Check for different extensions
+                extensions = ['.tcs', '.txt', '.bin']
+                for ext in extensions:
+                    if os.path.exists(file_path + ext):
+                        file_path = file_path + ext
+                        break
+            else:
+                return {
+                    "status": "error",
+                    "data": {"error": "Invalid function type"}
+                }, 400
+            
+            # Check if file exists
+            if not file_path or not os.path.exists(file_path):
+                return {
+                    "status": "error",
+                    "data": {"error": f"File '{filename}' not found"}
+                }, 404
+            
+            # Remove the file
+            os.remove(file_path)
+            
+            return {
+                "status": "success",
+                "data": {"message": f"File '{filename}' removed successfully"}
+            }, 200
+            
+        except Exception as e:
+            return {
+                "status": "error",
+                "data": {"error": f"Server error: {str(e)}"}
+            }, 500
 class MultiCmdQuery(Resource):
     def get(self,):
         try:
@@ -579,6 +636,7 @@ class StatusRequest(Resource):
                     , "data": {"message":result}
                 }
                 return resp_json
+
         except Exception as e:
             resp_json = {
                 "status": "error"
@@ -742,4 +800,3 @@ class RaucUpdate(Resource):
                 , "data": {"error": "%s" % e}
             }
             return resp_json, 500
-

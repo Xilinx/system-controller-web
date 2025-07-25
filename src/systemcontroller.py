@@ -75,6 +75,7 @@ api.add_resource(RaftQuery,"/raftquery")
 api.add_resource(MultiCmdQuery,"/multicmdquery")
 api.add_resource(EEPROMDetails,"/eeprom_details")
 api.add_resource(ClockFilesList,"/clock_files")
+api.add_resource(RemoveFile, '/removefile')
 api.add_resource(Banner,"/notif")
 api.add_resource(ScriptRunner, "/scriptrunner")
 api.add_resource(StatusRequest, "/status")
@@ -128,7 +129,6 @@ def generate_gen_sc_file(sc_app_path, app_config):
             finStr = finStr + ","
         finStr = finStr + '"list' + k + '"'
     f.write('"listfeature":[' + finStr + "],\n")
-
     lisj = app_config["config_sc_list_cmds"]
     for ind, k in enumerate(listfeature):
         ke = "list" + k

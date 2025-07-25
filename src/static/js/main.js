@@ -1798,6 +1798,238 @@ function generateBITUI() {
     });
 
 }
+//remove the file from the dropdown
+function createRemoveButton(selectElementId, fileType) {
+    var removeButton = document.createElement("input");
+    removeButton.classList.add("buttons");
+    removeButton.classList.add("dash_bm");
+    removeButton.style.marginLeft = "10px";
+    removeButton.setAttribute("value", "Remove files");
+    removeButton.setAttribute("type", "button");
+    
+    removeButton.addEventListener('click', function() {
+        var selectElement = document.getElementById(selectElementId);
+        
+        if (selectElement.options.length === 0) {
+            alert("No files available to remove");
+            return;
+        }
+
+        // Create popup for file selection with checkboxes
+        var popupBackground = document.createElement('div');
+        popupBackground.className = 'popup-background';
+        popupBackground.style.display = "block";
+
+        var popup = document.createElement('div');
+        popup.className = 'popup-content';
+        popup.style.zoom = "normal";
+        popup.style.maxHeight = "70vh";
+        popup.style.overflow = "auto";
+        popup.style.width = "50%";
+
+        var popupHeader = document.createElement('div');
+        popupHeader.className = 'popup-header';
+
+        var heading = document.createElement('h2');
+        heading.style.textAlign = 'center';
+        heading.textContent = 'Select Files to Delete (' + fileType.toUpperCase() + ')';
+        popupHeader.appendChild(heading);
+
+        var popupMessage = document.createElement('div');
+        popupMessage.style.padding = "20px";
+
+        // Select All checkbox
+        var selectAllDiv = document.createElement('div');
+        selectAllDiv.style.paddingBottom = "10px";
+
+        var selectAllCheckbox = document.createElement('input');
+        selectAllCheckbox.type = 'checkbox';
+        selectAllCheckbox.id = 'selectAll' + fileType;
+        selectAllCheckbox.style.marginRight = "10px";
+
+        var selectAllLabel = document.createElement('label');
+        selectAllLabel.setAttribute('for', 'selectAll' + fileType);
+        selectAllLabel.textContent = 'Select All';
+        selectAllLabel.style.fontWeight = "bold";
+        selectAllLabel.style.cursor = "pointer";
+
+        selectAllDiv.appendChild(selectAllCheckbox);
+        selectAllDiv.appendChild(selectAllLabel);
+        popupMessage.appendChild(selectAllDiv);
+
+        // File list with checkboxes
+        var fileListDiv = document.createElement('div');
+        fileListDiv.style.maxHeight = "40vh";
+        fileListDiv.style.overflow = "auto";
+
+        for (var i = 0; i < selectElement.options.length; i++) {
+            var fileDiv = document.createElement('div');
+            fileDiv.style.padding = "8px";
+
+            var checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.value = selectElement.options[i].value;
+            checkbox.className = 'file-checkbox';
+            checkbox.id = 'file_' + i + '_' + fileType;
+            checkbox.style.marginRight = "10px";
+
+            var label = document.createElement('label');
+            label.setAttribute('for', 'file_' + i + '_' + fileType);
+            label.textContent = selectElement.options[i].value;
+            label.style.cursor = "pointer";
+            label.style.userSelect = "none";
+
+            fileDiv.appendChild(checkbox);
+            fileDiv.appendChild(label);
+            fileListDiv.appendChild(fileDiv);
+        }
+
+        popupMessage.appendChild(fileListDiv);
+
+        // Select All functionality
+        function updateSelectAllState() {
+            var checkboxes = popup.querySelectorAll('.file-checkbox');
+            var checkedCount = popup.querySelectorAll('.file-checkbox:checked').length;
+            selectAllCheckbox.checked = checkedCount === checkboxes.length;
+            selectAllCheckbox.indeterminate = checkedCount > 0 && checkedCount < checkboxes.length;
+        }
+
+        selectAllCheckbox.addEventListener('change', function() {
+            var checkboxes = popup.querySelectorAll('.file-checkbox');
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
+        });
+
+        // Update select all state when individual checkboxes change
+        fileListDiv.addEventListener('change', function(e) {
+            if (e.target.className === 'file-checkbox') {
+                updateSelectAllState();
+            }
+        });
+
+        var popupFooter = document.createElement('div');
+        popupFooter.className = 'popup-footer';
+        
+        var buttonContainer = document.createElement('span');
+
+        var cancelButton = document.createElement('button');
+        cancelButton.textContent = 'Cancel';
+        cancelButton.className = 'popupbuttons';
+        cancelButton.style.cursor = "pointer";
+        cancelButton.style.marginRight = "10px";
+        cancelButton.onclick = function() {
+            document.body.removeChild(popupBackground);
+        };
+
+        var deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete Selected';
+        deleteButton.className = 'popupbuttons';
+        deleteButton.style.cursor = "pointer";
+        deleteButton.onclick = function() {
+            var checkedBoxes = popup.querySelectorAll('.file-checkbox:checked');
+            
+            if (checkedBoxes.length === 0) {
+                alert("Please select at least one file to delete");
+                return;
+            }
+
+            var filesToDelete = [];
+            checkedBoxes.forEach(function(checkbox) {
+                filesToDelete.push(checkbox.value);
+            });
+
+            var confirmMessage = "Are you sure you want to delete the following " + 
+                               filesToDelete.length + " file(s)?\n\n" + 
+                               filesToDelete.join('\n');
+
+            if (confirm(confirmMessage)) {
+                document.body.removeChild(popupBackground);
+                deleteSelectedFiles(filesToDelete, fileType, selectElement);
+            }
+        };
+
+        buttonContainer.appendChild(cancelButton);
+        buttonContainer.appendChild(deleteButton);
+        popupFooter.appendChild(buttonContainer);
+
+        popup.appendChild(popupHeader);
+        popup.appendChild(popupMessage);
+        popup.appendChild(popupFooter);
+        popupBackground.appendChild(popup);
+
+        document.body.appendChild(popupBackground);
+    });
+    
+    return removeButton;
+}
+
+function deleteSelectedFiles(filesToDelete, fileType, selectElement) {
+    var results = {
+        success: [],
+        failed: []
+    };
+
+    var deletePromises = [];
+    var completedRequests = 0;
+
+    function processResults() {
+        // Show results
+        var resultMessage = "";
+        if (results.success.length > 0) {
+            resultMessage += "Successfully deleted " + results.success.length + " file(s):\n";
+            resultMessage += results.success.join('\n') + "\n\n";
+        }
+        if (results.failed.length > 0) {
+            resultMessage += "Failed to delete " + results.failed.length + " file(s):\n";
+            resultMessage += results.failed.join('\n');
+        }
+        
+        alert(resultMessage);
+        
+        // Refresh file list
+        upload_clock_files(fileType);
+    }
+
+    // Delete files one by one
+    filesToDelete.forEach(function(filename) {
+        $.ajax({
+            url: "/removefile?func=" + fileType + "&filename=" + encodeURIComponent(filename),
+            type: 'DELETE',
+            dataType: 'json',
+            success: function(res) {
+                completedRequests++;
+                if (res.status === 'success') {
+                    results.success.push(filename);
+                    // Remove from dropdown immediately
+                    for (var i = 0; i < selectElement.options.length; i++) {
+                        if (selectElement.options[i].value === filename) {
+                            selectElement.remove(i);
+                            break;
+                        }
+                    }
+                } else {
+                    results.failed.push(filename + " (" + res.data.error + ")");
+                }
+                
+                // Check if all requests completed
+                if (completedRequests === filesToDelete.length) {
+                    processResults();
+                }
+            },
+            error: function() {
+                completedRequests++;
+                results.failed.push(filename + " (Network error)");
+                
+                // Check if all requests completed
+                if (completedRequests === filesToDelete.length) {
+                    processResults();
+                }
+            }
+        });
+    });
+}
+
 function generateRAUCblock() {
     var hideBackground = document.createElement('div');
     hideBackground.className = 'popup-background';
@@ -2278,7 +2510,7 @@ function generatePDIblock(){
     var button = document.createElement("input");
     button.classList.add("buttons");
     button.classList.add("dash_bm");
-    button.style.width = '60%';
+    button.style.width = '55%';
     button.id="uploadpdi";
     button.setAttribute("value", "Browse");
     button.setAttribute("type", "file");
@@ -2293,6 +2525,9 @@ function generatePDIblock(){
     }
 });
     em1.appendChild(button);
+    // Create and add remove button using the function
+    var removeButton = createRemoveButton("PDIselectionOption1", "pdi");
+    em1.appendChild(removeButton);
 //load PDI section
     var em2 = document.createElement("p");
     em2.classList.add("details_info");
@@ -2491,7 +2726,7 @@ function generateOSPIblock(){
     var button = document.createElement("input");
     button.classList.add("buttons");
     button.classList.add("dash_bm");
-    button.style.width = '58%';
+    button.style.width = '53%';
     button.id="uploadospi";
     button.setAttribute("value", "Browse");
     button.setAttribute("type", "file");
@@ -2514,6 +2749,10 @@ function generateOSPIblock(){
         }
     });
     em1.appendChild(button);
+    // Create and add remove button using the function
+    var removeButton = createRemoveButton("OSPIselectionOption", "ospi");
+    em1.appendChild(removeButton);
+
 
     // Add loading indicator for file upload
     var smload2 = document.createElement("div");
