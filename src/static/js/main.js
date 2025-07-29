@@ -1861,10 +1861,17 @@ function createRemoveButton(selectElementId, fileType) {
         var fileListDiv = document.createElement('div');
         fileListDiv.style.maxHeight = "40vh";
         fileListDiv.style.overflow = "auto";
+        fileListDiv.style.border = "1px solid #ddd";
+        fileListDiv.style.padding = "10px";
+        fileListDiv.style.borderRadius = "5px";
 
         for (var i = 0; i < selectElement.options.length; i++) {
             var fileDiv = document.createElement('div');
+            fileDiv.style.marginBottom = "8px";
             fileDiv.style.padding = "8px";
+            fileDiv.style.borderRadius = "3px";
+            fileDiv.style.backgroundColor = "#f9f9f9";
+            fileDiv.style.border = "1px solid #e0e0e0";
 
             var checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
@@ -1875,9 +1882,17 @@ function createRemoveButton(selectElementId, fileType) {
 
             var label = document.createElement('label');
             label.setAttribute('for', 'file_' + i + '_' + fileType);
-            label.textContent = selectElement.options[i].value;
             label.style.cursor = "pointer";
             label.style.userSelect = "none";
+
+            var fileicon = document.createElement('span');
+            fileicon.innerHTML = '&#128196;';
+            fileicon.style.marginRight = "5px";
+            fileicon.style.color = "#666";
+
+            label.appendChild(fileicon);
+            var fileText = document.createTextNode(selectElement.options[i].value);
+            label.appendChild(fileText);
 
             fileDiv.appendChild(checkbox);
             fileDiv.appendChild(label);
@@ -1924,6 +1939,7 @@ function createRemoveButton(selectElementId, fileType) {
 
         var deleteButton = document.createElement('button');
         deleteButton.textContent = 'Delete Selected';
+        deleteButton.style.marginRight = "10px";
         deleteButton.className = 'popupbuttons';
         deleteButton.style.cursor = "pointer";
         deleteButton.onclick = function() {
