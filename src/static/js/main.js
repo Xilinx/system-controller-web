@@ -2877,8 +2877,11 @@ function generateOSPIblock(){
         });
     }
     $('#OSPIselectionOption').change(function(e){
-        document.getElementById("loadospiloadid").className = "";
-        document.getElementById("loadospistatus").innerHTML = "";
+    var loadElement = document.getElementById("loadospiloadid");
+    var statusElement = document.getElementById("loadospistatus");
+    
+    if (loadElement) loadElement.className = "";
+    if (statusElement) statusElement.innerHTML = "";
     });
     
     var em3 = document.createElement("p");

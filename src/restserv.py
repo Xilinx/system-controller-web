@@ -630,13 +630,36 @@ class StatusRequest(Resource):
                 # /status?cmd=ospiboot,file=<ospifile>
                 cmd = app_config["ospirunstatusfile_getstatus"]
                 result = SysFactory.exec_cmd(cmd,SysFactory.TERMINAL)
-                result = parse.parse_ospi_response(result)
-                resp_json = {
-                    "status": "success"
-                    , "data": {"message":result}
-                }
-                return resp_json
-
+                if ("Operation programming SPI enabled" in result and 
+                    "Operation verifying SPI enabled" in result):
+                    result = parse.parse_program_verify_ospi_response(result)
+                    resp_json = {
+                        "status": "success"
+                        , "data": {"message":result}
+                    }
+                    return resp_json
+                elif "Operation verifying SPI enabled" in result:
+                    result = parse.parse_verify_ospi_response(result)
+                    print(result)
+                    resp_json = {
+                        "status": "success"
+                        , "data": {"message":result}
+                    }
+                    return resp_json
+                elif  "Operation programming SPI enabled" in result:
+                    result = parse.parse_program_ospi_response(result)
+                    resp_json = {
+                        "status": "success"
+                        , "data": {"message":result}
+                    }
+                    return resp_json
+                elif "Operation erasing SPI enabled" in result:
+                    result = parse.parse_erase_ospi_response(result)
+                    resp_json = {
+                        "status": "success"
+                        , "data": {"message":result}
+                    }
+                    return resp_json
         except Exception as e:
             resp_json = {
                 "status": "error"
@@ -670,7 +693,7 @@ class ScriptRunner(Resource):
                 if file:
                     cmd += file
                 result = SysFactory.exec_cmd(cmd,SysFactory.SCRIPT,app_config["ospirunstatusfile"])
-                if "Script completed" in result:
+                if result.startswith("\nScript completed"):
                     resp_json = {
                         "status": "success"
                         , "data": result
