@@ -37,4 +37,6 @@ app_config = {
     ,"uploaded_files_path":"/data/clock_files/"
     ,"PDIFilePath":"/data/PDIs/"
     ,"allowed_clock_files":['txt', 'tcs', 'bin']
+    ,"eeprom_fetch_cmd":"frugy -r /sys/bus/i2c/devices/*/eeprom_cc*/nvmem -o eeprom.yml"
 }
+

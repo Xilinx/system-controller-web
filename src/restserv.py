@@ -480,7 +480,6 @@ class RaftQuery(Resource):
                 raft_fun = eval(f"pm.{req}(\"{tar}\"{paramStr})")
             except Exception as d:
                 print(d)
-
             resp_json = {
                 "status" : raft_fun["status"],
                 "data":raft_fun["data"]
@@ -752,6 +751,33 @@ class ScriptRunner(Resource):
                         ,"data": result
                     }
                     return resp_jon
+            elif funq == "fetcheepromdata":
+                cmd = app_config["eeprom_fetch_cmd"]
+                result = Term.exec_cmd(cmd)
+                # Read the generated eeprom.yml file content
+                eeprom_content = ""
+                try:
+                    if os.path.exists("eeprom.yml"):
+                        with open("eeprom.yml", "r") as f:
+                            eeprom_content = f.read()
+                        # Parse the EEPROM data using the parse module
+                        parsed_data = parse.parse_eeprom_yaml(eeprom_content)
+                        resp_json = {
+                            "status": "success",
+                            "data": parsed_data
+                        }
+                        return resp_json
+                except Exception as e:
+                    resp_json = {
+                        "status": "error",
+                        "data": {"error": f"Error processing eeprom.yml: {str(e)}"}
+                    }
+                    return resp_json
+                resp_json = {
+                    "status": "error",
+                    "data": {"error": "eeprom.yml file not found"}
+                }
+                return resp_json
         except Exception as e:
             resp_json = {
                 "status":"error"

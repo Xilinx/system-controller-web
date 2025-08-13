@@ -204,6 +204,50 @@ or component == "geteeprom" or component == "getvoltage"):
             if percentage_match and len(inprog_key):
                 dict[inprog_key] = percentage_match.group()
         return dict
+    def parse_eeprom_yaml(self, yaml_data):
+        """Parse EEPROM YAML data to extract MAC addresses"""
+        data = {
+            'scMac': '',
+            'versalMac': '',
+            'versalMacs': []
+        }
+        try:
+            lines = yaml_data.split('\n')
+            in_multirecord = False
+            for i, line in enumerate(lines):
+                line = line.strip()
+                if line.startswith('MultirecordArea:'):
+                    in_multirecord = True
+                    continue
+                if not in_multirecord:
+                    continue
+                # Handle SC MAC (System Controller)
+                if 'type: sys_ctrl_xilinx_mac' in line:
+                    for j in range(i + 1, min(i + 5, len(lines))):
+                        if 'mac0:' in lines[j]:
+                            mac_value = lines[j].split(':', 1)[1].strip().replace('-', ':')
+                            data['scMac'] = mac_value
+                            break                            
+                # Handle Versal MAC (Device Under Test)
+                elif 'type: dut_xilinx_mac' in line:
+                    for j in range(i + 1, len(lines)):
+                        next_line = lines[j].strip()                        
+                        # Stop if we hit another section
+                        if next_line.startswith('- type:'):
+                            break                            
+                        # Extract MAC addresses
+                        if 'mac' in next_line and ':' in next_line:
+                            mac_match = re.match(r'mac\d*:\s*([0-9A-Fa-f\-:]+)', next_line)
+                            if mac_match:
+                                mac_address = mac_match.group(1).strip().replace('-', ':')
+                                data['versalMacs'].append(mac_address)                                
+                                # Set first MAC as primary for backward compatibility
+                                if not data['versalMac']:
+                                    data['versalMac'] = mac_address                                    
+        except Exception as e:
+            print(f'Error parsing EEPROM data: {e}')
+        
+        return data
 
 import json
 class ParseData(Parse):

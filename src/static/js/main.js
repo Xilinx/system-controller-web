@@ -147,7 +147,7 @@ function launchpmtool(){
 
 }
 function hideAllPages(){
-    $("#home_screen_com, #home_screen_db, #help_screen, #about_screen, #dnd_screen, #boardseettings_screen, #tools_screen, #testandebug_screen, #linuxprompt_screen,#raucupdate_screen,#versalimageupdate_screen, #ttbbackid").addClass('hide');
+    $("#home_screen_com, #home_screen_db, #help_screen, #about_screen, #dnd_screen, #boardseettings_screen, #tools_screen, #testandebug_screen, #linuxprompt_screen,#raucupdate_screen,#versalimageupdate_screen,#setmacaddress_screen, #ttbbackid").addClass('hide');
 }
 
 function renderComponentDiv(name, comps,heads){
@@ -3194,6 +3194,174 @@ function generateVersalFlashblock() {
     }
     
 }
+// Helper function to format EEPROM data for display using DOM methods
+function formatEEPROMDisplay(data) {
+    // Create main container div
+    var container = document.createElement('div');
+    container.style.lineHeight = '1.6';
+    
+    // Create and add title
+    var title = document.createElement('b');
+    title.textContent = 'EEPROM DATA:';
+    container.appendChild(title);
+    
+    // Add line breaks after title
+    container.appendChild(document.createElement('br'));
+    container.appendChild(document.createElement('br'));
+    
+    // Create SC MAC section
+    var scLabel = document.createElement('b');
+    scLabel.textContent = 'SC MAC: ';
+    container.appendChild(scLabel);
+    
+    var scMacInput = document.createElement('input');
+    scMacInput.type = 'text';
+    scMacInput.id = 'scMacInput';
+    scMacInput.value = data.scMac || '';
+    scMacInput.style.marginLeft = '10px';
+    scMacInput.style.padding = '5px';
+    scMacInput.style.border = '1px solid #ccc';
+    scMacInput.style.borderRadius = '3px';
+    scMacInput.style.width = '150px';
+    scMacInput.placeholder = 'xx:xx:xx:xx:xx:xx';
+    container.appendChild(scMacInput);
+    
+    // Add line breaks after SC MAC
+    container.appendChild(document.createElement('br'));
+    container.appendChild(document.createElement('br'));
+    
+    // Handle Versal MAC addresses
+    if (data.versalMacs && data.versalMacs.length > 0) {
+        if (data.versalMacs.length === 1) {
+            // Single Versal MAC
+            var versalLabel = document.createElement('b');
+            versalLabel.textContent = 'Versal MAC: ';
+            container.appendChild(versalLabel);
+            
+            var versalMacInput = document.createElement('input');
+            versalMacInput.type = 'text';
+            versalMacInput.id = 'versalMacInput';
+            versalMacInput.value = data.versalMacs[0];
+            versalMacInput.style.marginLeft = '10px';
+            versalMacInput.style.padding = '5px';
+            versalMacInput.style.border = '1px solid #ccc';
+            versalMacInput.style.borderRadius = '3px';
+            versalMacInput.style.width = '150px';
+            versalMacInput.placeholder = 'xx:xx:xx:xx:xx:xx';
+            container.appendChild(versalMacInput);
+        } else {
+            // Multiple Versal MACs
+            for (var i = 0; i < data.versalMacs.length; i++) {
+                var versalLabelMulti = document.createElement('b');
+                versalLabelMulti.textContent = 'Versal MAC ' + (i + 1) + ': ';
+                container.appendChild(versalLabelMulti);
+                
+                var versalMacInputMulti = document.createElement('input');
+                versalMacInputMulti.type = 'text';
+                versalMacInputMulti.id = 'versalMacInput' + i;
+                versalMacInputMulti.value = data.versalMacs[i];
+                versalMacInputMulti.style.marginLeft = '10px';
+                versalMacInputMulti.style.padding = '5px';
+                versalMacInputMulti.style.border = '1px solid #ccc';
+                versalMacInputMulti.style.borderRadius = '3px';
+                versalMacInputMulti.style.width = '150px';
+                versalMacInputMulti.placeholder = 'xx:xx:xx:xx:xx:xx';
+                container.appendChild(versalMacInputMulti);
+                
+                // Add line break after each MAC except the last one
+                if (i < data.versalMacs.length - 1) {
+                    container.appendChild(document.createElement('br'));
+                }
+            }
+        }
+    } else if (data.versalMac) {
+        // Fallback for backward compatibility
+        var versalLabelFallback = document.createElement('b');
+        versalLabelFallback.textContent = 'Versal MAC: ';
+        container.appendChild(versalLabelFallback);
+        
+        var versalMacInputFallback = document.createElement('input');
+        versalMacInputFallback.type = 'text';
+        versalMacInputFallback.id = 'versalMacInput';
+        versalMacInputFallback.value = data.versalMac;
+        versalMacInputFallback.style.marginLeft = '10px';
+        versalMacInputFallback.style.padding = '5px';
+        versalMacInputFallback.style.border = '1px solid #ccc';
+        versalMacInputFallback.style.borderRadius = '3px';
+        versalMacInputFallback.style.width = '150px';
+        versalMacInputFallback.placeholder = 'xx:xx:xx:xx:xx:xx';
+        container.appendChild(versalMacInputFallback);
+    } else {
+        // No Versal MAC data
+        var versalLabelEmpty = document.createElement('b');
+        versalLabelEmpty.textContent = 'Versal MAC: ';
+        container.appendChild(versalLabelEmpty);
+        
+        var versalMacInputEmpty = document.createElement('input');
+        versalMacInputEmpty.type = 'text';
+        versalMacInputEmpty.id = 'versalMacInput';
+        versalMacInputEmpty.value = '';
+        versalMacInputEmpty.style.marginLeft = '10px';
+        versalMacInputEmpty.style.padding = '5px';
+        versalMacInputEmpty.style.border = '1px solid #ccc';
+        versalMacInputEmpty.style.borderRadius = '3px';
+        versalMacInputEmpty.style.width = '150px';
+        versalMacInputEmpty.placeholder = 'xx:xx:xx:xx:xx:xx';
+        container.appendChild(versalMacInputEmpty);
+    }
+    
+    // Add line breaks before save button
+    container.appendChild(document.createElement('br'));
+    container.appendChild(document.createElement('br'));
+    
+    // Create Save button
+    var saveButton = document.createElement('button');
+    saveButton.textContent = 'WRITE EEPROM ';
+    saveButton.classList.add("buttons");
+    saveButton.classList.add("dash_bm");
+    // saveButton.onclick = saveMacAddresses;
+    container.appendChild(saveButton);
+    
+    return container;
+}
+function generatesetmacaddressblock() {
+    var block = $("#detectEEPROM");
+    var em0 = document.createElement("p");
+    em0.classList.add("details_info");
+    block.append(em0);
+    var button = document.createElement("input");
+    button.classList.add("buttons");
+    button.classList.add("dash_bm");
+    button.id="fetchmacadd";
+    button.setAttribute("value", "FETCH");
+    button.setAttribute("type", "button");
+    em0.appendChild(button);
+    var em1 = document.createElement("p");
+    em1.classList.add("details_info");
+    block.append(em1);
+    button.onclick = function() {
+        showLoadingTooltip("eepromstatus", em0);
+        $.ajax({
+            url: "/scriptrunner",
+            type: 'GET',
+            dataType: 'json',
+            data: { "cmd": "fetcheepromdata" },
+            success: function (res) {
+                // The data is now already parsed by the backend
+                var eepromData = res.data;
+                var formattedOutput = formatEEPROMDisplay(eepromData);
+                
+                // Clear existing content and append the new DOM element
+                em1.innerHTML = '';
+                em1.appendChild(formattedOutput);
+                showSuccessTooltip("eepromstatus", "Success", em0);
+            },
+            error: function (res) {
+                showFailureTooltip("eepromstatus", "Error fetching EEPROM data", em0);
+            }
+        });
+    };
+}
 
 
 function navClick(tid){
@@ -3207,7 +3375,8 @@ function navClick(tid){
     if (tid === "boardinterfacetest") {$("#testandebug_screen").removeClass('hide'); $("#ttbbackid").removeClass('hide');}
     if (tid === "raucupdate") {$("#raucupdate_screen").removeClass('hide'); $("#ttbbackid").removeClass('hide');}
     if (tid === "versalimageupdate") {$("#versalimageupdate_screen").removeClass('hide'); }
-    
+    if (tid === "setmacaddress") {$("#setmacaddress_screen").removeClass('hide'); }
+
 //    if (tid === "demosdesigns") {$("#dnd_screen").removeClass('hide');}
     if (tid === "cockpit") {launchacap()}
     if (tid === "pmdashboard") {launchpmtool()}    
@@ -3585,6 +3754,7 @@ $(document).ready(function () {
     generateOSPIblock();
     generateUARTblock();
     generateVersalFlashblock();
+    generatesetmacaddressblock();
     $('.app-title:empty').hide();
       $('#top_menu li').click(function (e) {
 
