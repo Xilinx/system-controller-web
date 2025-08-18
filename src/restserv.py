@@ -778,6 +778,71 @@ class ScriptRunner(Resource):
                     "data": {"error": "eeprom.yml file not found"}
                 }
                 return resp_json
+            elif funq == "writeeepromdata":
+                sc_mac = request.args.get('scMac', '').strip()
+                versal_macs = []
+                versal_macs_array = request.args.getlist('versalMacs[]')
+                if versal_macs_array:
+                    versal_macs = [mac.strip() for mac in versal_macs_array if mac.strip()]
+                else:
+                    i = 0
+                    while True:
+                        mac = request.args.get(f'versalMacs[{i}]')
+                        if mac and mac.strip():
+                            versal_macs.append(mac.strip())
+                            i += 1
+                        else:
+                            break
+                if not sc_mac and not versal_macs:
+                    resp_json = {
+                        "status": "error",
+                        "data": {"error": "At least one MAC address (SC or Versal) must be provided"}
+                    }
+                    return resp_json                
+                try:
+                    if not os.path.exists("eeprom.yml"):
+                        cmd = app_config["eeprom_fetch_cmd"]
+                        result = Term.exec_cmd(cmd)
+                        if not os.path.exists("eeprom.yml"):
+                            resp_json = {
+                                "status": "error",
+                                "data": {"error": "Failed to fetch EEPROM data"}
+                            }
+                            return resp_json
+                    with open("eeprom.yml", "r") as f:
+                        eeprom_content = f.read()
+                    updated_content = parse.update_eeprom_yaml_content(eeprom_content, sc_mac, versal_macs)
+                    with open("eeprom.yml", "w") as f:
+                        f.write(updated_content)
+                    cmd_convert = app_config["yml_to_bin_cmd"]
+                    result_convert = Term.exec_cmd(cmd_convert)
+                    if "error" in result_convert.lower() or "failed" in result_convert.lower():
+                        resp_json = {
+                            "status": "error",
+                            "data": {"error": f"Failed to convert YAML to binary: {result_convert}"}
+                        }
+                        return resp_json
+                    cmd_flash = app_config["flash_eeprom_cmd"]
+                    result_flash = Term.exec_cmd(cmd_flash)                    
+                    if "error" in result_flash.lower() or "permission denied" in result_flash.lower():
+                        resp_json = {
+                            "status": "error",
+                            "data": {"error": f"Failed to flash EEPROM: {result_flash}"}
+                        }
+                        return resp_json                    
+                    resp_json = {
+                        "status": "success",
+                        "data": {
+                            "message": f"EEPROM updated successfully with SC MAC: {sc_mac if sc_mac else 'unchanged'} and {len(versal_macs)} Versal MAC(s)"
+                        }
+                    }
+                    return resp_json                    
+                except Exception as e:
+                    resp_json = {
+                        "status": "error",
+                        "data": {"error": f"Error updating EEPROM: {str(e)}"}
+                    }
+                    return resp_json
         except Exception as e:
             resp_json = {
                 "status":"error"

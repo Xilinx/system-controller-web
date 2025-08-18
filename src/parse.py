@@ -248,6 +248,53 @@ or component == "geteeprom" or component == "getvoltage"):
             print(f'Error parsing EEPROM data: {e}')
         
         return data
+    def update_eeprom_yaml_content(self, yaml_content, sc_mac, versal_macs):
+        """Update MAC addresses in YAML content"""
+        lines = yaml_content.split('\n')
+        updated_lines = []
+        in_multirecord = False
+        in_sc_mac_section = False
+        in_dut_mac_section = False
+        versal_mac_index = 0
+        for i, line in enumerate(lines):
+            original_line = line
+            line_stripped = line.strip()
+            if line_stripped.startswith('MultirecordArea:'):
+                in_multirecord = True
+                in_sc_mac_section = False
+                in_dut_mac_section = False
+            elif line_stripped.startswith('- type:') and in_multirecord:
+                in_sc_mac_section = False
+                in_dut_mac_section = False
+                if 'sys_ctrl_xilinx_mac' in line_stripped:
+                    in_sc_mac_section = True
+                elif 'dut_xilinx_mac' in line_stripped:
+                    in_dut_mac_section = True
+                    versal_mac_index = 0
+            # Update SC MAC
+            if in_sc_mac_section and 'mac0:' in line_stripped and sc_mac:
+                # Preserve indentation
+                indent = line[:len(line) - len(line.lstrip())]
+                updated_lines.append(f"{indent}mac0: {sc_mac.replace(':', '-')}")
+                continue
+            # Update Versal MACs
+            if in_dut_mac_section and 'mac' in line_stripped and ':' in line_stripped:
+                mac_match = re.match(r'(\s*)(mac\d*):\s*([0-9A-Fa-f\-:]+)', line)
+                if mac_match:
+                    indent = mac_match.group(1)
+                    mac_key = mac_match.group(2)
+                    # If we have a replacement MAC for this position
+                    if versal_mac_index < len(versal_macs):
+                        new_mac = versal_macs[versal_mac_index].replace(':', '-')
+                        updated_lines.append(f"{indent}{mac_key}: {new_mac}")
+                        versal_mac_index += 1
+                        continue
+                    # If no replacement MAC available, keep original line
+                    else:
+                        updated_lines.append(original_line)
+                        continue
+            updated_lines.append(original_line)
+        return '\n'.join(updated_lines)
 
 import json
 class ParseData(Parse):

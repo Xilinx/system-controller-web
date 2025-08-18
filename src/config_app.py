@@ -1,3 +1,4 @@
+
 ##
 # Copyright (c) 2020 - 2022 Xilinx, Inc.  All rights reserved.
 # Copyright (c) 2022 - 2025 Advanced Micro Devices, Inc.  All rights reserved.
@@ -38,5 +39,7 @@ app_config = {
     ,"PDIFilePath":"/data/PDIs/"
     ,"allowed_clock_files":['txt', 'tcs', 'bin']
     ,"eeprom_fetch_cmd":"frugy -r /sys/bus/i2c/devices/*/eeprom_cc*/nvmem -o eeprom.yml"
+    ,"yml_to_bin_cmd":"frugy eeprom.yml"
+    ,"flash_eeprom_cmd":"sudo dd if=eeprom.bin of=$(ls /sys/bus/i2c/devices/*/eeprom_cc*/nvmem)"
 }
 
