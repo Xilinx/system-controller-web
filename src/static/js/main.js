@@ -3199,22 +3199,15 @@ function generateVersalFlashblock() {
     }
     
 }
-// Helper function to format EEPROM data for display using DOM methods
+//Set mac addresses
 function formatEEPROMDisplay(data) {
-    // Create main container div
     var container = document.createElement('div');
-    container.style.lineHeight = '1.6';
-    
-    // Create and add title
+    container.style.lineHeight = '1.6';  
     var title = document.createElement('b');
     title.textContent = 'EEPROM DATA:';
-    container.appendChild(title);
-    
-    // Add line breaks after title
+    container.appendChild(title);    
     container.appendChild(document.createElement('br'));
-    container.appendChild(document.createElement('br'));
-    
-    // Create SC MAC section
+    container.appendChild(document.createElement('br'));   
     var scLabel = document.createElement('b');
     scLabel.textContent = 'SC MAC: ';
     container.appendChild(scLabel);
@@ -3229,12 +3222,10 @@ function formatEEPROMDisplay(data) {
     scMacInput.style.borderRadius = '3px';
     scMacInput.style.width = '150px';
     scMacInput.placeholder = 'xx:xx:xx:xx:xx:xx';
-    container.appendChild(scMacInput);
-    
+    container.appendChild(scMacInput);    
     // Add line breaks after SC MAC
     container.appendChild(document.createElement('br'));
-    container.appendChild(document.createElement('br'));
-    
+    container.appendChild(document.createElement('br'));    
     // Handle Versal MAC addresses
     if (data && data.versalMacs && data.versalMacs.length > 0) {
         if (data.versalMacs.length === 1) {
@@ -3299,12 +3290,10 @@ function formatEEPROMDisplay(data) {
         versalMacInputEmpty.style.width = '150px';
         versalMacInputEmpty.placeholder = 'xx:xx:xx:xx:xx:xx';
         container.appendChild(versalMacInputEmpty);
-    }
-    
+    }    
     // Add line breaks before save button
     container.appendChild(document.createElement('br'));
-    container.appendChild(document.createElement('br'));
-    
+    container.appendChild(document.createElement('br'));    
     // Create Save button
     var saveButton = document.createElement('button');
     saveButton.textContent = 'WRITE EEPROM ';
@@ -3319,16 +3308,34 @@ function writeEEPROMData() {
     var scMac = document.getElementById('scMacInput').value.trim();
     var versalMacInputs = document.querySelectorAll('.versalMacInput');
     var versalMacs = [];
-    
+    var hasEmptyField = false;
+    var emptyFields = [];
+    if (!scMac) {
+        hasEmptyField = true;
+        emptyFields.push('SC MAC');
+    }
     versalMacInputs.forEach(function(input, index) {
         var value = input.value.trim();
         if (value) {
             versalMacs.push(value);
+        } else {
+            hasEmptyField = true;
+            if (versalMacInputs.length === 1) {
+                emptyFields.push('Versal MAC');
+            } else {
+                emptyFields.push('Versal MAC ' + (index + 1));
+            }
         }
     });
-    
+    if (hasEmptyField) {
+        alert('Please enter MAC address, do not set empty\n\nEmpty fields: ' + emptyFields.join(', '));
+        return;
+    }
+    if (!scMac && versalMacs.length === 0) {
+        alert('Please enter MAC address, do not set empty');
+        return;
+    }
     var macPattern = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/;
-    
     if (scMac && !macPattern.test(scMac)) {
         alert('Invalid SC MAC address format. Please use format: xx:xx:xx:xx:xx:xx');
         return;
@@ -3339,32 +3346,23 @@ function writeEEPROMData() {
             return;
         }
     }
-    if (!scMac && versalMacs.length === 0) {
-        alert('Please enter at least one MAC address');
-        return;
-    }
-    
     var requestData = {
         "cmd": "writeeepromdata"
     };
     if (scMac) {
         requestData.scMac = scMac;
-    }
-    
+    }    
     // Use both array and individual parameter format for compatibility
     versalMacs.forEach(function(mac, index) {
         requestData['versalMacs[' + index + ']'] = mac;
-    });
-    
+    });    
     // Also send as array format
     if (versalMacs.length > 0) {
         requestData['versalMacs[]'] = versalMacs;
     }
-    
     var saveButton = event.target;
     saveButton.disabled = true;
-    showLoadingTooltip("eepromwritestatus", saveButton.parentElement);
-    
+    showLoadingTooltip("eepromwritestatus", saveButton.parentElement);    
     $.ajax({
         url: "/scriptrunner",
         type: 'GET',
@@ -3372,29 +3370,21 @@ function writeEEPROMData() {
         data: requestData,
         success: function (res) {
             saveButton.disabled = false;
-            
             if (res.status === 'success') {
                 showSuccessTooltip("eepromwritestatus", "EEPROM updated successfully!", saveButton.parentElement);
                 alert('EEPROM updated successfully!');
-                setTimeout(function() {
-                    // Clear tooltip after 3 seconds
-                    var tooltipElement = document.getElementById("eepromwritestatus");
-                    if (tooltipElement) {
-                        tooltipElement.style.display = 'none';
-                    }
-                }, 3000);
             } else {
                 alert('Error updating EEPROM: ' + (res.data.error || res.data.message));
+                showFailureTooltip("eepromwritestatus", "Error: " + (res.data.error || res.data.message), saveButton.parentElement);
             }
         },
         error: function (res) {
-                showFailureTooltip("eepromwritestatus", "Error: " + (res.data.error || res.data.message), saveButton.parentElement);
+            saveButton.disabled = false;
+            showFailureTooltip("eepromwritestatus", "Network error", saveButton.parentElement);
             alert('Network error occurred while updating EEPROM');
         }
     });
 }
-
-
 function generatesetmacaddressblock() {
     var block = $("#detectEEPROM");
     var em0 = document.createElement("p");
@@ -3410,7 +3400,6 @@ function generatesetmacaddressblock() {
     var em1 = document.createElement("p");
     em1.classList.add("details_info");
     block.append(em1);
-    
     // Show empty fields initially
     var initialDisplay = formatEEPROMDisplay(null);
     em1.appendChild(initialDisplay);
@@ -3423,14 +3412,15 @@ function generatesetmacaddressblock() {
             dataType: 'json',
             data: { "cmd": "fetcheepromdata" },
             success: function (res) {
-                // The data is now already parsed by the backend
-                var eepromData = res.data;
-                var formattedOutput = formatEEPROMDisplay(eepromData);
-                
-                // Clear existing content and append the new DOM element
-                em1.innerHTML = '';
-                em1.appendChild(formattedOutput);
-                showSuccessTooltip("eepromstatus", "Success", em0);
+                if (res.status === 'success') {
+                    var eepromData = res.data;
+                    var formattedOutput = formatEEPROMDisplay(eepromData);
+                    em1.innerHTML = '';
+                    em1.appendChild(formattedOutput);
+                    showSuccessTooltip("eepromstatus", "Success", em0);
+                } else {
+                    showFailureTooltip("eepromstatus", "Error: " + (res.data.message || res.data.error || "Failed to fetch EEPROM data"), em0);
+                }
             },
             error: function (res) {
                 showFailureTooltip("eepromstatus", "Error fetching EEPROM data", em0);
@@ -3438,7 +3428,6 @@ function generatesetmacaddressblock() {
         });
     };
 }
-
 
 function navClick(tid){
     console.log(tid);
