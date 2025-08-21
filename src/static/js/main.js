@@ -1107,8 +1107,13 @@ function generateBoardSettingsUI(){
     });
 
     $('#boardtestdiv li').click(function (e) {
+        var targetDiv = $("#" + e.target.getAttribute("specKey_id"));
         $(e.target).addClass('active').siblings().removeClass('active');
-        $("#"+e.target.getAttribute("specKey_id")).removeClass('hide').siblings().addClass('hide');
+        targetDiv.removeClass('hide').siblings().addClass('hide');
+        if (e.target.getAttribute("specKey_id") !== "Clock" && e.target.getAttribute("specKey_id") !== "FMC") {
+            targetDiv.find('input[value="Get All"]').trigger('click');
+            targetDiv.find('input[value="↻ Information"]').trigger('click');
+        }
     });
 
      $('.tab_subitem').click(function (e) {
