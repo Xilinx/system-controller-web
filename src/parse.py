@@ -321,7 +321,6 @@ class ParseData(Parse):
                 }
         for re in resar:
             ary = re.split(":")
-            print(ary)
             if ary[0].startswith('Configuration'):
                 res['Configuration']=ary[1].strip()
             if ary[0].startswith('Shunt Voltage'):

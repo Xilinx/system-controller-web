@@ -3441,7 +3441,21 @@ function navClick(tid){
     }
     if (tid === "testtheboard") {if(listsjson_sc.listfeature.length == 1 && listsjson_sc.listfeature[0].length == 4){alert("This Feature is not supported.");return;}}
     if (tid === "testtheboard") {$("#home_screen_db").removeClass('hide');}
-    if (tid === "boardsettings") {$("#boardseettings_screen").removeClass('hide'); $("#ttbbackid").removeClass('hide');}
+    if (tid === "boardsettings") {
+        $("#boardseettings_screen").removeClass('hide'); 
+        $("#ttbbackid").removeClass('hide');
+        var activeTab = $('#boardtestdiv li.active');
+        if (activeTab.length > 0) {
+            var activeTabId = activeTab.attr('specKey_id');
+            if (activeTabId) {
+                var targetDiv = $("#" + activeTabId);
+                if (activeTabId !== "Clock" && activeTabId !== "FMC") {
+                    targetDiv.find('input[value="Get All"]').trigger('click');
+                    targetDiv.find('input[value="↻ Information"]').trigger('click');
+                }
+            }
+        }
+    }
     if (tid === "boardinterfacetest") {$("#testandebug_screen").removeClass('hide'); $("#ttbbackid").removeClass('hide');}
     if (tid === "raucupdate") {$("#raucupdate_screen").removeClass('hide'); $("#ttbbackid").removeClass('hide');}
     if (tid === "versalimageupdate") {$("#versalimageupdate_screen").removeClass('hide'); }

@@ -639,7 +639,6 @@ class StatusRequest(Resource):
                     return resp_json
                 elif "Operation verifying SPI enabled" in result:
                     result = parse.parse_verify_ospi_response(result)
-                    print(result)
                     resp_json = {
                         "status": "success"
                         , "data": {"message":result}
