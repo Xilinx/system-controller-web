@@ -1321,9 +1321,8 @@ color: white;
 .partition{
   background: #007c97;
   padding: 20px;
-  text-align: center;
   width: 25%;
-  height: 25vh;
+  height: 30vh;
 }
 .bootStatus{
   color: white;
