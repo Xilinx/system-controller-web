@@ -222,14 +222,20 @@ or component == "geteeprom" or component == "getvoltage"):
                 if not in_multirecord:
                     continue
                 # Handle SC MAC (System Controller)
-                if 'type: sys_ctrl_xilinx_mac' in line:
+                if (
+                    'type: sys_ctrl_xilinx_mac' in line
+                    or 'type: SysCtrlXilinxMac' in line
+                ):
                     for j in range(i + 1, min(i + 5, len(lines))):
                         if 'mac0:' in lines[j]:
                             mac_value = lines[j].split(':', 1)[1].strip().replace('-', ':')
                             data['scMac'] = mac_value
                             break                            
                 # Handle Versal MAC (Device Under Test)
-                elif 'type: dut_xilinx_mac' in line:
+                elif (
+                    'type: dut_xilinx_mac' in line
+                    or 'type: DutXilinxMac' in line
+                ):
                     for j in range(i + 1, len(lines)):
                         next_line = lines[j].strip()                        
                         # Stop if we hit another section
@@ -266,9 +272,15 @@ or component == "geteeprom" or component == "getvoltage"):
             elif line_stripped.startswith('- type:') and in_multirecord:
                 in_sc_mac_section = False
                 in_dut_mac_section = False
-                if 'sys_ctrl_xilinx_mac' in line_stripped:
+                if (
+                    'sys_ctrl_xilinx_mac' in line_stripped
+                    or 'SysCtrlXilinxMac' in line_stripped
+                ):
                     in_sc_mac_section = True
-                elif 'dut_xilinx_mac' in line_stripped:
+                elif (
+                    'dut_xilinx_mac' in line_stripped
+                    or 'DutXilinxMac' in line_stripped
+                ):
                     in_dut_mac_section = True
                     versal_mac_index = 0
             # Update SC MAC

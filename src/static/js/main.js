@@ -2392,7 +2392,7 @@ function generateRAUCblock() {
     };
     // Create and append the remove button
     var removeBundleButton = createRemoveButton("RaucSelectionOption", "rauc");
-    removeBundleButton.style.width = "10%";
+    removeBundleButton.style.width = "12%";
     removeBundleButton.setAttribute("value", "Remove Bundle Files");
 
     $("#rauc_update_screen").append(mainContainer);
