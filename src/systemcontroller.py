@@ -270,7 +270,7 @@ def generate_gen_sc_file(sc_app_path, app_config):
     #get the IP
     f = open("./static/js/gen_sc.js", "a")
     f.write("var ip_add = {\n")
-    ip_add = Term.exec_cmd("ifconfig end0 | grep 'inet addr' | awk -F: '{print $2}' | awk '{print $1}'").strip()  # Strip newline characters
+    ip_add = Term.exec_cmd("/usr/bin/ifconfig end0 | grep 'inet ' | awk '{print $2}' | awk -F ':' '{print $1}'").strip()  # Strip newline characters
     if "command not found" in ip_add:
         ip_address = "-"
     else:

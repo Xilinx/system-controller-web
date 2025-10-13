@@ -46,11 +46,11 @@ fi
 
 ## print ip on console
 COUNT=30
-IP=`/bin/ifconfig end0 | grep 'inet addr' | awk '{print $2}' | awk -F ':' '{print $2}'`
+IP=`/usr/bin/ifconfig end0 | grep 'inet ' | awk '{print $2}' | awk -F ':' '{print $1}'`
 while [ "$IP" == "" -a "$COUNT" != "0" ]; do
     sleep 1
     COUNT=`expr $COUNT - 1`
-    IP=`/bin/ifconfig end0 | grep 'inet addr' | awk '{print $2}' | awk -F ':' '{print $2}'`
+    IP=`/usr/bin/ifconfig end0 | grep 'inet ' | awk '{print $2}' | awk -F ':' '{print $1}'`
 done
 
 echo | tee -a /dev/console
