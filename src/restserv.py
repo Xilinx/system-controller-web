@@ -691,7 +691,7 @@ class ScriptRunner(Resource):
                 if file:
                     cmd += file
                 result = SysFactory.exec_cmd(cmd,SysFactory.SCRIPT,app_config["ospirunstatusfile"])
-                if result.startswith("\nScript completed"):
+                if result.strip().split('\n')[-1].strip() == "Script completed":
                     resp_json = {
                         "status": "success"
                         , "data": result

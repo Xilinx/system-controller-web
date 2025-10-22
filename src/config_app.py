@@ -21,7 +21,7 @@ app_config = {
     ,"csvFIlePath":"/usr/share/raft/examples/python/pmtool/pm-cmd.py output-csv --path ./static/tmp/"
     ,"raucFilepath":"/data/"
     ,"ospiFilepath":"/data/OSPI/"
-    ,"ospirunscript":"/usr/share/embpf-bootfw-update-tool/prog_spi.sh -V -s 4001 -d versal_eval"
+    ,"ospirunscript":"/usr/share/embpf-bootfw-update-tool/prog_spi.sh -V -d versal_eval"
     ,'ospirunstatusfile': "./ospi_flash_status.txt"
     ,'ospirunstatusfile_getstatus':"[ -f ./ospi_flash_status.txt ] && cat ./ospi_flash_status.txt" #"[ -f ./ospi_flash_status.txt ] && tail -n 1 ./ospi_flash_status.txt"
     ,"VersalUSBImagePath":"/data/usb/"
@@ -42,4 +42,3 @@ app_config = {
     ,"yml_to_bin_cmd":"frugy eeprom.yml"
     ,"flash_eeprom_cmd":"sudo dd if=eeprom.bin of=$(ls /sys/bus/i2c/devices/*/eeprom_cc*/nvmem)"
 }
-
