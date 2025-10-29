@@ -38,7 +38,7 @@ app_config = {
     ,"uploaded_files_path":"/data/clock_files/"
     ,"PDIFilePath":"/data/PDIs/"
     ,"allowed_clock_files":['txt', 'tcs', 'bin']
-    ,"eeprom_fetch_cmd":"frugy -r /sys/bus/i2c/devices/*/eeprom_cc*/nvmem -o eeprom.yml"
+    ,"eeprom_fetch_cmd":"frugy -r /sys/bus/i2c/devices/2-0054/eeprom -o eeprom.yml"
     ,"yml_to_bin_cmd":"frugy eeprom.yml"
-    ,"flash_eeprom_cmd":"sudo dd if=eeprom.bin of=$(ls /sys/bus/i2c/devices/*/eeprom_cc*/nvmem)"
+    ,"flash_eeprom_cmd":"timeout 1 gpioset -c $(gpioinfo | grep -B40 \"EEPROM_WP\" | grep \"gpiochip\" | tail -1 | sed 's/gpiochip\\([0-9]*\\).*/\\1/') $(gpioinfo | grep EEPROM_WP | sed 's/.*line *\\([0-9]*\\):.*/\\1/')=0 ; dd if=eeprom.bin of=/sys/bus/i2c/devices/2-0054/eeprom ; timeout 1 gpioset -c $(gpioinfo | grep -B40 \"EEPROM_WP\" | grep \"gpiochip\" | tail -1 | sed 's/gpiochip\\([0-9]*\\).*/\\1/') $(gpioinfo | grep EEPROM_WP | sed 's/.*line *\\([0-9]*\\):.*/\\1/')=1"
 }
