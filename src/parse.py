@@ -207,7 +207,6 @@ or component == "geteeprom" or component == "getvoltage"):
     def parse_eeprom_yaml(self, yaml_data):
         """Parse EEPROM YAML data to extract MAC addresses"""
         data = {
-            'scMac': '',
             'versalMac': '',
             'versalMacs': []
         }
@@ -221,18 +220,8 @@ or component == "geteeprom" or component == "getvoltage"):
                     continue
                 if not in_multirecord:
                     continue
-                # Handle SC MAC (System Controller)
-                if (
-                    'type: sys_ctrl_xilinx_mac' in line
-                    or 'type: SysCtrlXilinxMac' in line
-                ):
-                    for j in range(i + 1, min(i + 5, len(lines))):
-                        if 'mac0:' in lines[j]:
-                            mac_value = lines[j].split(':', 1)[1].strip().replace('-', ':')
-                            data['scMac'] = mac_value
-                            break                            
                 # Handle Versal MAC (Device Under Test)
-                elif (
+                if (
                     'type: dut_xilinx_mac' in line
                     or 'type: DutXilinxMac' in line
                 ):
@@ -254,12 +243,11 @@ or component == "geteeprom" or component == "getvoltage"):
             print(f'Error parsing EEPROM data: {e}')
         
         return data
-    def update_eeprom_yaml_content(self, yaml_content, sc_mac, versal_macs):
+    def update_eeprom_yaml_content(self, yaml_content, versal_macs):
         """Update MAC addresses in YAML content"""
         lines = yaml_content.split('\n')
         updated_lines = []
         in_multirecord = False
-        in_sc_mac_section = False
         in_dut_mac_section = False
         versal_mac_index = 0
         for i, line in enumerate(lines):
@@ -267,28 +255,15 @@ or component == "geteeprom" or component == "getvoltage"):
             line_stripped = line.strip()
             if line_stripped.startswith('MultirecordArea:'):
                 in_multirecord = True
-                in_sc_mac_section = False
                 in_dut_mac_section = False
             elif line_stripped.startswith('- type:') and in_multirecord:
-                in_sc_mac_section = False
                 in_dut_mac_section = False
                 if (
-                    'sys_ctrl_xilinx_mac' in line_stripped
-                    or 'SysCtrlXilinxMac' in line_stripped
-                ):
-                    in_sc_mac_section = True
-                elif (
                     'dut_xilinx_mac' in line_stripped
                     or 'DutXilinxMac' in line_stripped
                 ):
                     in_dut_mac_section = True
                     versal_mac_index = 0
-            # Update SC MAC
-            if in_sc_mac_section and 'mac0:' in line_stripped and sc_mac:
-                # Preserve indentation
-                indent = line[:len(line) - len(line.lstrip())]
-                updated_lines.append(f"{indent}mac0: {sc_mac.replace(':', '-')}")
-                continue
             # Update Versal MACs
             if in_dut_mac_section and 'mac' in line_stripped and ':' in line_stripped:
                 mac_match = re.match(r'(\s*)(mac\d*):\s*([0-9A-Fa-f\-:]+)', line)

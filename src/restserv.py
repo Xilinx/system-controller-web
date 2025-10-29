@@ -778,7 +778,6 @@ class ScriptRunner(Resource):
                 }
                 return resp_json
             elif funq == "writeeepromdata":
-                sc_mac = request.args.get('scMac', '').strip()
                 versal_macs = []
                 versal_macs_array = request.args.getlist('versalMacs[]')
                 if versal_macs_array:
@@ -792,10 +791,10 @@ class ScriptRunner(Resource):
                             i += 1
                         else:
                             break
-                if not sc_mac and not versal_macs:
+                if not versal_macs:
                     resp_json = {
                         "status": "error",
-                        "data": {"error": "At least one MAC address (SC or Versal) must be provided"}
+                        "data": {"error": "At least one Versal MAC address must be provided"}
                     }
                     return resp_json                
                 try:
@@ -810,7 +809,7 @@ class ScriptRunner(Resource):
                             return resp_json
                     with open("eeprom.yml", "r") as f:
                         eeprom_content = f.read()
-                    updated_content = parse.update_eeprom_yaml_content(eeprom_content, sc_mac, versal_macs)
+                    updated_content = parse.update_eeprom_yaml_content(eeprom_content, versal_macs)
                     with open("eeprom.yml", "w") as f:
                         f.write(updated_content)
                     cmd_convert = app_config["yml_to_bin_cmd"]
@@ -832,7 +831,7 @@ class ScriptRunner(Resource):
                     resp_json = {
                         "status": "success",
                         "data": {
-                            "message": f"EEPROM updated successfully with SC MAC: {sc_mac if sc_mac else 'unchanged'} and {len(versal_macs)} Versal MAC(s)"
+                            "message": f"EEPROM updated successfully with {len(versal_macs)} Versal MAC(s)"
                         }
                     }
                     return resp_json                    

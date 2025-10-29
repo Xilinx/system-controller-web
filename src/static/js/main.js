@@ -3241,24 +3241,6 @@ function formatEEPROMDisplay(data) {
     container.appendChild(title);    
     container.appendChild(document.createElement('br'));
     container.appendChild(document.createElement('br'));   
-    var scLabel = document.createElement('b');
-    scLabel.textContent = 'SC MAC: ';
-    container.appendChild(scLabel);
-    
-    var scMacInput = document.createElement('input');
-    scMacInput.type = 'text';
-    scMacInput.id = 'scMacInput';
-    scMacInput.value = data && data.scMac ? data.scMac : '';
-    scMacInput.style.marginLeft = '10px';
-    scMacInput.style.padding = '5px';
-    scMacInput.style.border = '1px solid #ccc';
-    scMacInput.style.borderRadius = '3px';
-    scMacInput.style.width = '150px';
-    scMacInput.placeholder = 'xx:xx:xx:xx:xx:xx';
-    container.appendChild(scMacInput);    
-    // Add line breaks after SC MAC
-    container.appendChild(document.createElement('br'));
-    container.appendChild(document.createElement('br'));    
     // Handle Versal MAC addresses
     if (data && data.versalMacs && data.versalMacs.length > 0) {
         if (data.versalMacs.length === 1) {
@@ -3338,15 +3320,10 @@ function formatEEPROMDisplay(data) {
     return container;
 }
 function writeEEPROMData() {
-    var scMac = document.getElementById('scMacInput').value.trim();
     var versalMacInputs = document.querySelectorAll('.versalMacInput');
     var versalMacs = [];
     var hasEmptyField = false;
     var emptyFields = [];
-    if (!scMac) {
-        hasEmptyField = true;
-        emptyFields.push('SC MAC');
-    }
     versalMacInputs.forEach(function(input, index) {
         var value = input.value.trim();
         if (value) {
@@ -3364,15 +3341,11 @@ function writeEEPROMData() {
         alert('Please enter MAC address, do not set empty\n\nEmpty fields: ' + emptyFields.join(', '));
         return;
     }
-    if (!scMac && versalMacs.length === 0) {
-        alert('Please enter MAC address, do not set empty');
+    if (versalMacs.length === 0) {
+        alert('Please enter at least one Versal MAC address');
         return;
     }
     var macPattern = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/;
-    if (scMac && !macPattern.test(scMac)) {
-        alert('Invalid SC MAC address format. Please use format: xx:xx:xx:xx:xx:xx');
-        return;
-    }
     for (var i = 0; i < versalMacs.length; i++) {
         if (!macPattern.test(versalMacs[i])) {
             alert('Invalid Versal MAC address format at position ' + (i + 1) + '. Please use format: xx:xx:xx:xx:xx:xx');
@@ -3382,9 +3355,6 @@ function writeEEPROMData() {
     var requestData = {
         "cmd": "writeeepromdata"
     };
-    if (scMac) {
-        requestData.scMac = scMac;
-    }    
     // Use both array and individual parameter format for compatibility
     versalMacs.forEach(function(mac, index) {
         requestData['versalMacs[' + index + ']'] = mac;

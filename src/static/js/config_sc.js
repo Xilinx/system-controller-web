@@ -1077,7 +1077,7 @@ function addVadjTab() {
         , "B0params": "all"
         , "B0disabled":false
     };
-    innCompsget.push(getv2);
+    // innCompsget.push(getv2);
 
     var setv = {
         "type": "list"
