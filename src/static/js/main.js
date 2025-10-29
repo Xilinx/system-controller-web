@@ -3376,6 +3376,11 @@ function writeEEPROMData() {
             if (res.status === 'success') {
                 showSuccessTooltip("eepromwritestatus", "EEPROM updated successfully!", saveButton.parentElement);
                 alert('EEPROM updated successfully!');
+                var existingDetails = document.getElementById("db_dashboard").querySelectorAll('p.details_info');
+                existingDetails.forEach(function(element) {
+                    element.remove();
+                });
+                filleepromdetails();
             } else {
                 alert('Error updating EEPROM: ' + (res.data.error || res.data.message));
                 showFailureTooltip("eepromwritestatus", "Error: " + (res.data.error || res.data.message), saveButton.parentElement);
