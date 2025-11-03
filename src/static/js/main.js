@@ -1368,13 +1368,15 @@ function displaypopup(title, message, res, e, cn, inprg, count) {
 }
 
 function manualtestresult(result,res, e,cn,inprg,count){
-                                        if(result){
+                                        var hasFail = res.data.bitlogs && res.data.bitlogs.includes("FAIL");
+                                        
+                                        if(result && !hasFail){
                                         if(count != parseInt(e.target.getAttribute("test_type"))){
 						manualTest(e,cn,inprg,count+1);
 					}else{ 
 					inprg.className="";
 					inprg.classList.add("progress_inprogress_bar");
-					cn.childNodes[0].innerHTML = res.data.message+restime();
+					cn.childNodes[0].innerHTML ="Success";
 					cn.className = '';
 					cn.classList.add("ministatussuccess");
 					cn.classList.add("tooltip");
@@ -1385,7 +1387,7 @@ function manualtestresult(result,res, e,cn,inprg,count){
 					inprg.className="";
 					inprg.classList.add("progress_inprogress_bar");
 
-					cn.childNodes[0].innerHTML = res.data.message+restime();
+					cn.childNodes[0].innerHTML = res.data.bitlogs + "\n";
 					cn.className = '';
 					cn.classList.add("ministatusfail");
 					cn.classList.add("tooltip");
@@ -1393,6 +1395,7 @@ function manualtestresult(result,res, e,cn,inprg,count){
 
                                         }
 }
+
 function manTestResAnalysis(res,e,cn,inprg,count){
 		if(parseInt(e.target.getAttribute("test_type")) > 0){
 
