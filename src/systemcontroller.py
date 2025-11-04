@@ -328,7 +328,11 @@ if __name__ == '__main__':
     #    Logg.log("Please check sensors app Path",Logg.RELEASE)
     #    exit(0)
 
+    # Generate default.pdi file at startup
+    Term.exec_cmd(sc_app_path + " -c geteeprom -t onboard -v summary")   
+    
     generate_gen_sc_file(sc_app_path, app_config)
+    
     @app.route('/uploader', methods=['POST'])
     def upload_file():
         req = request.args.get('func')
