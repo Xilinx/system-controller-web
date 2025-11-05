@@ -24,6 +24,7 @@ app_config = {
     ,"ospirunscript":"/usr/share/embpf-bootfw-update-tool/prog_spi.sh -V -d versal_eval"
     ,'ospirunstatusfile': "./ospi_flash_status.txt"
     ,'ospirunstatusfile_getstatus':"[ -f ./ospi_flash_status.txt ] && cat ./ospi_flash_status.txt" #"[ -f ./ospi_flash_status.txt ] && tail -n 1 ./ospi_flash_status.txt"
+    ,"VRK160_ospirunscript":"/usr/share/embpf-bootfw-update-tool/bin/BOOT_vrk160_es1_sdr.bin"
     ,"VersalUSBImagePath":"/data/usb/"
     ,"versalconnectscript":"/usr/sbin/usb_gadget_connect.sh /data/usb/"
     ,"versaldisconnectscript":"/usr/sbin/usb_gadget_disconnect.sh"
