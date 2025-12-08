@@ -10,7 +10,7 @@
 app_config = {
     "deployment":"RELEASE"              # RELEASE, DEBUG
     ,"major_version":"1"
-    ,"minor_version" : "5"
+    ,"minor_version" : "6"
     ,"dev_for_major_ver" : "1"
     ,"dev_minor_ver" : "4"
     ,"sc_app_path":"sc_app"
