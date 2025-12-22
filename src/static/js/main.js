@@ -3072,7 +3072,7 @@ function generateOSPIblock(){
         });
     });
     
-    if (!app_strings.hasOwnProperty('OSPI_feature')){
+    if (!app_strings.hasOwnProperty('OSPI_feature') || !app_strings.OSPI_feature.isSuppot){
         document.getElementById("detectOSPI").remove();
     }
 }
