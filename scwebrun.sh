@@ -63,14 +63,12 @@ then
 *         BEAM Tool Web Address        *
 *                                      *
 *         http://$IP               
-*         http://$(hostname)                       
 *                                      *
 ****************************************       
 EOM
 )
                                                                  
 var=$(echo "$msge"  | sed -E '5s/(.{39})/&\*/')
-var=$(echo "$var"   | sed -E '6s/(.{39})/&\*/')
                                                    
 else
 
