@@ -1320,7 +1320,9 @@ function displaypopup(title, message, res, e, cn, inprg, count) {
     var sp = document.createElement("span");
 
     var em = document.createElement("input");
-    if (res.data.message.toLowerCase().indexOf("'ok'") > -1) {
+    if (res.data.message.toLowerCase().indexOf("connect") > -1) {
+        em.setAttribute("value", "Cancel");
+    } else if (res.data.message.toLowerCase().indexOf("'ok'") > -1) {
         em.setAttribute("value", "Cancel");
     } else {
         em.setAttribute("value", "Fail");
@@ -1338,7 +1340,9 @@ function displaypopup(title, message, res, e, cn, inprg, count) {
 
     em = document.createElement("input");
     em.setAttribute("type", "button");
-    if (res.data.message.toLowerCase().indexOf("'ok'") > -1) {
+    if (res.data.message.toLowerCase().indexOf("connect") > -1) {
+        em.setAttribute("value", "Connect");
+    } else if (res.data.message.toLowerCase().indexOf("'ok'") > -1) {
         em.setAttribute("value", "OK");
     } else {
         em.setAttribute("value", "Pass");
@@ -1349,6 +1353,18 @@ function displaypopup(title, message, res, e, cn, inprg, count) {
             document.getElementById("popform").style.display = "none";
         }
         manualtestresult(true, res, e, cn, inprg, count);
+        // Open PL UART 0 console only when Connect button is clicked
+        if (ev.target.value === "Connect") {
+            if (app_strings.hasOwnProperty('UART_content') && app_strings.UART_content.pane) {
+                var plUartAvailable = app_strings.UART_content.pane.some(function(uart) {
+                    return uart.button_link_title === "PL UART 0";
+                });
+                if (plUartAvailable) {
+                    var uartUrl = "uartconsole?title=" + encodeURIComponent("PL UART 0") + "&command=" + encodeURIComponent("4002");
+                    window.open(uartUrl, '_blank');
+                }
+            }
+        }
     };
     em.classList.add("popupbuttons");
     sp.appendChild(em);
