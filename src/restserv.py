@@ -27,6 +27,22 @@ def get_base_filename(filename):
     while '.' in filename:
         filename = os.path.splitext(filename)[0]
     return filename
+
+def uploaded_clock_display_name(filename):
+    suffixes_to_remove = [
+        '-user_config.boot.hex.txt',
+        '-prod_fw.boot.hex.txt',
+        '-patch_rom.boot.hex.txt',    
+]
+    base_name = filename
+    for suffix in suffixes_to_remove:
+        if base_name.endswith(suffix):
+            base_name = base_name[:-len(suffix)]
+            break
+    # If no specific suffix matched, strip all extensions
+    if base_name == filename:
+        base_name = get_base_filename(filename)    
+    return base_name
  
 def list_files_recursive(directory,bname):
     fileslist = []
@@ -189,11 +205,11 @@ class ClockFilesList(Resource):
                 if (os.path.exists(app_config["uploaded_files_path"])):
                     for c in os.listdir(app_config["uploaded_files_path"]):
                         if c.endswith(".tcs"):
-                            upload_tcs_files.append(os.path.splitext(c)[0])
+                            upload_tcs_files.append(uploaded_clock_display_name(c))
                         if c.endswith(".txt"):
-                            upload_txt_files.append(os.path.splitext(c)[0])
+                            upload_txt_files.append(uploaded_clock_display_name(c))
                         if c.endswith(".bin"):
-                            upload_bin_files.append(os.path.splitext(c)[0])
+                            upload_bin_files.append(uploaded_clock_display_name(c))
                 final_upload_list = list(set(upload_txt_files+upload_tcs_files))
                 upload_bin_files = list(set(upload_bin_files))
                 resp_json = {

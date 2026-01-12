@@ -990,7 +990,7 @@ function rendertabComponentDiv(title, comp){
                     bt1.setAttribute("id", "selectFile");
                     bt.setAttribute("type", "file");
                     bt.setAttribute('multiple', 'multiple');
-		    bt.setAttribute('accept', '.txt,.tcs,.bin');
+		            bt.setAttribute('accept', '.txt,.tcs,.bin');
                     bt1.onclick = function () {
                          bt.click();
                          return false;
@@ -998,9 +998,28 @@ function rendertabComponentDiv(title, comp){
 
                     bt.addEventListener("change", (e) => {
                     var formData = new FormData();
+                        var filesCount = e.target.files.length;
+                        var uploadedCount = 0;
+                        
+                        // Show loading state using utility function
+                        showLoadingTooltip("uploadFileStatus", lidiv);
+                        var uploadTip = document.getElementById("uploadFileStatusstatus");
+                        if (uploadTip) {
+                            uploadTip.innerHTML = "Uploading " + filesCount + " file(s)...";
+                            // uploadTip.style.display = "block";
+                        }
+                        
                         for (let i = 0; i < e.target.files.length; i++) {
                             formData.append('file', e.target.files[i]);
-                            fileUploder(formData, e.target.files[i], e.target.files[i].name.split('.')[1] == 'txt' ? '1' : '0',"clock");
+                            fileUploder(formData, e.target.files[i], e.target.files[i].name.split('.')[1] == 'txt' ? '1' : '0',"clock").then(function(result) {
+                                uploadedCount++;
+                                if (uploadedCount === filesCount) {
+                                    // All files uploaded successfully
+                                    showSuccessTooltip("uploadFileStatus", "Success", lidiv);
+                                }
+                            }).catch(function(error) {
+                                showFailureTooltip("uploadFileStatus", "Upload failed", lidiv);
+                            });
                         }
                         e.target.value = "";
                     })
