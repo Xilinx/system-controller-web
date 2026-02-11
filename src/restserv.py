@@ -459,10 +459,17 @@ class RaftQuery(Resource):
                 raft_fun = eval(f"pm.{req}(\"{tar}\"{paramStr})")
             except Exception as d:
                 print(d)
-            resp_json = {
-                "status" : raft_fun["status"],
-                "data":raft_fun["data"]
-            }
+            if raft_fun["status"] == "failure" or raft_fun["status"].startswith("failure"):
+                dresp = {"message": raft_fun["message"]}
+                resp_json = {
+                    "status":"error"
+                    ,"data":dresp
+                }
+            else:
+                resp_json = {
+                    "status":"success"
+                    ,"data":raft_fun["data"]
+                }
             return resp_json
         except Exception as e:
             resp_json = {
