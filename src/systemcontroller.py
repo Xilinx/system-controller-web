@@ -1,6 +1,6 @@
 ##
 # Copyright (c) 2020 - 2022 Xilinx, Inc.  All rights reserved.
-# Copyright (c) 2022 - 2025 Advanced Micro Devices, Inc.  All rights reserved.
+# Copyright (c) 2022 - 2026 Advanced Micro Devices, Inc.  All rights reserved.
 #
 # SPDX-License-Identifier: MIT
 ##
@@ -29,11 +29,10 @@ from websocket_server import WebsocketSession
 app = Flask(__name__)
 api = Api(app)
 app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024 * 1024 # 1 GB
-ALLOWED_CLK_EXTENSIONS = set(app_config["allowed_clock_files"])
 # ALLOWED_PDI_EXTENSIONS = set(app_config["allowed_pdi_files"])
 
 def allowed_clk_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_CLK_EXTENSIONS
+    return True
 def allowed_pdi_file(filename):
     return True
 def allowed_rauc_file(filename):
@@ -373,11 +372,10 @@ if __name__ == '__main__':
 
 
         if errors:
-            return jsonify({'message': 'Some files could not be uploaded. Allowed file types are txt'})
+            return jsonify({'message': 'Some files could not be uploaded.'})
 
         return jsonify({'message': 'Files successfully uploaded'})
     WebsocketSession()
     app.run(host="0.0.0.0", port=80, debug=False)
-
 
 

@@ -1,6 +1,6 @@
 ##
 # Copyright (c) 2020 - 2022 Xilinx, Inc.  All rights reserved.
-# Copyright (c) 2022 - 2025 Advanced Micro Devices, Inc.  All rights reserved.
+# Copyright (c) 2022 - 2026 Advanced Micro Devices, Inc.  All rights reserved.
 #
 # SPDX-License-Identifier: MIT
 ##
@@ -23,34 +23,13 @@ parse = ParseData()
 deviname = ""
 sc_app_path = app_config["sc_app_path"]
 listtemp = Term.exec_cmd(sc_app_path + " -c listtemp\n")
-def get_base_filename(filename):
-    while '.' in filename:
-        filename = os.path.splitext(filename)[0]
-    return filename
 
-def uploaded_clock_display_name(filename):
-    suffixes_to_remove = [
-        '-user_config.boot.hex.txt',
-        '-prod_fw.boot.hex.txt',
-        '-patch_rom.boot.hex.txt',    
-]
-    base_name = filename
-    for suffix in suffixes_to_remove:
-        if base_name.endswith(suffix):
-            base_name = base_name[:-len(suffix)]
-            break
-    # If no specific suffix matched, strip all extensions
-    if base_name == filename:
-        base_name = get_base_filename(filename)    
-    return base_name
- 
-def list_files_recursive(directory,bname):
+def list_files_recursive(directory,bname): #add the files which is starts with board name.
     fileslist = []
     for root, dirs, files in os.walk(directory):
         for file in files:
             if file.startswith(bname.split('\n')[0]):
-                base_filename = get_base_filename(file)
-                fileslist.append(base_filename)
+                fileslist.append(file)
     return list(set(fileslist))
 class BootMode:
     active_bootmode = "-"
@@ -186,42 +165,26 @@ class ClockFilesList(Resource):
         try:
             req = request.args.get('func')
             if req == "clock":
-                tcs_files = []
-                txt_files = []
-                bin_files = []
-                vendor_clock_files = []
-                for c in os.listdir(app_config["8A34001_clk_files_path"]):
-                    if c.endswith(".tcs"):
-                        tcs_files.append(os.path.splitext(c)[0])
-                    if c.endswith(".txt"):
-                        txt_files.append(os.path.splitext(c)[0])
-                    if c.endswith(".bin"):
-                        bin_files.append(os.path.splitext(c)[0])
-                final_list = list_files_recursive(app_config["8A34001_clk_files_path"],deviname.replace(" ",""))
-                bin_files = list(set(bin_files))
-                upload_tcs_files = []
-                upload_txt_files = []
-                upload_bin_files = []
-                if (os.path.exists(app_config["uploaded_files_path"])):
+                # Get all default clock files filtered by device name
+                default_clock_files = list_files_recursive(app_config["8A34001_clk_files_path"], deviname.replace(" ", ""))
+                default_clock_files = list(set(default_clock_files))
+                
+                # Get all uploaded clock files
+                uploaded_clock_files = []
+                if os.path.exists(app_config["uploaded_files_path"]):
                     for c in os.listdir(app_config["uploaded_files_path"]):
-                        if c.endswith(".tcs"):
-                            upload_tcs_files.append(uploaded_clock_display_name(c))
-                        if c.endswith(".txt"):
-                            upload_txt_files.append(uploaded_clock_display_name(c))
-                        if c.endswith(".bin"):
-                            upload_bin_files.append(uploaded_clock_display_name(c))
-                final_upload_list = list(set(upload_txt_files+upload_tcs_files))
-                upload_bin_files = list(set(upload_bin_files))
+                        if os.path.isfile(os.path.join(app_config["uploaded_files_path"], c)):
+                            uploaded_clock_files.append(c)
+                uploaded_clock_files = list(set(uploaded_clock_files))
+                
                 resp_json = {
                     "status": "success"
                     , "data": {
                         "default": {
-                            "finallist": final_list
-                            , "binfiles": final_list
+                            "finallist": default_clock_files
                         }
                         , "user": {
-                            "finaluploadlist": final_upload_list
-                            , "binfiles": upload_bin_files
+                            "finaluploadlist": uploaded_clock_files
                         }
                     }
                 }

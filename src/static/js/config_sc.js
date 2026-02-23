@@ -612,6 +612,18 @@ function addClockTab(){
         tds2 = "-";
         if(tdsary.length > 1) tds2 = "("+tdsary[1];
         if(tdsary[0].includes("Vendor Utility") == true) {
+        var extensions = [];
+        // Extract extensions from "Vendor Utility" string
+        var file_extensions = tdsary[0].indexOf("Vendor Utility");
+        if (file_extensions !== -1) {
+            var file_extensions_strings = tdsary[0].substring(file_extensions);
+            var match = file_extensions_strings.match(/\(([^)]+)\)/);
+            if (match && match[1]) {
+                extensions = match[1].split(',').map(function(ext) {
+                    return ext.trim().replace(/"/g, ''); // Remove quotes and trim whitespace
+                });
+            }
+        }
         var eachcomp = {
             "type":"list"
             ,"components" : ["C,L0,L1,F0,B0"]    // Checkbox, Label, editfield, info, button, Action
@@ -624,6 +636,7 @@ function addClockTab(){
             ,"B0sc_cmd":"setclock"
             , "B0target": tds
             , "B0params":""
+            , "EXT": extensions
         };
         innCompsset.push(eachcomp);
 
@@ -652,6 +665,17 @@ function addClockTab(){
         tds2 = "-";
         if(tdsary.length > 1) tds2 = "("+tdsary[1];
         if(tdsary[0].includes("Vendor Utility") == true) {
+        var extensions = [];
+        var file_extensions = tdsary[0].indexOf("Vendor Utility");
+        if (file_extensions !== -1) {
+            var file_extensions_strings = tdsary[0].substring(file_extensions);
+            var match = file_extensions_strings.match(/\(([^)]+)\)/);
+            if (match && match[1]) {
+                extensions = match[1].split(',').map(function(ext) {
+                    return ext.trim().replace(/"/g, '');
+                });
+            }
+        }
         var eachcomp = {
             "type":"list"
             ,"components" : ["C,L0,L1,G0,B0"]    // Checkbox, Label, editfield, info, button, Action
@@ -664,6 +688,7 @@ function addClockTab(){
             ,"B0sc_cmd":"setbootclock"
             , "B0target": tds
             , "B0params":""
+            , "EXT": extensions
         };
         innCompssetboot.push(eachcomp);
 
@@ -761,17 +786,32 @@ function addClockTab(){
             ]
             };
             var available = false;
+            var uploadExtensions = [];
             jQuery.each(listsjson_sc["listclock"], function (i, tds1) {
                 tdsary = tds1.split(" - (");
                 tds = tdsary[0];
                 if (tds.includes("Vendor Utility") == true) {
                     available = true;
+                    var file_extensions = tdsary[0].indexOf("Vendor Utility");
+                    if (file_extensions !== -1) {
+                        var file_extensions_strings = tdsary[0].substring(file_extensions);
+                        var match = file_extensions_strings.match(/\(([^)]+)\)/);
+                        if (match && match[1]) {
+                            match[1].split(',').forEach(function (ext) {
+                                var cleaned = ext.trim().replace(/"/g, '');
+                                if (cleaned.length > 0 && uploadExtensions.indexOf(cleaned) === -1) {
+                                    uploadExtensions.push(cleaned);
+                                }
+                            });
+                        }
+                    }
                 }
             });
             if (available){
                 dict.components.push({
                     "subtype": "tab_plus_button",
-                    "name": "Upload clock files"
+                    "name": "Upload clock files",
+                    "EXT": uploadExtensions
                 });
             }
     boardsettingsTab.push(dict);
@@ -1211,7 +1251,7 @@ function addVadjTab() {
     if (listsjson_sc["listFMCvoltage"].length && listsjson_sc["listFMCvoltage"][0].length == 0) {
         dict.components.splice(0, 1);
     }
-
+    
     boardsettingsTab.push(dict);
 }
 function addPowerDomainTab(){
