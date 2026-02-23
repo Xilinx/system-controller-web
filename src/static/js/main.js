@@ -1,6 +1,6 @@
 /*
 * Copyright (c) 2020 - 2021 Xilinx, Inc. and Contributors. All rights reserved.
-* Copyright (c) 2022 - 2025 Advanced Micro Devices, Inc.  All rights reserved.
+* Copyright (c) 2022 - 2026 Advanced Micro Devices, Inc.  All rights reserved.
 *
 * SPDX-License-Identifier: MIT
 */
@@ -281,6 +281,9 @@ var theadcomp = document.createElement("thead");
                     	var em = document.createElement("select");
                         em.setAttribute("reqkey", c[elem]);
                         em.setAttribute("id", 'selectElementId1' );
+                        if (c["EXT"]) {
+                            em.setAttribute("clock_file_extensions", c["EXT"]);
+                        }
                         var defOption = document.createElement("optgroup");
                         defOption.setAttribute("label", "Default");
                         em.appendChild(defOption);
@@ -293,6 +296,9 @@ var theadcomp = document.createElement("thead");
                         var em = document.createElement("select");
                         em.setAttribute("reqkey", c[elem]);
                         em.setAttribute("id", 'selectElementId0');
+                        if (c["EXT"]) {
+                            em.setAttribute("clock_file_extensions", c["EXT"]);
+                        }
                         var defOption = document.createElement("optgroup");
                         defOption.setAttribute("label", "Default");
                         em.appendChild(defOption);
@@ -473,33 +479,59 @@ function upload_clock_files(funcType) {
         data: { "func": funcType },
         success: function (res) {
             if (funcType === "clock"){
-                document.querySelectorAll('#selectElementId1').forEach((em, i) => {
+                document.querySelectorAll('#selectElementId1 ,#selectElementId0').forEach((em, i) => {
                     while (em.length > 0) em.remove(em.length - 1);
+                    // console.log("clock_file_extensions:", em.getAttribute("clock_file_extensions"));
+                    var extAttr = em.getAttribute("clock_file_extensions") || "";
+                    var allowedExtensions = extAttr
+                        .split(',')
+                        .map(function (ext) { return ext.trim().toLowerCase(); })
+                        .filter(function (ext) { return ext.length > 0; });
+
+                    function isAllowedFile(filename) {
+                        if (!allowedExtensions.length) return true;
+                        var lowerName = String(filename).toLowerCase();
+                        for (var idx = 0; idx < allowedExtensions.length; idx++) {
+                            if (lowerName.endsWith(allowedExtensions[idx])) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
+                    
+                    function stripAllowedExtension(filename) {
+                        if (!allowedExtensions.length) return filename;
+                        var lowerName = String(filename).toLowerCase();
+                        for (var idx = 0; idx < allowedExtensions.length; idx++) {
+                            var ext = allowedExtensions[idx];
+                            if (lowerName.endsWith(ext)) {
+                                return filename.slice(0, filename.length - ext.length);
+                            }
+                        }
+                        return filename;
+                    }
+
+                    var seenDefault = {};
                     jQuery.each(res["data"]["default"]["finallist"], function (k, d) {
+                        if (!isAllowedFile(d)) return;
+                        var displayName = stripAllowedExtension(d);
+                        if (seenDefault[displayName]) return;
+                        seenDefault[displayName] = true;
                         var g = document.createElement("option");
                         g.setAttribute('value', d);
-                        g.innerHTML = d
+                        g.innerHTML = displayName;
                         em.children[0].appendChild(g);
                     });
+
+                    var seenUser = {};
                     jQuery.each(res["data"]["user"]["finaluploadlist"], function (k, d) {
+                        if (!isAllowedFile(d)) return;
+                        var displayName = stripAllowedExtension(d);
+                        if (seenUser[displayName]) return;
+                        seenUser[displayName] = true;
                         var g = document.createElement("option");
                         g.setAttribute('value', d);
-                        g.innerHTML = d
-                        em.children[1].appendChild(g);
-                    });
-                });
-                document.querySelectorAll('#selectElementId0').forEach((em, i) => {
-                    while (em.length > 0) em.remove(em.length - 1);
-                    jQuery.each(res["data"]["default"]["binfiles"], function (k, d) {
-                        var g = document.createElement("option");
-                        g.setAttribute('value', d);
-                        g.innerHTML = d
-                        em.children[0].appendChild(g);
-                    });
-                    jQuery.each(res["data"]["user"]["binfiles"], function (k, d) {
-                        var g = document.createElement("option");
-                        g.setAttribute('value', d);
-                        g.innerHTML = d
+                        g.innerHTML = displayName;
                         em.children[1].appendChild(g);
                     });
                 });
@@ -559,7 +591,7 @@ function fileUploder(formdata, fileObj, select_id, funcType) {
          document.querySelectorAll('.ministatusloading').forEach(function (el) {
             el.classList.remove('ministatusloading');
         });
-        return;
+        return Promise.reject(new Error("Empty file"));
     }
     var dupFound = false;
     var sIds = ["selectElementId0", "selectElementId1", "PDIselectionOption1", "PDIselectionOption2", "RaucSelectionOption", "OSPIselectionOption", "VersalselectionOption"]
@@ -575,7 +607,7 @@ function fileUploder(formdata, fileObj, select_id, funcType) {
     });
     if (dupFound) {
         alert("File with same name already exists. Please upload file with different name.");
-        return;
+        return Promise.reject(new Error("Duplicate file"));
 
     }
     return fetch('/uploader?func=' + funcType, {
@@ -990,7 +1022,20 @@ function rendertabComponentDiv(title, comp){
                     bt1.setAttribute("id", "selectFile");
                     bt.setAttribute("type", "file");
                     bt.setAttribute('multiple', 'multiple');
-		            bt.setAttribute('accept', '.txt,.tcs,.bin');
+                    if (c["EXT"]) {
+                        var rawExtList = Array.isArray(c["EXT"]) ? c["EXT"] : String(c["EXT"]).split(',');
+                        var normalizedExt = rawExtList
+                            .map(function (ext) {
+                                var trimmed = String(ext).trim();
+                                if (!trimmed) return "";
+                                return trimmed.startsWith('.') ? trimmed : '.' + trimmed;
+                            })
+                            .filter(function (ext) { return ext.length > 0; })
+                            .join(',');
+                        if (normalizedExt.length > 0) {
+                            bt.setAttribute('accept', normalizedExt);
+                        }
+                    }
                     bt1.onclick = function () {
                          bt.click();
                          return false;
@@ -3905,4 +3950,3 @@ $(document).ready(function () {
     	}
 
 });
-
