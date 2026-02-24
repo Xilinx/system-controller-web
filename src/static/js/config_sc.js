@@ -564,7 +564,8 @@ function addClockTab(){
         tdsary = tds1.split(" - (");
         tdsfinalary = tdsary[0].split(" - ");
         tds = tdsfinalary[0];
-        if(tdsary[0].includes("Vendor Utility")) {
+        var vendorLabel = tdsfinalary[1] ? tdsfinalary[1].split(" (")[0].trim() : "";
+        if(vendorLabel === "Vendor Utility") {
         var eachcomp = {
             "type":"list"
             ,"components" : ["C,L0,V0,V1,B0"]    // Checkbox, Label, editfield, info, button, Action
@@ -580,7 +581,7 @@ function addClockTab(){
             ,"B0sc_cmd":JSON.stringify(["getclock","getmeasuredclock"])
             , "B0target": JSON.stringify([tds,tds])
             , "B0params":JSON.stringify(["",""])
-            , "B0extraparams":JSON.stringify([tdsfinalary[1],tdsfinalary[1]])
+            , "B0extraparams":JSON.stringify([vendorLabel,vendorLabel])
         };
         innCompsget.push(eachcomp);
 
@@ -2043,4 +2044,5 @@ var boardsettingsTabReference = [
         ]
 
     }
+
 ];
