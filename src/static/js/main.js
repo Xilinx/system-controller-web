@@ -518,7 +518,7 @@ function upload_clock_files(funcType) {
                         if (seenDefault[displayName]) return;
                         seenDefault[displayName] = true;
                         var g = document.createElement("option");
-                        g.setAttribute('value', d);
+                        g.setAttribute('value', displayName);
                         g.innerHTML = displayName;
                         em.children[0].appendChild(g);
                     });
@@ -530,7 +530,7 @@ function upload_clock_files(funcType) {
                         if (seenUser[displayName]) return;
                         seenUser[displayName] = true;
                         var g = document.createElement("option");
-                        g.setAttribute('value', d);
+                        g.setAttribute('value', displayName);
                         g.innerHTML = displayName;
                         em.children[1].appendChild(g);
                     });
