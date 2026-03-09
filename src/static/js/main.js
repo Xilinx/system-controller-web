@@ -1028,7 +1028,14 @@ function rendertabComponentDiv(title, comp){
                             .map(function (ext) {
                                 var trimmed = String(ext).trim();
                                 if (!trimmed) return "";
-                                return trimmed.startsWith('.') ? trimmed : '.' + trimmed;
+                                if (trimmed.startsWith('.')) {
+                                    return trimmed;
+                                }
+                                var firstDot = trimmed.indexOf('.');
+                                if (firstDot !== -1) {
+                                    return trimmed.slice(firstDot);
+                                }
+                                return '.' + trimmed;
                             })
                             .filter(function (ext) { return ext.length > 0; })
                             .join(',');
