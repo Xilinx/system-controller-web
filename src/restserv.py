@@ -454,11 +454,13 @@ class RaftQuery(Resource):
         try:
             req = request.args.get('sc_cmd')
             tar = request.args.get('target')
-            params_req = request.args.get('params')
-            params = params_req.split(",")
+            params_req = request.args.get('params', '')
+            params = [p for p in params_req.split(",") if len(p)]
             paramStr = ""
-            if len(params_req):
-                paramStr = ",["+params_req+"]"
+            if len(params) == 1:
+                paramStr = "," + params[0]
+            elif len(params) > 1:
+                paramStr = ",[" + params_req + "]"
             try:
                 raft_fun = eval(f"pm.{req}(\"{tar}\"{paramStr})")
             except Exception as d:
