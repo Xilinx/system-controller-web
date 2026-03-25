@@ -13,7 +13,6 @@
 from flask import Flask, render_template, request
 from flask import Response  ,jsonify
 from flask_restful import Resource, Api , reqparse
-from werkzeug.utils import secure_filename
 import shutil
 
 from logg import *
@@ -41,6 +40,16 @@ def allowed_ospi_file(filename):
     return True
 def allowed_versal_file(filename):
     return True
+
+def uploaded_filename(filename):
+    name = os.path.basename(str(filename)).replace('\x00', '').strip()
+    if not name or name in ('.', '..'):
+        return None
+    if '..' in name:
+        return None
+    if any(ord(ch) < 32 for ch in name):
+        return None
+    return name
 
 @app.route('/')
 def index():
@@ -352,20 +361,20 @@ if __name__ == '__main__':
             if file.filename == '':
                 return jsonify({'message': 'No file selected for uploading'})
 
+            filename = uploaded_filename(file.filename)
+            if not filename:
+                errors = True
+                continue
+
             if req == 'clock' and file and allowed_clk_file(file.filename):
-                filename = secure_filename(file.filename)
                 file.save(os.path.join(app_config["uploaded_files_path"], filename))
             elif req == 'pdi' and file and allowed_pdi_file(file.filename):
-                filename = secure_filename(file.filename)
                 file.save(os.path.join(app_config["PDIFilePath"], filename))
             elif req == 'rauc' and file and allowed_rauc_file(file.filename):
-                filename = secure_filename(file.filename)
                 file.save(os.path.join(app_config["raucFilepath"], filename))
             elif req == 'ospi' and file and allowed_ospi_file(file.filename):
-                filename = secure_filename(file.filename)
                 file.save(os.path.join(app_config["ospiFilepath"], filename))
             elif req == 'versal' and file and allowed_versal_file(file.filename):
-                filename = secure_filename(file.filename)
                 file.save(os.path.join(app_config["VersalUSBImagePath"], filename))
             else:
                 errors = True

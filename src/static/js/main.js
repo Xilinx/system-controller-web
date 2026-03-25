@@ -471,7 +471,7 @@ function startPolling() {
     }
   });
   startPolling();
-function upload_clock_files(funcType) {
+function upload_clock_files(funcType, uploadedFileName) {
     $.ajax({
         url: "/clock_files",
         type: 'GET',
@@ -579,6 +579,10 @@ function upload_clock_files(funcType) {
                     });
                 });
             }
+            // Auto-select uploaded file if provided
+            if (uploadedFileName) {
+                selectUploadedFile(uploadedFileName, funcType);
+            }
         },
         error: function (res) {
             console.log(res)
@@ -618,7 +622,7 @@ function fileUploder(formdata, fileObj, select_id, funcType) {
             if (response.status == 200) {
                 console.log('File uploaded successfully.');
                 if (["clock", "pdi", "rauc", "ospi", "versal"].includes(funcType)) {
-                    upload_clock_files(funcType);
+                    upload_clock_files(funcType, fileObj.name);
                 }
                 return "Success";
             } else {
@@ -628,6 +632,35 @@ function fileUploder(formdata, fileObj, select_id, funcType) {
         .catch((error) => {
             console.error('Error:', error);
         });
+}
+function selectUploadedFile(fileName, funcType) {
+    // Map funcType to dropdown selectors
+    var dropdowns = {
+        "clock": ["selectElementId0", "selectElementId1"],
+        "pdi": ["PDIselectionOption1", "PDIselectionOption2"],
+        "ospi": ["OSPIselectionOption"],
+        "rauc": ["RaucSelectionOption"],
+        "versal": ["VersalselectionOption"]
+    };
+    
+    var selectorIds = dropdowns[funcType];
+    if (!selectorIds) {
+        return;
+    }
+    
+    // Select the uploaded file in all relevant dropdowns
+    selectorIds.forEach(function(id) {
+        document.querySelectorAll('#' + id).forEach(function(select) {
+            // Check if the file exists in the dropdown
+            for (var i = 0; i < select.options.length; i++) {
+                if (select.options[i].value === fileName) {
+                    select.selectedIndex = i;
+                    $(select).trigger('change');
+                    break;
+                }
+            }
+        });
+    });
 }
 function getlogs(){
     $.ajax({
@@ -2642,14 +2675,18 @@ function generatePDIblock(){
     button.id="uploadpdi";
     button.setAttribute("value", "Browse");
     button.setAttribute("type", "file");
+    button.setAttribute('multiple', 'multiple');
 //    button.setAttribute('accept', '.pdi');
     button.addEventListener('change', function(event) {
-    var file = event.target.files[0];
-    if (file) {
-        var formData = new FormData();
-        formData.append("file", file);
-        fileUploder(formData, file, "PDIselectionOption1", "pdi");
-        fileUploder(formData, file, "PDIselectionOption2", "pdi");
+    var files = event.target.files;
+    for (var i = 0; i < files.length; i++) {
+        var file = files[i];
+        if (file) {
+            var formData = new FormData();
+            formData.append("file", file);
+            fileUploder(formData, file, "PDIselectionOption1", "pdi");
+            fileUploder(formData, file, "PDIselectionOption2", "pdi");
+        }
     }
 });
     em1.appendChild(button);
@@ -2858,22 +2895,26 @@ function generateOSPIblock(){
     button.id="uploadospi";
     button.setAttribute("value", "Browse");
     button.setAttribute("type", "file");
+    button.setAttribute('multiple', 'multiple');
 //    button.setAttribute('accept', '.bin');
     button.addEventListener('change', function(event) {
         document.getElementById("uploadospiloadid").className = "";
         document.getElementById("uploadospistatus").innerHTML = "";
-        var file = event.target.files[0];
-        if (file) {
-            var formData = new FormData();
-            formData.append("file", file);
-            document.getElementById("uploadospiloadid").className = "ministatusloading";
-            fileUploder(formData, file, "OSPIselectionOption", "ospi").then(() => {
-                document.getElementById("uploadospiloadid").className = "ministatussuccess";
-                document.getElementById("uploadospistatus").innerHTML = "Upload Success";
-            }).catch(() => {
-                document.getElementById("uploadospiloadid").className = "ministatusfail";
-                document.getElementById("uploadospistatus").innerHTML = "Upload Failed";
-            });
+        var files = event.target.files;
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            if (file) {
+                var formData = new FormData();
+                formData.append("file", file);
+                document.getElementById("uploadospiloadid").className = "ministatusloading";
+                fileUploder(formData, file, "OSPIselectionOption", "ospi").then(() => {
+                    document.getElementById("uploadospiloadid").className = "ministatussuccess";
+                    document.getElementById("uploadospistatus").innerHTML = "Upload Success";
+                }).catch(() => {
+                    document.getElementById("uploadospiloadid").className = "ministatusfail";
+                    document.getElementById("uploadospistatus").innerHTML = "Upload Failed";
+                });
+            }
         }
     });
     em1.appendChild(button);
