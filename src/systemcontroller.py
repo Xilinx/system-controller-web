@@ -14,6 +14,7 @@ from flask import Flask, render_template, request
 from flask import Response  ,jsonify
 from flask_restful import Resource, Api , reqparse
 import shutil
+import os
 
 from logg import *
 from restserv import *
@@ -366,17 +367,27 @@ if __name__ == '__main__':
                 errors = True
                 continue
 
+            target_dir = None
             if req == 'clock' and file and allowed_clk_file(file.filename):
-                file.save(os.path.join(app_config["uploaded_files_path"], filename))
+                target_dir = app_config["uploaded_files_path"]
             elif req == 'pdi' and file and allowed_pdi_file(file.filename):
-                file.save(os.path.join(app_config["PDIFilePath"], filename))
+                target_dir = app_config["PDIFilePath"]
             elif req == 'rauc' and file and allowed_rauc_file(file.filename):
-                file.save(os.path.join(app_config["raucFilepath"], filename))
+                target_dir = app_config["raucFilepath"]
             elif req == 'ospi' and file and allowed_ospi_file(file.filename):
-                file.save(os.path.join(app_config["ospiFilepath"], filename))
+                target_dir = app_config["ospiFilepath"]
             elif req == 'versal' and file and allowed_versal_file(file.filename):
-                file.save(os.path.join(app_config["VersalUSBImagePath"], filename))
+                target_dir = app_config["VersalUSBImagePath"]
             else:
+                errors = True
+                continue
+
+            try:
+                if not os.path.exists(target_dir):
+                    os.makedirs(target_dir)
+                file.save(os.path.join(target_dir, filename))
+            except Exception as e:
+                Logg.log("Upload failed for {}: {}".format(filename, str(e)), Logg.ERROR)
                 errors = True
 
 
@@ -386,5 +397,4 @@ if __name__ == '__main__':
         return jsonify({'message': 'Files successfully uploaded'})
     WebsocketSession()
     app.run(host="0.0.0.0", port=80, debug=False)
-
 
