@@ -39,7 +39,7 @@ class BootMode:
     @staticmethod
     def setBootMode(mode):
         BootMode.active_bootmode = mode
-        if deviname == "VEK385":
+        if deviname.strip() == "VEK385":
             SysFactory.exec_cmd(sc_app_path +" -c setbootmode -t "+mode + "",SysFactory.TERMINAL) 
         else:
             SysFactory.exec_cmd(sc_app_path +" -c setbootmode -t "+mode + " -v alternate",SysFactory.TERMINAL)
