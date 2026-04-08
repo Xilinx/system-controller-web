@@ -338,14 +338,7 @@ if __name__ == '__main__':
     #    exit(0)
 
     # Generate default.pdi file at startup
-    Term.exec_cmd(sc_app_path + " -c geteeprom -t onboard -v summary")
-    # Get device name to check if it's VRK160
-    deviname = Term.exec_cmd(sc_app_path + " -c board\n").strip()    
-    # Check if VRK160 OSPI file has size, if not run the prog_spi.sh command
-    if deviname == "VRK160":
-        file_path = app_config["VRK160_ospirunscript"]
-        if not os.path.exists(file_path) or os.path.getsize(file_path) == 0:
-            response = Term.exec_cmd("/usr/share/embpf-bootfw-update-tool/prog_spi.sh -c -d versal_eval")    
+    Term.exec_cmd(sc_app_path + " -c geteeprom -t onboard -v summary")   
     
     generate_gen_sc_file(sc_app_path, app_config)
     

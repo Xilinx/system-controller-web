@@ -682,15 +682,7 @@ class ScriptRunner(Resource):
                     cmd += " -e"
                 if file:
                     cmd += file
-                
-                # Check if VRK160 OSPI boot file exists and device is VRK160
-                vrk160_boot_file = app_config["VRK160_ospirunscript"]
-                if os.path.exists(vrk160_boot_file) and deviname.strip() == "VRK160":
-                    result = SysFactory.exec_cmd(cmd + " -b " + app_config["VRK160_ospirunscript"], SysFactory.SCRIPT, app_config["ospirunstatusfile"])
-                    print("VRK160 Ospi Flashing Result:", cmd + " -b " + app_config["VRK160_ospirunscript"], SysFactory.SCRIPT, app_config["ospirunstatusfile"])
-                else:
-                    result = SysFactory.exec_cmd(cmd, SysFactory.SCRIPT, app_config["ospirunstatusfile"])
-                    print("Ospi Flashing Result:", cmd, SysFactory.SCRIPT, app_config["ospirunstatusfile"])
+                result = SysFactory.exec_cmd(cmd,SysFactory.SCRIPT,app_config["ospirunstatusfile"])
                 if result.strip().split('\n')[-1].strip() == "Script completed":
                     resp_json = {
                         "status": "success"
