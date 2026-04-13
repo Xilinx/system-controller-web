@@ -6,6 +6,40 @@
 */
 var myVar;
 var pollresp = false;
+var bitLogSocket = null;
+
+function appendBitLogText(logText) {
+    var textbox = $(".textBox")[0];
+    if (!textbox || !logText) {
+        return;
+    }
+    textbox.value += logText;
+    if (!logText.endsWith("\n")) {
+        textbox.value += "\n";
+    }
+    textbox.scrollTop = textbox.scrollHeight;
+}
+
+function startBitLogStream() {
+    if (bitLogSocket && (bitLogSocket.readyState === WebSocket.OPEN || bitLogSocket.readyState === WebSocket.CONNECTING)) {
+        return;
+    }
+
+    bitLogSocket = new WebSocket('ws://' + window.location.hostname + ':8765/bitlog');
+    bitLogSocket.onmessage = function(event) {
+        appendBitLogText(event.data);
+    };
+    bitLogSocket.onclose = function() {
+        bitLogSocket = null;
+        setTimeout(startBitLogStream, 2000);
+    };
+    bitLogSocket.onerror = function() {
+        // Ensure onclose is triggered so reconnect happens.
+        if (bitLogSocket && bitLogSocket.readyState !== WebSocket.CLOSED && bitLogSocket.readyState !== WebSocket.CLOSING) {
+            bitLogSocket.close();
+        }
+    };
+}
 /*
 * loading screen for till loading the html pages
 */
@@ -1530,9 +1564,8 @@ function manualTest(e,cn,inprg,count){
                 if(res) {
 			manTestResAnalysis(res,e,cn,inprg,count)
  		}
-                if (res.data.bitlogs) {
-                    var textbox = $(".textBox")[0];
-                    textbox.value += res.data.bitlogs + "\n";
+                 if (res.data.bitlogs && (!bitLogSocket || (bitLogSocket.readyState !== WebSocket.OPEN && bitLogSocket.readyState !== WebSocket.CONNECTING))) {
+                    appendBitLogText(res.data.bitlogs);
                 }
           },
 	  error: function(){
@@ -1555,6 +1588,8 @@ function restime(){
     return "";//"</br>"+(new Date()).toLocaleTimeString();
 }
 function generateBITUI() {
+
+    startBitLogStream();
 
        var runall = document.createElement("input");
     runall.setAttribute("type", "button");
@@ -1845,10 +1880,9 @@ function generateBITUI() {
 								setTimeout(()=>{inprg.innerHTML = "Fail";inprg.classList.add("inprogress_bar_state_fail"); },10);
 							}
 						}
-						if (res.data.bitlogs) {
-                         			    var textbox = $(".textBox")[0];
-			                            textbox.value += res.data.bitlogs + "\n";
-                      				}
+                        if (res.data.bitlogs && (!bitLogSocket || (bitLogSocket.readyState !== WebSocket.OPEN && bitLogSocket.readyState !== WebSocket.CONNECTING))) {
+                            appendBitLogText(res.data.bitlogs);
+                          			}
 					},
 					error: function(){
 						cn.childNodes[0].innerHTML = 'Network Issue'+restime();

@@ -10,6 +10,7 @@ import threading
 import shutil
 import socket
 from urllib.parse import urlparse, parse_qs
+from config_app import app_config
 
 class UartConnect:
     def __init__(self):
@@ -57,7 +58,37 @@ class WebsocketSession:
         uri = urlparse(path)
         params = parse_qs(uri.query)
         key_value = params.get('session', [None])[0]
-        if uri.path == "/connect" and key_value is not None:
+        if uri.path == "/bitlog":
+            tail_process = None
+            try:
+                bitlog_path = app_config["bitlogFilePath"]
+                tail_process = await asyncio.create_subprocess_exec(
+                    "tail", "-n", "0", "-F", bitlog_path,
+                    stdout=asyncio.subprocess.PIPE,
+                    stderr=asyncio.subprocess.PIPE,
+                )
+                while True:
+                    line = await tail_process.stdout.readline()
+                    if not line:
+                        await asyncio.sleep(0.1)
+                        continue
+                    await websocket.send(line.decode(errors="ignore"))
+            except websockets.exceptions.ConnectionClosed:
+                pass
+            except Exception:
+                pass
+            finally:
+                if tail_process is not None:
+                    try:
+                        tail_process.kill()
+                    except Exception:
+                        pass
+                try:
+                    await websocket.close(code=1000, reason="Connection closed by the server")
+                except Exception:
+                    pass
+            return
+        elif uri.path == "/connect" and key_value is not None:
             try:
                 if key_value not in self.sessions.keys() :
                     self.sessions[key_value] = UartConnect()
