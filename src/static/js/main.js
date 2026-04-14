@@ -31,7 +31,6 @@ function startBitLogStream() {
     };
     bitLogSocket.onclose = function() {
         bitLogSocket = null;
-        setTimeout(startBitLogStream, 2000);
     };
     bitLogSocket.onerror = function() {
         // Ensure onclose is triggered so reconnect happens.
@@ -1785,6 +1784,7 @@ function generateBITUI() {
 
 
     $(".buttons_bit").click(function(e){ 
+    startBitLogStream();
     console.log("button clicked"+e.target.getAttribute("target_s"));
 /*        var erow = $(e.target).parent().parent().parent().parent().find('tbody').find("tr");
             jQuery.each(erow, function(j,trs){
