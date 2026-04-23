@@ -2334,6 +2334,9 @@ function generateRAUCblock() {
                 document.getElementById("uploadraucstatus").innerHTML = "Upload Failed";
             });
         }
+        setTimeout(function () {
+            event.target.value = "";
+        }, 3000);
     });
     raucFlash.appendChild(button);    
     // Add loading indicator for file upload
@@ -2722,6 +2725,9 @@ function generatePDIblock(){
             fileUploder(formData, file, "PDIselectionOption2", "pdi");
         }
     }
+    setTimeout(function () {
+        event.target.value = "";
+    }, 3000);
 });
     em1.appendChild(button);
     // Create and add remove button using the function
@@ -2950,6 +2956,9 @@ function generateOSPIblock(){
                 });
             }
         }
+        setTimeout(function () {
+            event.target.value = "";
+        }, 3000);
     });
     em1.appendChild(button);
     // Create and add remove button using the function
@@ -3296,6 +3305,9 @@ function generateVersalFlashblock() {
                 document.getElementById("uploadversalstatus").innerHTML = "Upload Failed";
             });
       }
+            setTimeout(function () {
+                    event.target.value = "";
+            }, 3000);
     });
     em1.appendChild(button);
     var smload2 = document.createElement("div");
