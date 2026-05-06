@@ -24,20 +24,20 @@ cd /usr/share/scweb/
 python3 systemcontroller.py &
 
 ## Run Jupyter notebook
-dev_eeprom=$(find /sys/bus/i2c/devices/*54/ -name eeprom | head -1)
-board=$(ipmi-fru --fru-file=${dev_eeprom} --interpret-oem-data | awk -F": " '/^  *FRU Board Product*/ { print tolower ($2) }')
-if [ $board == "vck190" ] || [ $board == "vmk180" ]
-then
-    HOME=`(cd ~root && pwd) || echo 'none'`
-    rm ${HOME}/.local/share/jupyter/runtime/*
-    systemctl enable jupyter-setup.service
-    systemctl start jupyter-setup.service
-else
-    ## Run jupyter notebook with non root user
-    HOME=`(cd ~petalinux && pwd) || echo 'none'`
-    rm ${HOME}/.local/share/jupyter/runtime/*
-    sudo su - petalinux -c "systemctl --user enable jupyter-setup.service"
-fi
+# dev_eeprom=$(find /sys/bus/i2c/devices/*54/ -name eeprom | head -1)
+# board=$(ipmi-fru --fru-file=${dev_eeprom} --interpret-oem-data | awk -F": " '/^  *FRU Board Product*/ { print tolower ($2) }')
+# if [ $board == "vck190" ] || [ $board == "vmk180" ]
+# then
+#     HOME=`(cd ~root && pwd) || echo 'none'`
+#     rm ${HOME}/.local/share/jupyter/runtime/*
+#     systemctl enable jupyter-setup.service
+#     systemctl start jupyter-setup.service
+# else
+#     ## Run jupyter notebook with non root user
+#     HOME=`(cd ~petalinux && pwd) || echo 'none'`
+#     rm ${HOME}/.local/share/jupyter/runtime/*
+#     sudo su - petalinux -c "systemctl --user enable jupyter-setup.service"
+# fi
 
 if [ -d /usr/share/embpf-bootfw-update-tool/ospi ]; then
     mkdir -p /data/OSPI
