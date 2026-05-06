@@ -1469,6 +1469,9 @@ function displaypopup(title, message, res, e, cn, inprg, count) {
         if (document.getElementById("popform").innerHTML.length == 0) {
             document.getElementById("popform").style.display = "none";
         }
+        if (ev.target.value === "Fail") {
+            appendBitLogText("\n"+e.target.getAttribute("target_s")+" Fail");
+        }
         manualtestresult(false, res, e, cn, inprg, count);
     };
     sp.appendChild(em);
@@ -1484,6 +1487,9 @@ function displaypopup(title, message, res, e, cn, inprg, count) {
         ev.target.parentNode.parentNode.parentNode.remove();
         if (document.getElementById("popform").innerHTML.length == 0) {
             document.getElementById("popform").style.display = "none";
+        }
+        if (ev.target.value === "Pass") {
+            appendBitLogText("\n"+e.target.getAttribute("target_s")+" Pass");
         }
         manualtestresult(true, res, e, cn, inprg, count);
     };
