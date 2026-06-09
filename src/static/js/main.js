@@ -68,7 +68,7 @@ function loadRefreshData(){
                 var tval = 0;
                 tval = res.data.temp > 125 ? 125 : res.data.temp;
                 tval = tval < 0 ? 0 : tval;
-                if (res.data.temp == 256)
+                if (res.data.temp == 256 || res.data.temp == 228.8)
                     tval = '-';
                 el.style.setProperty("--temps", tval);
                 if(res.data.temp < 70) el.style.setProperty("--showc","green");
@@ -76,7 +76,7 @@ function loadRefreshData(){
                 else el.style.setProperty("--showc","red");
                 if(tval == '-'){el.style.setProperty("--showc","gray");}
                 if("listtemp" in listsjson_sc){
-                    if (res.data.temp == 256){
+                    if (res.data.temp == 256 || res.data.temp == 228.8){
                         document.getElementById("home_board_temp_id").innerHTML = "- °C";
                     } else{
                         document.getElementById("home_board_temp_id").innerHTML = res.data.temp +" °C";
