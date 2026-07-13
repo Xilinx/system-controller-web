@@ -601,6 +601,11 @@ function upload_clock_files(funcType, uploadedFileName) {
                     });
                     
                 });
+                var raucSelect = document.getElementById("RaucSelectionOption");
+                var raucUpdateBtn = document.getElementById("update_rauc");
+                if (raucUpdateBtn && raucSelect) {
+                    raucUpdateBtn.disabled = !(raucSelect.options.length > 0 && raucSelect.value);
+                }
             }else if (funcType === "versal"){
                 document.querySelectorAll('#VersalselectionOption').forEach((em, i) => {
                     while (em.length > 0) em.remove(em.length - 1);
@@ -2373,13 +2378,21 @@ function generateRAUCblock() {
     rauc_update_btn.id="update_rauc";
     rauc_update_btn.setAttribute("value", "Update");
     rauc_update_btn.setAttribute("type", "button");
+    rauc_update_btn.disabled = true;
 
     es2.appendChild(rauc_update_btn);
+
+    function toggleRaucUpdateButton() {
+        var selectedValue = $('#RaucSelectionOption').val();
+        rauc_update_btn.disabled = (!selectedValue || !selectedValue.length);
+    }
     
     $('#RaucSelectionOption').change(function(e){
         document.getElementById("uploadraucloadid").className = "";
         document.getElementById("uploadraucstatus").innerHTML = "";
+        toggleRaucUpdateButton();
     });
+    toggleRaucUpdateButton();
      rauc_update_btn.onclick = function () {
             $('#loader').show();
             $('#raucupdate_screen').append(hideBackground);
@@ -3627,7 +3640,7 @@ function navClick(tid){
         }
     }
     if (tid === "boardinterfacetest") {$("#testandebug_screen").removeClass('hide'); $("#ttbbackid").removeClass('hide');}
-    if (tid === "raucupdate") {$("#raucupdate_screen").removeClass('hide'); $("#ttbbackid").removeClass('hide');}
+    if (tid === "raucupdate") {$("#raucupdate_screen").removeClass('hide');$("#ttbbackid").removeClass('hide');upload_clock_files("rauc");}
     if (tid === "versalimageupdate") {$("#versalimageupdate_screen").removeClass('hide'); }
     if (tid === "setmacaddress") {$("#setmacaddress_screen").removeClass('hide'); }
 
