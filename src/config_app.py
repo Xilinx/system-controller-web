@@ -40,5 +40,5 @@ app_config = {
     ,"allowed_clock_files":['txt', 'tcs', 'bin']
     ,"eeprom_fetch_cmd":"frugy -r /sys/bus/i2c/devices/2-0054/eeprom -o eeprom.yml"
     ,"yml_to_bin_cmd":"frugy eeprom.yml"
-    ,"flash_eeprom_cmd":"timeout 1 gpioset -c $(gpioinfo | grep -B40 \"EEPROM_WP\" | grep \"gpiochip\" | tail -1 | sed 's/gpiochip\\([0-9]*\\).*/\\1/') $(gpioinfo | grep EEPROM_WP | sed 's/.*line *\\([0-9]*\\):.*/\\1/')=0 ; dd if=eeprom.bin of=/sys/bus/i2c/devices/2-0054/eeprom ; timeout 1 gpioset -c $(gpioinfo | grep -B40 \"EEPROM_WP\" | grep \"gpiochip\" | tail -1 | sed 's/gpiochip\\([0-9]*\\).*/\\1/') $(gpioinfo | grep EEPROM_WP | sed 's/.*line *\\([0-9]*\\):.*/\\1/')=1"
+    ,"flash_eeprom_cmd":"timeout 1 gpioset -c $(gpioinfo | grep -B40 \"EEPROM_WC_B\" | grep \"gpiochip\" | tail -1 | sed 's/gpiochip\\([0-9]*\\).*/\\1/') $(gpioinfo | grep \"EEPROM_WC_B\" | sed 's/.*line *\\([0-9]*\\):.*/\\1/')=0 ; dd if=eeprom.bin of=/sys/bus/i2c/devices/2-0054/eeprom ; timeout 1 gpioset -c $(gpioinfo | grep -B40 \"EEPROM_WC_B\" | grep \"gpiochip\" | tail -1 | sed 's/gpiochip\\([0-9]*\\).*/\\1/') $(gpioinfo | grep \"EEPROM_WC_B\" | sed 's/.*line *\\([0-9]*\\):.*/\\1/')=1"
 }
