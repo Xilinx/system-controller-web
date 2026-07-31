@@ -3710,6 +3710,202 @@ function layoutDesigns(){
 /*	Help Screen */
    {
         $('#help_screen .app-title').html(app_strings.help_content.title);
+
+        // Debug Mode checkbox
+        var debugCheckboxWrapper = document.createElement("div");
+        debugCheckboxWrapper.style.display = "flex";
+        debugCheckboxWrapper.style.alignItems = "center";
+        debugCheckboxWrapper.style.gap = "8px";
+        debugCheckboxWrapper.style.marginTop = "20px";
+        debugCheckboxWrapper.style.padding = "10px";
+        debugCheckboxWrapper.style.marginLeft = "20px";
+
+        var debugCheckbox = document.createElement("input");
+        debugCheckbox.setAttribute("type", "checkbox");
+        debugCheckbox.id = "debugModeCheckbox";
+        debugCheckbox.style.cursor = "pointer";
+
+        var debugLabel = document.createElement("label");
+        debugLabel.setAttribute("for", "debugModeCheckbox");
+        debugLabel.classList.add("descontent");
+        debugLabel.textContent = "Debug Mode:";
+        debugLabel.style.cursor = "pointer";
+        debugLabel.style.margin = "0";
+
+        var debugStatusText = document.createElement("span");
+        debugStatusText.classList.add("descontent");
+        debugStatusText.style.marginLeft = "10px";
+
+        debugCheckbox.checked = false;
+        debugStatusText.textContent = "OFF";
+
+        var debugDownloadButton = document.createElement("button");
+        debugDownloadButton.textContent = "Download";
+        debugDownloadButton.style.marginLeft = "10px";
+        debugDownloadButton.style.padding = "5px 10px";
+        debugDownloadButton.style.cursor = "pointer";
+        debugDownloadButton.style.display = "none";
+        debugDownloadButton.onclick = function () {
+            if (debugLog.length === 0) {
+                alert("No debug log data to download");
+                return;
+            }
+            var content = debugLog.join("\n");
+            var blob = new Blob([content], { type: "text/csv" });
+            var a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = debugFileName || "debug_log.csv";
+            a.click();
+            URL.revokeObjectURL(a.href);
+        };
+
+        var debugLog = [];
+        var debugFileHandle = null;
+        var debugFileName = "";
+        var debugClickHandler = null;
+        var isDebugRecording = false;
+
+        function escapeCSV(str) {
+            if (!str) return "";
+            if (typeof str !== 'string') str = String(str);
+            if (str.indexOf(',') >= 0 || str.indexOf('"') >= 0 || str.indexOf('\n') >= 0) {
+                return '"' + str.replace(/"/g, '""') + '"';
+            }
+            return str;
+        }
+
+        function startDebugRecording(name) {
+            debugLog = [];
+            isDebugRecording = true;
+            
+            // Add CSV header
+            debugLog.push(["EventType", "TagName", "ElementID", "Value", "Target", "SpecKeyID", "Response"].map(escapeCSV).join(","));
+            
+            debugClickHandler = function (e) {
+                var row = [
+                    "CLICK",
+                    e.target.tagName || "",
+                    e.target.id || "",
+                    e.target.value || "",
+                    e.target.getAttribute('target') || "",
+                    e.target.getAttribute('speckey_id') || "",
+                    (e.target.textContent && e.target.textContent.trim() ? e.target.textContent.trim().substring(0, 50) : "")
+                ];
+                debugLog.push(row.map(escapeCSV).join(","));
+            };
+            document.addEventListener("click", debugClickHandler, true);
+            
+            $(document).on("ajaxSuccess.debug", function (event, xhr, settings) {
+                if (!isDebugRecording) return;
+                var responseData = xhr.responseJSON ? JSON.stringify(xhr.responseJSON).substring(0, 150) : "";
+                var targetMatch = settings.url ? settings.url.match(/target=([^&]+)/) : null;
+                var targetValue = targetMatch ? decodeURIComponent(targetMatch[1]) : "";
+                var isResponseError = xhr.responseJSON && xhr.responseJSON.status === 'error';
+                var row = [
+                    isResponseError ? "API ERROR" : "API SUCCESS",
+                    settings.url || "",
+                    "",
+                    "",
+                    targetValue,
+                    "",
+                    xhr.status + " | " + responseData
+                ];
+                debugLog.push(row.map(escapeCSV).join(","));
+            });
+            
+            $(document).on("ajaxError.debug", function (event, xhr, settings, error) {
+                if (!isDebugRecording) return;
+                var targetMatch = settings.url ? settings.url.match(/target=([^&]+)/) : null;
+                var targetValue = targetMatch ? decodeURIComponent(targetMatch[1]) : "";
+                var row = [
+                    "API ERROR",
+                    settings.url || "",
+                    "",
+                    "",
+                    targetValue,
+                    "",
+                    xhr.status + " | " + error
+                ];
+                debugLog.push(row.map(escapeCSV).join(","));
+            });
+            
+            debugStatusText.textContent = "ON";
+        }
+
+        function stopDebugRecording() {
+            isDebugRecording = false;
+            if (debugClickHandler) {
+                document.removeEventListener("click", debugClickHandler, true);
+                debugClickHandler = null;
+            }
+            $(document).off("ajaxSuccess.debug ajaxError.debug");
+            debugStatusText.textContent = "OFF";
+        }
+
+        function saveDebugLog() {
+            if (debugLog.length === 0) return;
+            var content = debugLog.join("\n");
+            if (debugFileHandle) {
+                debugFileHandle.createWritable().then(function (writable) {
+                    return writable.write(content).then(function () { return writable.close(); });
+                }).catch(function () {
+                    alert("Failed to write debug log to file.");
+                });
+            } else {
+                var blob = new Blob([content], { type: "text/csv" });
+                var a = document.createElement("a");
+                a.href = URL.createObjectURL(blob);
+                a.download = debugFileName || "debug_log.csv";
+                a.click();
+                URL.revokeObjectURL(a.href);
+            }
+        }
+
+        debugCheckbox.addEventListener("change", function () {
+            if (debugCheckbox.checked) {
+                if (window.showSaveFilePicker) {
+                    window.showSaveFilePicker({
+                        suggestedName: "debug_log.csv",
+                        types: [{ description: "CSV Files", accept: { "text/csv": [".csv"] } }]
+                    }).then(function (fileHandle) {
+                        debugFileHandle = fileHandle;
+                        startDebugRecording(fileHandle.name);
+                        debugDownloadButton.style.display = "inline-block";
+                    }).catch(function () {
+                        debugCheckbox.checked = false;
+                        debugStatusText.textContent = "OFF";
+                        debugDownloadButton.style.display = "none";
+                    });
+                } else {
+                    alert("Debug mode enabled - monitor log file size to avoid huge log files");
+                    var now = new Date();
+                    var timestamp = now.getFullYear() + 
+                                   String(now.getMonth() + 1).padStart(2, '0') + 
+                                   String(now.getDate()).padStart(2, '0') + '_' +
+                                   String(now.getHours()).padStart(2, '0') + 
+                                   String(now.getMinutes()).padStart(2, '0') + 
+                                   String(now.getSeconds()).padStart(2, '0');
+                    var fileName = "debug_log_" + timestamp + ".csv";
+                    debugFileName = fileName;
+                    debugFileHandle = null;
+                    startDebugRecording(fileName);
+                    debugDownloadButton.style.display = "inline-block";
+                }
+            } else {
+                stopDebugRecording();
+                debugLog = [];
+                debugFileHandle = null;
+                debugFileName = "";
+                debugDownloadButton.style.display = "none";
+            }
+        });
+
+        debugCheckboxWrapper.appendChild(debugCheckbox);
+        debugCheckboxWrapper.appendChild(debugLabel);
+        debugCheckboxWrapper.appendChild(debugStatusText);
+        debugCheckboxWrapper.appendChild(debugDownloadButton);
+        $("#help_screen").append(debugCheckboxWrapper);
+
         var em3 = document.createElement("div");
         for(var i = 0; i < app_strings.help_content.content.length; i++){
         if (app_strings.help_content.content[i].heading.length){
