@@ -2836,10 +2836,25 @@ function generatePDIblock(){
     tip3.id="resetbootpdistatus";
     tip3.classList.add("tooltiptext");
     smload3.append(tip3);
+
+    function updatePdiButtonsState() {
+        var loadPdiSelect = document.getElementById("PDIselectionOption1");
+        var setBootPdiSelect = document.getElementById("PDIselectionOption2");
+        document.getElementById("loadpdibuttonid").disabled = loadPdiSelect.options.length === 0;
+        document.getElementById("setbootpdibuttonid").disabled = setBootPdiSelect.options.length === 0;
+    }
+
+    updatePdiButtonsState();
+
+    var pdiLoadObserver = new MutationObserver(updatePdiButtonsState);
+    pdiLoadObserver.observe(document.getElementById("PDIselectionOption1"), { childList: true });
+    var pdiSetBootObserver = new MutationObserver(updatePdiButtonsState);
+    pdiSetBootObserver.observe(document.getElementById("PDIselectionOption2"), { childList: true });
   
     $('#PDIselectionOption1').change(function(e){
         document.getElementById("loadpdiloadid").className = "";
         document.getElementById("loadpdistatus").innerHTML = "";
+        updatePdiButtonsState();
     });
     $('#loadpdibuttonid').click(function(e){
         document.getElementById("loadpdistatus").innerHTML = "";
@@ -2874,6 +2889,7 @@ function generatePDIblock(){
     $('#PDIselectionOption2').change(function(e){
         document.getElementById("setbootpdiloadid").className = "";
         document.getElementById("setbootpdistatus").innerHTML = "";
+        updatePdiButtonsState();
     });
     $('#setbootpdibuttonid').click(function(e){
         document.getElementById("setbootpdistatus").innerHTML = "";
@@ -3097,6 +3113,7 @@ function generateOSPIblock(){
     
     if (loadElement) loadElement.className = "";
     if (statusElement) statusElement.innerHTML = "";
+    updateOspiButtonsState();
     });
     
     var em3 = document.createElement("p");
@@ -3149,6 +3166,16 @@ function generateOSPIblock(){
     button4.setAttribute("value", "Erase");
     button4.setAttribute("type", "button");
     em4.appendChild(button4);
+
+    function updateOspiButtonsState() {
+        var ospiSelect = document.getElementById("OSPIselectionOption");
+        document.getElementById("applyospibuttonid").disabled = ospiSelect.options.length === 0;
+    }
+
+    updateOspiButtonsState();
+
+    var ospiObserver = new MutationObserver(updateOspiButtonsState);
+    ospiObserver.observe(document.getElementById("OSPIselectionOption"), { childList: true });
 
     var applyospiID = document.getElementById("applyospi");
 
