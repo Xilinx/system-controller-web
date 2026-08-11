@@ -690,6 +690,21 @@ class ScriptRunner(Resource):
                     }
                     return resp_json
                 else:
+                    if "Error:" in result:
+                        split_result = result.split("Error:", 1)
+                        if len(split_result) > 1 and split_result[1].strip():
+                            error_message = "Error:" + split_result[1].strip()
+                            if "Timed out" in result:
+                                result = (
+                                    "OSPI operation timed out."
+                                    + "\n" + error_message
+                                )
+                            else:
+                                result = error_message
+                        else:
+                            result = result.strip()
+                    else:
+                        result = result.strip()
                     resp_json = {
                         "status": "error"
                         , "data":{
@@ -707,6 +722,24 @@ class ScriptRunner(Resource):
                     ,"data": result.strip().split("\n")[-1]
                 }
                 return resp_jon
+            elif funq == 'getospilog':
+                cmd = "cat /usr/share/scweb/ospi_flash_status.txt"
+                result = Term.exec_cmd(cmd)
+                if result is None or "No such file or directory" in result or "can't open" in result:
+                    resp_json = {
+                        "status": "error"
+                        , "data": {
+                            "message": "Unable to read /usr/share/scweb/ospi_flash_status.txt"
+                        }
+                    }
+                    return resp_json
+                resp_json = {
+                    "status": "success"
+                    , "data": {
+                        "message": result.strip()
+                    }
+                }
+                return resp_json
             elif funq == "versalUSBconnect":
                 file = request.args.get('file')
                 cmd = app_config["versalconnectscript"]+file

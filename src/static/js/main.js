@@ -3050,6 +3050,41 @@ function generateOSPIblock(){
     closeButton.onclick = function () {
         document.body.removeChild(ospipopupmain);
     };
+
+    var showLogButton = document.createElement('button');
+    showLogButton.textContent = 'Show Full Log';
+    showLogButton.classList.add('popupbuttons');
+    showLogButton.style.marginRight = '10px';
+    showLogButton.style.marginLeft = '10px';
+    showLogButton.style.display = 'none';
+    showLogButton.onclick = function () {
+        $.ajax({
+            url: "/scriptrunner",
+            type: 'GET',
+            dataType: 'json',
+            data: { "cmd": "getospilog" },
+            success: function (res) {
+                if (res.status === 'success' && res.data && res.data.message) {
+                    var logWin = window.open('', '_blank');
+                    if (logWin) {
+                        logWin.document.write('<!doctype html><html><head><title>OSPI Full Log</title></head><body><pre style="white-space: pre-wrap; word-break: break-word;">' + $('<div/>').text(res.data.message).html() + '</pre></body></html>');
+                        logWin.document.close();
+                    } else {
+                        popupMessage.textContent = "Unable to open new window. Please allow pop-ups.";
+                        popupMessage.style.whiteSpace = "pre-wrap";
+                    }
+                } else {
+                    popupMessage.textContent = "Unable to fetch OSPI full log.";
+                    popupMessage.style.whiteSpace = "pre-wrap";
+                }
+            },
+            error: function () {
+                popupMessage.textContent = "Unable to fetch OSPI full log.";
+                popupMessage.style.whiteSpace = "pre-wrap";
+            }
+        });
+    };
+
     closeButton.disabled = true;
     popupFooter.appendChild(closeButton);
     ospipopupmain.appendChild(popup);
@@ -3068,12 +3103,7 @@ function generateOSPIblock(){
     m.id = "OSPIselectionOption";
     m.classList.add("dash_bm");
     em2.appendChild(m);
-
-    var ErrorStatus = "OSPI Flash Failure: The OSPI flash process has encountered an error. Please try the following steps to resolve the issue:\
-<br>&emsp;1.Retry the flashing process.\
-<br>&emsp;2.If the issue persists, verify the integrity of the OSPI image.\
-<br>&emsp;3.Check the board settings for any discrepancies.\
-<br>If the problem persists after troubleshooting these steps, consider seeking additional support or consulting the relevant documentation.";
+    
     var pollactive = true;
     var pollInterval;
     function Timer(){
@@ -3103,7 +3133,7 @@ function generateOSPIblock(){
                 popupMessage.innerHTML = table;
             },
             error: function () {
-                popupMessage.innerHTML = ErrorStatus
+                popupMessage.innerHTML = "Network Error";
             }
         });
     }
@@ -3182,6 +3212,11 @@ function generateOSPIblock(){
     $('#applyospibuttonid').click(function (e) {
         popupMessage.innerHTML = "<b style='display: flex; justify-content: center; align-items: center;'>Initializing... Please wait</b>";
         closeButton.disabled = true;
+        showLogButton.disabled = true;
+        showLogButton.style.display = "none";
+        if (popupFooter.contains(showLogButton)) {
+            popupFooter.removeChild(showLogButton);
+        }
         document.body.appendChild(ospipopupmain);
         var verifyChecked = document.getElementById("verifyospibuttonid").checked;
         var programChecked = document.getElementById("programospibuttonid").checked;
@@ -3211,10 +3246,21 @@ function generateOSPIblock(){
                 if (res.status === 'error') {
                     pollactive = false;
                     showFailureTooltip("applyospistatus",res.data.message,applyospiID);
-                    popupMessage.innerHTML = ErrorStatus;
+                    popupMessage.textContent = res.data.message;
+                    popupMessage.style.whiteSpace = "pre-wrap";
+                    showLogButton.style.display = "inline-block";
+                    showLogButton.disabled = false;
+                    if (!popupFooter.contains(showLogButton)) {
+                        popupFooter.insertBefore(showLogButton, closeButton);
+                    }
                     closeButton.disabled = false;
                 } else {
                     showSuccessTooltip("applyospistatus", "Success", applyospiID);
+                    showLogButton.style.display = "none";
+                    showLogButton.disabled = false;
+                    if (popupFooter.contains(showLogButton)) {
+                        popupFooter.removeChild(showLogButton);
+                    }
                     closeButton.disabled = false;
                     ospiSuccess();
                 }
@@ -3223,8 +3269,12 @@ function generateOSPIblock(){
                 pollactive = false;
                 clearInterval(pollInterval);
                 document.body.appendChild(ospipopupmain);
-                showFailureTooltip("applyospistatus", ErrorStatus, applyospiID);
-                popupMessage.innerHTML = ErrorStatus;
+                showFailureTooltip("applyospistatus", "Network Error", applyospiID);
+                popupMessage.innerHTML = "Network Error";
+                showLogButton.disabled = false;
+                if (popupFooter.contains(showLogButton)) {
+                    popupFooter.removeChild(showLogButton);
+                }
                 closeButton.disabled = false;
             }
         });
@@ -3233,6 +3283,11 @@ function generateOSPIblock(){
     $('#eraseospibuttonid').click(function (e) {
         popupMessage.innerHTML = "<b style='display: flex; justify-content: center; align-items: center;'>Erasing OSPI... Please wait</b>";
         closeButton.disabled = true;
+        showLogButton.disabled = true;
+        showLogButton.style.display = "none";
+        if (popupFooter.contains(showLogButton)) {
+            popupFooter.removeChild(showLogButton);
+        }
         document.body.appendChild(ospipopupmain);
 
         var pollInterval = setInterval(Timer, 1000);
@@ -3254,10 +3309,21 @@ function generateOSPIblock(){
                 if (res.status === 'error') {
                     pollactive = false;
                     showFailureTooltip("eraseospistatus",res.data.message,eraseospiID);
-                    popupMessage.innerHTML = ErrorStatus;
+                    popupMessage.textContent = res.data.message;
+                    popupMessage.style.whiteSpace = "pre-wrap";
+                    showLogButton.style.display = "inline-block";
+                    showLogButton.disabled = false;
+                    if (!popupFooter.contains(showLogButton)) {
+                        popupFooter.insertBefore(showLogButton, closeButton);
+                    }
                     closeButton.disabled = false;
                 } else {
                     showSuccessTooltip("eraseospistatus", "Success", eraseospiID);
+                    showLogButton.style.display = "none";
+                    showLogButton.disabled = false;
+                    if (popupFooter.contains(showLogButton)) {
+                        popupFooter.removeChild(showLogButton);
+                    }
                     closeButton.disabled = false;
                     ospiSuccess();
                 }
@@ -3266,8 +3332,12 @@ function generateOSPIblock(){
                 pollactive = false;
                 clearInterval(pollInterval);
                 document.body.appendChild(ospipopupmain);
-                showFailureTooltip("eraseospistatus", ErrorStatus, eraseospiID);
-                popupMessage.innerHTML = ErrorStatus;
+                showFailureTooltip("eraseospistatus", "Network Error", eraseospiID);
+                popupMessage.innerHTML = "Network Error";
+                showLogButton.disabled = false;
+                if (popupFooter.contains(showLogButton)) {
+                    popupFooter.removeChild(showLogButton);
+                }
                 closeButton.disabled = false;
             }
         });
