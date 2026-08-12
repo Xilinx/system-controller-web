@@ -41,6 +41,8 @@ def allowed_ospi_file(filename):
     return True
 def allowed_versal_file(filename):
     return True
+def allowed_ufs_file(filename):
+    return True
 
 def uploaded_filename(filename):
     name = os.path.basename(str(filename)).replace('\x00', '').strip()
@@ -371,6 +373,8 @@ if __name__ == '__main__':
                 target_dir = app_config["ospiFilepath"]
             elif req == 'versal' and file and allowed_versal_file(file.filename):
                 target_dir = app_config["VersalUSBImagePath"]
+            elif req == 'ufs' and file and allowed_ufs_file(file.filename):
+                target_dir = app_config["ufsFilepath"]
             else:
                 errors = True
                 continue

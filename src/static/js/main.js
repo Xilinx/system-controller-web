@@ -588,6 +588,16 @@ function upload_clock_files(funcType, uploadedFileName) {
                         em.appendChild(g);
                     });
                 });
+            }else if (funcType === "ufs"){
+                document.querySelectorAll('#UFSselectionOption').forEach((em, i) => {
+                    while (em.length > 0) em.remove(em.length - 1);
+                    jQuery.each(res["data"]["ufs"]["ufs_files"], function (k, d) {
+                        var g = document.createElement("option");
+                        g.setAttribute('value', d);
+                        g.innerHTML = d
+                        em.appendChild(g);
+                    });
+                });
             }else if (funcType === "rauc"){
                 document.querySelectorAll('#RaucSelectionOption').forEach((em, i) => {
                     while (em.length > 0) em.remove(em.length - 1);
@@ -636,7 +646,7 @@ function fileUploder(formdata, fileObj, select_id, funcType) {
         return Promise.reject(new Error("Empty file"));
     }
     var dupFound = false;
-    var sIds = ["selectElementId0", "selectElementId1", "PDIselectionOption1", "PDIselectionOption2", "RaucSelectionOption", "OSPIselectionOption", "VersalselectionOption"]
+    var sIds = ["selectElementId0", "selectElementId1", "PDIselectionOption1", "PDIselectionOption2", "RaucSelectionOption", "OSPIselectionOption","UFSselectionOption", "VersalselectionOption"]
     jQuery.each(sIds, function (t, l) {
 
         document.querySelectorAll('#' + l).forEach((em, i) => {
@@ -659,7 +669,7 @@ function fileUploder(formdata, fileObj, select_id, funcType) {
         .then(response => {
             if (response.status == 200) {
                 console.log('File uploaded successfully.');
-                if (["clock", "pdi", "rauc", "ospi", "versal"].includes(funcType)) {
+                if (["clock", "pdi", "rauc", "ospi", "ufs", "versal"].includes(funcType)) {
                     upload_clock_files(funcType, fileObj.name);
                 }
                 return "Success";
@@ -677,6 +687,7 @@ function selectUploadedFile(fileName, funcType) {
         "clock": ["selectElementId0", "selectElementId1"],
         "pdi": ["PDIselectionOption1", "PDIselectionOption2"],
         "ospi": ["OSPIselectionOption"],
+        "ufs": ["UFSselectionOption"],
         "rauc": ["RaucSelectionOption"],
         "versal": ["VersalselectionOption"]
     };
@@ -3347,6 +3358,402 @@ function generateOSPIblock(){
         document.getElementById("detectOSPI").remove();
     }
 }
+//Upload UFS section
+function generateUFSblock(){
+    var block = $("#detectUFS");
+    var em1 = document.createElement("div");
+    em1.classList.add("details_info");
+    block.append(em1)
+    var es = document.createTextNode("Browse UFS Image:");
+    em1.appendChild(es);
+
+    var button = document.createElement("input");
+    button.classList.add("buttons");
+    button.classList.add("dash_bm");
+    button.style.width = '45%';
+    button.id="uploadufs";
+    button.setAttribute("value", "Browse");
+    button.setAttribute("type", "file");
+    button.setAttribute('multiple', 'multiple');
+//    button.setAttribute('accept', '.bin');
+    button.addEventListener('change', function(event) {
+        document.getElementById("uploadufsloadid").className = "";
+        document.getElementById("uploadufsstatus").innerHTML = "";
+        var files = event.target.files;
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            if (file) {
+                var formData = new FormData();
+                formData.append("file", file);
+                document.getElementById("uploadufsloadid").className = "ministatusloading";
+                fileUploder(formData, file, "UFSselectionOption", "ufs").then(() => {
+                    document.getElementById("uploadufsloadid").className = "ministatussuccess";
+                    document.getElementById("uploadufsstatus").innerHTML = "Upload Success";
+                }).catch(() => {
+                    document.getElementById("uploadufsloadid").className = "ministatusfail";
+                    document.getElementById("uploadufsstatus").innerHTML = "Upload Failed";
+                });
+            }
+        }
+        setTimeout(function () {
+            event.target.value = "";
+        }, 3000);
+    });
+    em1.appendChild(button);
+    // Create and add remove button using the function
+    var removeButton = createRemoveButton("UFSselectionOption", "ufs");
+    em1.appendChild(removeButton);
+
+
+    // Add loading indicator for file upload
+    var smload2 = document.createElement("div");
+    smload2.id="uploadufsloadid";
+    smload2.style.display = 'inline-block';
+    smload2.style.marginLeft = '15px';
+    em1.append(smload2);
+    var tip2 = document.createElement("a");
+    tip2.id="uploadufsstatus";
+    tip2.classList.add("tooltiptext");
+    smload2.append(tip2);
+    //load UFS section
+    var ufspopupmain = document.createElement('div');
+    ufspopupmain.className = 'popup-background';
+    ufspopupmain.style.display = "block";
+    ufspopupmain.setAttribute('id', 'popupmain');
+
+    var popup = document.createElement('div');
+    popup.setAttribute('id', 'popup');
+    popup.className = 'popup-content';
+    popup.style.zoom = "normal";
+    popup.style.width = "60%";
+    popup.style.maxHeight = "56%";
+    popup.style.overflow = "auto";
+
+    var popupHeader = document.createElement('div');
+    popupHeader.className = 'popup-header';
+
+    var heading = document.createElement('h2');
+    heading.style.textAlign = 'center';
+    heading.setAttribute('popupid', '1');
+    heading.id = 'popupheadingid';
+    heading.textContent = 'UFS Image Update Status';
+    popupHeader.appendChild(heading);
+
+    var popupMessage = document.createElement('p');
+    popupMessage.style.padding = "10px";
+    popupMessage.style.lineHeight = "25px";
+    popupMessage.style.maxHeight = "50vh";
+    popupMessage.style.overflow = "auto";
+
+    var popupFooter = document.createElement('div');
+    popupFooter.classList.add('popup-footer');
+
+    var closeButton = document.createElement('button');
+    closeButton.textContent = 'Close';
+    closeButton.classList.add('popupbuttons');
+    closeButton.onclick = function () {
+        document.body.removeChild(ufspopupmain);
+    };
+
+    var showUfsLogButton = document.createElement('button');
+    showUfsLogButton.textContent = 'Show Full Log';
+    showUfsLogButton.classList.add('popupbuttons');
+    showUfsLogButton.style.marginRight = '10px';
+    showUfsLogButton.style.marginLeft = '10px';
+    showUfsLogButton.style.display = 'none';
+    showUfsLogButton.onclick = function () {
+        $.ajax({
+            url: "/scriptrunner",
+            type: 'GET',
+            dataType: 'json',
+            data: { "cmd": "getufslog" },
+            success: function (res) {
+                if (res.status === 'success' && res.data && res.data.message) {
+                    var logWin = window.open('', '_blank');
+                    if (logWin) {
+                        logWin.document.write('<!doctype html><html><head><title>UFS Full Log</title></head><body><pre style="white-space: pre-wrap; word-break: break-word;">' + $('<div/>').text(res.data.message).html() + '</pre></body></html>');
+                        logWin.document.close();
+                    } else {
+                        popupMessage.textContent = "Unable to open new window. Please allow pop-ups.";
+                        popupMessage.style.whiteSpace = "pre-wrap";
+                    }
+                } else {
+                    popupMessage.textContent = "Unable to fetch UFS full log.";
+                    popupMessage.style.whiteSpace = "pre-wrap";
+                }
+            },
+            error: function () {
+                popupMessage.textContent = "Unable to fetch UFS full log.";
+                popupMessage.style.whiteSpace = "pre-wrap";
+            }
+        });
+    };
+
+    closeButton.disabled = true;
+    popupFooter.appendChild(closeButton);
+    ufspopupmain.appendChild(popup);
+    popup.appendChild(popupHeader);
+    popup.appendChild(popupMessage);
+    popup.appendChild(popupFooter);
+
+    var em2 = document.createElement("p");
+    em2.classList.add("details_info");
+//    em2.style.borderBottom = 'none';
+    block.append(em2);
+
+    var es2 = document.createTextNode("UFS Image Source:");
+    em2.append(es2);
+    var radioWrapper = document.createElement("span");
+    radioWrapper.style.marginLeft = "10px";
+
+    var radioDropdown = document.createElement("input");
+    radioDropdown.setAttribute("type", "radio");
+    radioDropdown.setAttribute("name", "ufsLoadMode");
+    radioDropdown.setAttribute("value", "dropdown");
+    radioDropdown.id = "ufsRadioDropdown";
+    radioDropdown.checked = true;
+    radioDropdown.style.marginRight = "4px";
+
+    var labelDropdown = document.createElement("label");
+    labelDropdown.setAttribute("for", "ufsRadioDropdown");
+    labelDropdown.textContent = "File List";
+    labelDropdown.style.marginRight = "14px";
+    labelDropdown.style.cursor = "pointer";
+
+    var radioPath = document.createElement("input");
+    radioPath.setAttribute("type", "radio");
+    radioPath.setAttribute("name", "ufsLoadMode");
+    radioPath.setAttribute("value", "path");
+    radioPath.id = "ufsRadioPath";
+    radioPath.style.marginRight = "4px";
+
+    var labelPath = document.createElement("label");
+    labelPath.setAttribute("for", "ufsRadioPath");
+    labelPath.textContent = "USB Path";
+    labelPath.style.cursor = "pointer";
+
+    radioWrapper.appendChild(radioDropdown);
+    radioWrapper.appendChild(labelDropdown);
+    radioWrapper.appendChild(radioPath);
+    radioWrapper.appendChild(labelPath);
+    em2.appendChild(radioWrapper);
+    em2.appendChild(document.createElement("br"));
+
+    var m = document.createElement("select");
+    m.id = "UFSselectionOption";
+    m.classList.add("dash_bm");
+    m.style.minWidth = "210px";
+    em2.appendChild(m);
+    m.style.marginTop = "10px";
+
+    var ufsPathInput = document.createElement("input");
+    ufsPathInput.setAttribute("type", "text");
+    ufsPathInput.id = "UFSFilePathInput";
+    ufsPathInput.classList.add("dash_bm");
+    ufsPathInput.placeholder = "Enter UFS file path";
+    ufsPathInput.style.minWidth = "215px";
+    ufsPathInput.style.display = "none";
+    em2.appendChild(ufsPathInput);
+    var pathInfo = document.createElement("span");
+    pathInfo.classList.add("tooltipinfo");
+    pathInfo.style.marginLeft = "5px";
+    pathInfo.style.display = "none";
+    pathInfo.appendChild(document.createTextNode("ⓘ"));
+
+    var pathTooltip = document.createElement("a");
+    pathTooltip.classList.add("tooltiptextinfo");
+    pathTooltip.textContent = "Enter the full UFS file path in USB device to load.";
+    pathInfo.appendChild(pathTooltip);
+    em2.appendChild(pathInfo);
+    var pathLoadButton = document.createElement("input");
+    pathLoadButton.classList.add("buttons");
+    pathLoadButton.classList.add("dash_bm");
+    pathLoadButton.id = "loadufsbuttonid";
+    pathLoadButton.setAttribute("value", "Write");
+    pathLoadButton.setAttribute("type", "button");
+    pathLoadButton.style.minWidth = "120px";
+    pathLoadButton.style.marginLeft = "25px";
+    pathLoadButton.style.marginTop = "10px";
+    em2.appendChild(pathLoadButton);
+    var ufsLoadMode = "dropdown";
+
+    function setUfsLoadMode(mode) {
+        ufsLoadMode = mode;
+        var isDropdownMode = mode === "dropdown";
+
+        m.style.display = isDropdownMode ? "inline-block" : "none";
+        ufsPathInput.style.display = isDropdownMode ? "none" : "inline-block";
+        pathInfo.style.display = isDropdownMode ? "none" : "inline-block";
+        button.disabled = !isDropdownMode;
+
+        radioDropdown.checked = isDropdownMode;
+        radioPath.checked = !isDropdownMode;
+        updateUfsButtonsState();
+    }
+
+    radioDropdown.addEventListener("change", function () {
+        if (radioDropdown.checked) setUfsLoadMode("dropdown");
+    });
+    radioPath.addEventListener("change", function () {
+        if (radioPath.checked) setUfsLoadMode("path");
+    });
+    var pollactive = true;
+    var pollInterval;
+    function Timer(){
+            if (!pollactive) {
+                clearInterval(pollInterval);
+                return;
+            }
+            ufsSuccess();
+    }
+    function ufsSuccess(){
+        $.ajax({
+            url: "/status",
+            type: 'GET',
+            dataType: 'json',
+            data: { "cmd": "ufsboot" },
+            success: function (res) {
+                if (!pollactive) { 
+                    clearInterval(pollInterval);
+                    return;
+                }
+                var message = res.data.message;
+                var table = "<table>";
+                for (var key in message) {
+                    table += "<tr><td></td><td>" + " " + key + "</td><td style='text-align:center'>" + message[key] + "</td></tr>";
+                }
+                table += "</table>";
+                popupMessage.innerHTML = table;
+            },
+            error: function () {
+                popupMessage.innerHTML = "Network Error";
+            }
+        });
+    }
+    $('#UFSselectionOption').change(function(e){
+    var loadElement = document.getElementById("loadufsloadid");
+    var statusElement = document.getElementById("loadufsstatus");
+    
+    if (loadElement) loadElement.className = "";
+    if (statusElement) statusElement.innerHTML = "";
+    updateUfsButtonsState();
+    });
+    $('#UFSFilePathInput').on('input', function(){
+    var loadElement = document.getElementById("loadufsloadid");
+    var statusElement = document.getElementById("loadufsstatus");
+
+    if (loadElement) loadElement.className = "";
+    if (statusElement) statusElement.innerHTML = "";
+    updateUfsButtonsState();
+    });
+
+    function updateUfsButtonsState() {
+        var ufsSelect = document.getElementById("UFSselectionOption");
+        var ufsPathValue = document.getElementById("UFSFilePathInput").value.trim();
+        var loadButton = document.getElementById("loadufsbuttonid");
+        if (!loadButton) {
+            return;
+        }
+        if (ufsLoadMode === "dropdown") {
+            loadButton.disabled = ufsSelect.options.length === 0;
+        } else {
+            loadButton.disabled = ufsPathValue.length === 0;
+        }
+    }
+
+    updateUfsButtonsState();
+    setUfsLoadMode("dropdown");
+
+    var ufsObserver = new MutationObserver(updateUfsButtonsState);
+    ufsObserver.observe(document.getElementById("UFSselectionOption"), { childList: true });
+    
+    var loadufsID = em2;
+
+    $('#loadufsbuttonid').click(function (e) {
+        popupMessage.innerHTML = "<b style='display: flex; justify-content: center; align-items: center;'>Initializing... Please wait</b>";
+        closeButton.disabled = true;
+        showUfsLogButton.disabled = true;
+        showUfsLogButton.style.display = "none";
+        if (popupFooter.contains(showUfsLogButton)) {
+            popupFooter.removeChild(showUfsLogButton);
+        }
+        document.body.appendChild(ufspopupmain);
+        var pollInterval = setInterval(Timer, 5000);
+        showLoadingTooltip("loadufsbstatus", loadufsID);
+
+        var ufsdata = null;
+        if (ufsLoadMode === "dropdown") {
+            var selectedUfs = $('#UFSselectionOption').val();
+            if (!selectedUfs) {
+                showFailureTooltip("loadufsbstatus", "Select a UFS file", loadufsID);
+                popupMessage.innerHTML = "Select a UFS file.";
+                closeButton.disabled = false;
+                clearInterval(pollInterval);
+                return;
+            }
+            var ufsfile = selectedUfs.split("\t")[0];
+            ufsdata = {"cmd": "ufsboot", "file": " -i /data/UFS/" + ufsfile};
+        } else {
+            var ufsPathValue = $('#UFSFilePathInput').val().trim();
+            if (!ufsPathValue) {
+                showFailureTooltip("loadufsbstatus", "Enter a UFS file path", loadufsID);
+                popupMessage.innerHTML = "Enter a UFS file path.";
+                closeButton.disabled = false;
+                clearInterval(pollInterval);
+                return;
+            }
+            ufsdata = {"cmd": "ufsboot", "file": " -u -i " + ufsPathValue};
+        }
+
+        pollactive = true;
+        $.ajax({
+            url: "/scriptrunner",
+            type: 'GET',
+            dataType: 'json',
+            data: ufsdata,
+            success: function (res) {
+                clearInterval(pollInterval);
+                if (res.status === 'error') {
+                    pollactive = false;
+                    showFailureTooltip("loadufsbstatus",res.data.message,loadufsID);
+                    popupMessage.textContent = res.data.message;
+                    popupMessage.style.whiteSpace = "pre-wrap";
+                    showUfsLogButton.style.display = "inline-block";
+                    showUfsLogButton.disabled = false;
+                    if (!popupFooter.contains(showUfsLogButton)) {
+                        popupFooter.insertBefore(showUfsLogButton, closeButton);
+                    }
+                    closeButton.disabled = false;
+                } else {
+                    showSuccessTooltip("loadufsbstatus", "Success", loadufsID);
+                    showUfsLogButton.style.display = "none";
+                    showUfsLogButton.disabled = false;
+                    if (popupFooter.contains(showUfsLogButton)) {
+                        popupFooter.removeChild(showUfsLogButton);
+                    }
+                    closeButton.disabled = false;
+                    ufsSuccess();
+                }
+            },
+            error: function () {
+                pollactive = false;
+                clearInterval(pollInterval);
+                document.body.appendChild(ufspopupmain);
+                showFailureTooltip("loadufsbstatus", "Network Error", loadufsID);
+                popupMessage.innerHTML = "Network Error";
+                showUfsLogButton.disabled = false;
+                if (popupFooter.contains(showUfsLogButton)) {
+                    popupFooter.removeChild(showUfsLogButton);
+                }
+                closeButton.disabled = false;
+            }
+        });
+    });
+    
+    if (!app_strings.hasOwnProperty('UFS_feature') || !app_strings.UFS_feature.isSuppot){
+        document.getElementById("detectUFS").remove();
+    }
+}
 function generateUARTblock() {
     if (app_strings.hasOwnProperty('UART_content')) {
         var block = document.getElementById("detectUART");
@@ -4314,6 +4721,7 @@ $(document).ready(function () {
     generateRAUCblock();
     generatePDIblock();
     generateOSPIblock();
+    generateUFSblock();
     generateUARTblock();
     generateVersalFlashblock();
     generatesetmacaddressblock();
@@ -4351,6 +4759,7 @@ $(document).ready(function () {
 	upload_clock_files("rauc");
 	upload_clock_files("ospi");
 	upload_clock_files("versal");
+	upload_clock_files("ufs");
         if(!listsjson_sc.listfeature.includes("listBIT")){
         	$("#boardinterfacetest").remove();
     	}

@@ -8,6 +8,18 @@ from config_app import *
 import re
 
 class Parse:
+    def _extract_progress_percentage(self, line):
+        percentage_match = re.search(r'(\d{1,3})%', line)
+        if percentage_match:
+            return percentage_match.group()
+
+        ratio_match = re.search(r'(\d+)\s*/\s*(\d+)', line)
+        if ratio_match:
+            completed = int(ratio_match.group(1))
+            return f"{completed} B"
+
+        return None
+
     def parse_cmd_resp(self, data, component,targ="",params = "",extraparams = ""):
         if(component == "getpower" or component == "getcalpower"):
             return self.parseGetPower(data)
@@ -89,9 +101,9 @@ or component == "geteeprom" or component == "getvoltage"):
             if "Verification successful" in line:
                 dict["Verifying (step 4/4)"] = "Done"
                 continue
-            percentage_match = re.search(r'(\d{1,3})%', line)
-            if percentage_match and len(inprog_key):
-                dict[inprog_key] = percentage_match.group()
+            progress = self._extract_progress_percentage(line)
+            if progress and len(inprog_key):
+                dict[inprog_key] = progress
 
         # html_table = '<table>\n'
         # for key, value in dict.items():
@@ -131,9 +143,9 @@ or component == "geteeprom" or component == "getvoltage"):
             if "Verification successful" in line:
                 dict["Verifying (step 3/3)"] = "Done"
                 continue
-            percentage_match = re.search(r'(\d{1,3})%', line)
-            if percentage_match and len(inprog_key):
-                dict[inprog_key] = percentage_match.group()
+            progress = self._extract_progress_percentage(line)
+            if progress and len(inprog_key):
+                dict[inprog_key] = progress
         return dict
     def parse_program_ospi_response(self,data):
         dict = {
@@ -171,9 +183,9 @@ or component == "geteeprom" or component == "getvoltage"):
                 dict["Flashing"] = "Done"
                 inprog_key = ""
                 continue
-            percentage_match = re.search(r'(\d{1,3})%', line)
-            if percentage_match and len(inprog_key):
-                dict[inprog_key] = percentage_match.group()
+            progress = self._extract_progress_percentage(line)
+            if progress and len(inprog_key):
+                dict[inprog_key] = progress
         return dict
     def parse_erase_ospi_response(self,data):
         dict = {
@@ -200,9 +212,47 @@ or component == "geteeprom" or component == "getvoltage"):
                 dict["Erase Flash (step 2/2)"] = "Done"
                 dict["Erasing"] = "Done"
                 continue
-            percentage_match = re.search(r'(\d{1,3})%', line)
-            if percentage_match and len(inprog_key):
-                dict[inprog_key] = percentage_match.group()
+            progress = self._extract_progress_percentage(line)
+            if progress and len(inprog_key):
+                dict[inprog_key] = progress
+        return dict
+    def parse_program_program_ufs_response(self,data):
+        dict = {
+            "Initializing Update":"In progress"
+            ,"Booting device over JTAG (step 1/3)":""
+            ,"Booting Status":""
+            ,"Downloading image to DDR (step 2/3)":""
+            ,"Download status":""
+            ,"UFS/eMMC programming...this could take up to 5 minutes (step 3/3)":""
+            ,"Programming":""
+        }
+        inprog_key = ""
+        for line in data.split('\n'):
+            if "Booting device over JTAG (step 1/3" in line:
+                dict["Initializing Update"] = "Done"
+                dict["Booting device over JTAG (step 1/3)"] = "In progress"
+                inprog_key = "Booting Status"
+                continue
+            if "Downloading image to DDR (step 2/3)" in line:
+                dict["Booting device over JTAG (step 1/3)"] = "Done"
+                dict["Downloading image to DDR (step 2/3)"] = "In progress"
+                dict["Booting Status"] = "Done"
+                inprog_key = "Download status"
+                continue
+            if "UFS/eMMC programming...this could take up to 5 minutes (step 3/3)" in line:
+                dict["Downloading image to DDR (step 2/3)"] = "Done"
+                dict["UFS/eMMC programming...this could take up to 5 minutes (step 3/3)"] = "In progress"
+                dict["Download status"] = "Done"
+                inprog_key = "Programming"
+                continue
+            if "UFS written successfully" in line:
+                dict["UFS/eMMC programming...this could take up to 5 minutes (step 3/3)"] = "Done"
+                dict["Programming"] = "Done"
+                inprog_key = ""
+                continue                
+            progress = self._extract_progress_percentage(line)
+            if progress and len(inprog_key):
+                dict[inprog_key] = progress
         return dict
     def parse_eeprom_yaml(self, yaml_data):
         """Parse EEPROM YAML data to extract MAC addresses"""

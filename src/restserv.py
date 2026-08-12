@@ -221,6 +221,17 @@ class ClockFilesList(Resource):
                         }
                     }
                 }
+                return resp_json,
+            elif req == "ufs":
+                ufsfiles = os.listdir(app_config["ufsFilepath"]) if os.path.exists(app_config["ufsFilepath"]) else []
+                resp_json = {
+                    "status": "success"
+                    , "data": {
+                        "ufs": {
+                            "ufs_files": ufsfiles
+                        }
+                    }
+                }
                 return resp_json,200
             elif req == "versal":
                 versalfiles = os.listdir(app_config["VersalUSBImagePath"]) if os.path.exists(app_config["VersalUSBImagePath"]) else []
@@ -267,6 +278,8 @@ class RemoveFile(Resource):
                 file_path = os.path.join(app_config["PDIFilePath"], filename)
             elif func == "rauc":
                 file_path = os.path.join(app_config["raucFilepath"], filename)
+            elif func == "ufs":
+                file_path = os.path.join(app_config["ufsFilepath"], filename)
             elif func == "versal":
                 file_path = os.path.join(app_config["VersalUSBImagePath"], filename)
             elif func == "clock":
@@ -650,6 +663,30 @@ class StatusRequest(Resource):
                         , "data": {"message":result}
                     }
                     return resp_json
+            if funq == 'ufsboot':
+                # api should be
+                # /status?cmd=ufsboot,file=<ufsfile>
+                cmd = app_config["ufsrunstatusfile_getstatus"]
+                result = SysFactory.exec_cmd(cmd,SysFactory.TERMINAL)
+                if "Operation programming UFS enabled" in result:
+                    result = parse.parse_program_program_ufs_response(result)
+                    resp_json = {
+                        "status": "success"
+                        , "data": {"message":result}
+                    }
+                    return resp_json
+                elif "ERROR:" in result:
+                    resp_json = {
+                        "status": "success"
+                        , "data": {"message": {"Error": result}}
+                    }
+                    return resp_json
+                else:
+                    resp_json = {
+                        "status": "success"
+                        , "data": {"message": {"Status": result}}
+                    }
+                    return resp_json
         except Exception as e:
             resp_json = {
                 "status": "error"
@@ -711,6 +748,57 @@ class ScriptRunner(Resource):
                             "message": result
                         }
                     }
+                    return 
+            elif funq == 'ufsboot':
+                with open(app_config['ufsrunstatusfile'], 'w'):
+                    pass
+                # api should be 
+                # /scriptrunner?cmd=ufsboot,file=<ufile>
+                file = request.args.get('file')
+                script = app_config["ufsrunscript"]
+
+                cmd = script + " -U"
+                if file:
+                    cmd += file
+                result = SysFactory.exec_cmd(cmd,SysFactory.SCRIPT,app_config["ufsrunstatusfile"])
+                if result.strip().split('\n')[-1].strip() == "Script completed":
+                    resp_json = {
+                        "status": "success"
+                        , "data": result
+                    }
+                    return resp_json
+                elif "Detected board type vek385_reva" in result or "detected board type vek385_reva" in result.lower():
+                    resp_json = {
+                        "status": "success"
+                        , "data": {
+                            "message": "This feature is not supported on VEK385 revA boards."
+                        }
+                    }
+                    return resp_json
+                else:
+                    if "Error:" in result:
+                        split_result = result.split("Error:", 1)
+                        if len(split_result) > 1 and split_result[1].strip():
+                            error_message = "Error:" + split_result[1].strip()
+                            if "Timed out" in result:
+                                result = (
+                                    "UFS operation timed out."
+                                    + "\n" + error_message
+                                )
+                            else:
+                                result = error_message
+                        else:
+                            result = result.strip()
+                    elif "Timed out" in result:
+                        result = "UFS operation timed out."
+                    else:
+                        result = result.strip()
+                    resp_json = {
+                        "status": "error"
+                        , "data":{
+                            "message": result
+                        }
+                    }
                     return resp_json
             elif funq == 'getlogs':
                  # api should be 
@@ -730,6 +818,24 @@ class ScriptRunner(Resource):
                         "status": "error"
                         , "data": {
                             "message": "Unable to read /usr/share/scweb/ospi_flash_status.txt"
+                        }
+                    }
+                    return resp_json
+                resp_json = {
+                    "status": "success"
+                    , "data": {
+                        "message": result.strip()
+                    }
+                }
+                return resp_json
+            elif funq == 'getufslog':
+                cmd = "cat /usr/share/scweb/ufs_flash_status.txt"
+                result = Term.exec_cmd(cmd)
+                if result is None or "No such file or directory" in result or "can't open" in result:
+                    resp_json = {
+                        "status": "error"
+                        , "data": {
+                            "message": "Unable to read /usr/share/scweb/ufs_flash_status.txt"
                         }
                     }
                     return resp_json
