@@ -221,7 +221,7 @@ class ClockFilesList(Resource):
                         }
                     }
                 }
-                return resp_json,
+                return resp_json,200
             elif req == "ufs":
                 ufsfiles = os.listdir(app_config["ufsFilepath"]) if os.path.exists(app_config["ufsFilepath"]) else []
                 resp_json = {
@@ -748,7 +748,7 @@ class ScriptRunner(Resource):
                             "message": result
                         }
                     }
-                    return 
+                    return resp_json
             elif funq == 'ufsboot':
                 with open(app_config['ufsrunstatusfile'], 'w'):
                     pass
@@ -769,7 +769,7 @@ class ScriptRunner(Resource):
                     return resp_json
                 elif "Detected board type vek385_reva" in result or "detected board type vek385_reva" in result.lower():
                     resp_json = {
-                        "status": "success"
+                        "status": "error"
                         , "data": {
                             "message": "This feature is not supported on VEK385 revA boards."
                         }

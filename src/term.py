@@ -59,20 +59,21 @@ class ScriptTerm:
     #                       None on failure
     #
     @staticmethod
-    def exec_cmd(cmd):
+    def exec_cmd(cmd, filename=None):
         try:
             proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,shell=True)
             out = ""
+            status_file = filename if filename else app_config['ospirunstatusfile']
 
             while proc.poll() is None:
                 output = proc.stdout.readline()
                 if output:
-                    open(app_config['ospirunstatusfile'], 'a').writelines(output.decode('utf-8'))
+                    open(status_file, 'a').writelines(output.decode('utf-8'))
                     out  += output.decode('utf-8')
 
             # Read any remaining output
             for output in proc.stdout.readlines():
-                open(app_config['ospirunstatusfile'], 'a').writelines(output.decode('utf-8'))
+                open(status_file, 'a').writelines(output.decode('utf-8'))
                 out  += output.decode('utf-8')
             return out
         except FileNotFoundError:
@@ -227,7 +228,7 @@ class SysFactory:
         if cmdType == SysFactory.TERMINAL:
             return Term.exec_cmd(command)
         if cmdType == SysFactory.SCRIPT:
-            return ScriptTerm.exec_cmd(command)
+            return ScriptTerm.exec_cmd(command, filename)
         elif cmdType == SysFactory.XSDB:
             return Xsdb.exec_cmd(command)
         elif cmdType == SysFactory.SOCKET:

@@ -3550,7 +3550,7 @@ function generateUFSblock(){
     ufsPathInput.setAttribute("type", "text");
     ufsPathInput.id = "UFSFilePathInput";
     ufsPathInput.classList.add("dash_bm");
-    ufsPathInput.placeholder = "Enter UFS file path";
+    ufsPathInput.placeholder = "Enter UFS file name";
     ufsPathInput.style.minWidth = "215px";
     ufsPathInput.style.display = "none";
     em2.appendChild(ufsPathInput);
@@ -3562,14 +3562,14 @@ function generateUFSblock(){
 
     var pathTooltip = document.createElement("a");
     pathTooltip.classList.add("tooltiptextinfo");
-    pathTooltip.textContent = "Enter the full UFS file path in USB device to load.";
+    pathTooltip.textContent = "Enter the full UFS file name in USB device to write.";
     pathInfo.appendChild(pathTooltip);
     em2.appendChild(pathInfo);
     var pathLoadButton = document.createElement("input");
     pathLoadButton.classList.add("buttons");
     pathLoadButton.classList.add("dash_bm");
     pathLoadButton.id = "loadufsbuttonid";
-    pathLoadButton.setAttribute("value", "Write");
+    pathLoadButton.setAttribute("value", "Load");
     pathLoadButton.setAttribute("type", "button");
     pathLoadButton.style.minWidth = "120px";
     pathLoadButton.style.marginLeft = "25px";
