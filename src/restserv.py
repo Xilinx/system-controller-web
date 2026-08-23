@@ -668,13 +668,22 @@ class StatusRequest(Resource):
                 # /status?cmd=ufsboot,file=<ufsfile>
                 cmd = app_config["ufsrunstatusfile_getstatus"]
                 result = SysFactory.exec_cmd(cmd,SysFactory.TERMINAL)
-                if "Operation programming UFS enabled" in result:
+                if ("Operation programming UFS enabled" in result and 
+                    "Payload in USB" in result):
+                    result = parse.parse_program_usb_program_ufs_response(result)
+                    resp_json = {
+                        "status": "success"
+                        , "data": {"message":result}
+                        }
+                    return resp_json
+                elif "Operation programming UFS enabled" in result:
                     result = parse.parse_program_program_ufs_response(result)
                     resp_json = {
                         "status": "success"
                         , "data": {"message":result}
                     }
                     return resp_json
+
                 elif "ERROR:" in result:
                     resp_json = {
                         "status": "success"
@@ -776,10 +785,11 @@ class ScriptRunner(Resource):
                     }
                     return resp_json
                 else:
-                    if "Error:" in result:
-                        split_result = result.split("Error:", 1)
+                    error_tag = "Error:" if "Error:" in result else ("ERROR:" if "ERROR:" in result else None)
+                    if error_tag:
+                        split_result = result.split(error_tag, 1)
                         if len(split_result) > 1 and split_result[1].strip():
-                            error_message = "Error:" + split_result[1].strip()
+                            error_message = error_tag + split_result[1].strip()
                             if "Timed out" in result:
                                 result = (
                                     "UFS operation timed out."

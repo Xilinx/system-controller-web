@@ -254,6 +254,44 @@ or component == "geteeprom" or component == "getvoltage"):
             if progress and len(inprog_key):
                 dict[inprog_key] = progress
         return dict
+    def parse_program_usb_program_ufs_response(self,data):
+        dict = {
+            "Initializing Update":"In progress"
+            ,"Booting device over JTAG (step 1/3)":""
+            ,"Booting Status":""
+            ,"Loading image from USB to DDR (step 2/3)":""
+            ,"Load status":""
+            ,"UFS/eMMC programming...this could take up to 5 minutes (step 3/3)":""
+            ,"Programming":""
+        }
+        inprog_key = ""
+        for line in data.split('\n'):
+            if "Booting device over JTAG (step 1/3" in line:
+                dict["Initializing Update"] = "Done"
+                dict["Booting device over JTAG (step 1/3)"] = "In progress"
+                inprog_key = "Booting Status"
+                continue
+            if "Loading image from USB to DDR (step 2/3)" in line:
+                dict["Booting device over JTAG (step 1/3)"] = "Done"
+                dict["Loading image from USB to DDR (step 2/3)"] = "In progress"
+                dict["Booting Status"] = "Done"
+                inprog_key = "Load status"
+                continue
+            if "UFS/eMMC programming...this could take up to 5 minutes (step 3/3)" in line:
+                dict["Loading image from USB to DDR (step 2/3)"] = "Done"
+                dict["UFS/eMMC programming...this could take up to 5 minutes (step 3/3)"] = "In progress"
+                dict["Load status"] = "Done"
+                inprog_key = "Programming"
+                continue
+            if "UFS written successfully" in line:
+                dict["UFS/eMMC programming...this could take up to 5 minutes (step 3/3)"] = "Done"
+                dict["Programming"] = "Done"
+                inprog_key = ""
+                continue                
+            progress = self._extract_progress_percentage(line)
+            if progress and len(inprog_key):
+                dict[inprog_key] = progress
+        return dict
     def parse_eeprom_yaml(self, yaml_data):
         """Parse EEPROM YAML data to extract MAC addresses"""
         data = {
