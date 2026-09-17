@@ -25,7 +25,7 @@ app_config = {
     ,'ospirunstatusfile': "./ospi_flash_status.txt"
     ,'ospirunstatusfile_getstatus':"[ -f ./ospi_flash_status.txt ] && cat ./ospi_flash_status.txt" #"[ -f ./ospi_flash_status.txt ] && tail -n 1 ./ospi_flash_status.txt"
     ,"ufsFilepath":"/data/UFS/"
-    ,"ufsrunscript":"/usr/share/embpf-bootfw-update-tool/prog_spi.sh -Vp -d versal_eval"
+    ,"ufsrunscript":"/usr/share/embpf-bootfw-update-tool/prog_spi.sh -V -d versal_eval"
     ,'ufsrunstatusfile': "./ufs_flash_status.txt"
     ,'ufsrunstatusfile_getstatus':"[ -f ./ufs_flash_status.txt ] && cat ./ufs_flash_status.txt" 
     ,"VersalUSBImagePath":"/data/usb/"

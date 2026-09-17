@@ -3552,6 +3552,7 @@ function generateUFSblock(){
     ufsPathInput.classList.add("dash_bm");
     ufsPathInput.placeholder = "Enter UFS file name";
     ufsPathInput.style.minWidth = "215px";
+    ufsPathInput.style.marginTop = "10px";
     ufsPathInput.style.display = "none";
     em2.appendChild(ufsPathInput);
     var pathInfo = document.createElement("span");
@@ -3565,16 +3566,6 @@ function generateUFSblock(){
     pathTooltip.textContent = "Enter the full UFS file name in USB device to write.";
     pathInfo.appendChild(pathTooltip);
     em2.appendChild(pathInfo);
-    var pathLoadButton = document.createElement("input");
-    pathLoadButton.classList.add("buttons");
-    pathLoadButton.classList.add("dash_bm");
-    pathLoadButton.id = "loadufsbuttonid";
-    pathLoadButton.setAttribute("value", "Load");
-    pathLoadButton.setAttribute("type", "button");
-    pathLoadButton.style.minWidth = "120px";
-    pathLoadButton.style.marginLeft = "25px";
-    pathLoadButton.style.marginTop = "10px";
-    em2.appendChild(pathLoadButton);
     var ufsLoadMode = "dropdown";
 
     function setUfsLoadMode(mode) {
@@ -3650,7 +3641,7 @@ function generateUFSblock(){
     function updateUfsButtonsState() {
         var ufsSelect = document.getElementById("UFSselectionOption");
         var ufsPathValue = document.getElementById("UFSFilePathInput").value.trim();
-        var loadButton = document.getElementById("loadufsbuttonid");
+        var loadButton = document.getElementById("applyufsbuttonid");
         if (!loadButton) {
             return;
         }
@@ -3666,10 +3657,57 @@ function generateUFSblock(){
 
     var ufsObserver = new MutationObserver(updateUfsButtonsState);
     ufsObserver.observe(document.getElementById("UFSselectionOption"), { childList: true });
-    
-    var loadufsID = em2;
 
-    $('#loadufsbuttonid').click(function (e) {
+    var em3 = document.createElement("p");
+    em3.classList.add("details_info");
+    em3.id = "applyufs";
+    block.append(em3);
+    var checkBox1 = document.createElement("input");
+    checkBox1.id = "verifyufsbuttonid";
+    checkBox1.setAttribute("type", "checkbox");
+    var label1 = document.createElement("label");
+    label1.setAttribute("for", checkBox1.id);
+    label1.textContent = "Verify";
+    label1.style.margin = "0 20px 0 5px";
+    em3.appendChild(checkBox1);
+    em3.appendChild(label1);
+    var checkBox2 = document.createElement("input");
+    checkBox2.id = "programufsbuttonid";
+    checkBox2.setAttribute("type", "checkbox");
+    checkBox2.setAttribute("name", "Program");
+    var label2 = document.createElement("label");
+    label2.setAttribute("for", checkBox2.id);
+    label2.style.margin = "0 20px 0 5px";
+    label2.textContent = "Program";
+    var applyUfsButton = document.createElement("input");
+    applyUfsButton.classList.add("buttons");
+    applyUfsButton.classList.add("dash_bm");
+    applyUfsButton.style.margin = "0px";
+    applyUfsButton.id = "applyufsbuttonid";
+    applyUfsButton.setAttribute("value", "Apply");
+    applyUfsButton.setAttribute("type", "button");
+    em3.appendChild(checkBox2);
+    em3.appendChild(label2);
+    em3.appendChild(applyUfsButton);
+
+    var em4 = document.createElement("p");
+    em4.classList.add("details_info");
+    em4.id = "eraseufs";
+    var esErase = document.createTextNode("Erase UFS:");
+    em4.appendChild(esErase);
+    block.append(em4);
+    var eraseUfsButton = document.createElement("input");
+    eraseUfsButton.classList.add("buttons");
+    eraseUfsButton.classList.add("dash_bm");
+    eraseUfsButton.id = "eraseufsbuttonid";
+    eraseUfsButton.setAttribute("value", "Erase");
+    eraseUfsButton.setAttribute("type", "button");
+    em4.appendChild(eraseUfsButton);
+
+    var applyufsID = em3;
+    var eraseUfsID = em4;
+
+    $('#applyufsbuttonid').click(function (e) {
         popupMessage.innerHTML = "<b style='display: flex; justify-content: center; align-items: center;'>Initializing... Please wait</b>";
         closeButton.disabled = true;
         showUfsLogButton.disabled = true;
@@ -3678,14 +3716,21 @@ function generateUFSblock(){
             popupFooter.removeChild(showUfsLogButton);
         }
         document.body.appendChild(ufspopupmain);
+        var verifyChecked = document.getElementById("verifyufsbuttonid").checked;
+        var programChecked = document.getElementById("programufsbuttonid").checked;
+        if (!verifyChecked && !programChecked) {
+            alert("Please select an option (Verify and/or Program)");
+            document.body.removeChild(ufspopupmain);
+            return;
+        }
         var pollInterval = setInterval(Timer, 5000);
-        showLoadingTooltip("loadufsbstatus", loadufsID);
+        showLoadingTooltip("applyufsstatus", applyufsID);
 
         var ufsdata = null;
         if (ufsLoadMode === "dropdown") {
             var selectedUfs = $('#UFSselectionOption').val();
             if (!selectedUfs) {
-                showFailureTooltip("loadufsbstatus", "Select a UFS file", loadufsID);
+                showFailureTooltip("applyufsstatus", "Select a UFS file", applyufsID);
                 popupMessage.innerHTML = "Select a UFS file.";
                 closeButton.disabled = false;
                 clearInterval(pollInterval);
@@ -3696,7 +3741,7 @@ function generateUFSblock(){
         } else {
             var ufsPathValue = $('#UFSFilePathInput').val().trim();
             if (!ufsPathValue) {
-                showFailureTooltip("loadufsbstatus", "Enter a UFS file path", loadufsID);
+                showFailureTooltip("applyufsstatus", "Enter a UFS file path", applyufsID);
                 popupMessage.innerHTML = "Enter a UFS file path.";
                 closeButton.disabled = false;
                 clearInterval(pollInterval);
@@ -3704,7 +3749,12 @@ function generateUFSblock(){
             }
             ufsdata = {"cmd": "ufsboot", "file": " -u -i " + ufsPathValue};
         }
-
+        if (verifyChecked) {
+            ufsdata.verify = "true";
+        }
+        if (programChecked) {
+            ufsdata.program = "true";
+        }
         pollactive = true;
         $.ajax({
             url: "/scriptrunner",
@@ -3715,7 +3765,7 @@ function generateUFSblock(){
                 clearInterval(pollInterval);
                 if (res.status === 'error') {
                     pollactive = false;
-                    showFailureTooltip("loadufsbstatus",res.data.message,loadufsID);
+                    showFailureTooltip("applyufsstatus", res.data.message, applyufsID);
                     popupMessage.textContent = res.data.message;
                     popupMessage.style.whiteSpace = "pre-wrap";
                     showUfsLogButton.style.display = "inline-block";
@@ -3725,7 +3775,7 @@ function generateUFSblock(){
                     }
                     closeButton.disabled = false;
                 } else {
-                    showSuccessTooltip("loadufsbstatus", "Success", loadufsID);
+                    showSuccessTooltip("applyufsstatus", "Success", applyufsID);
                     showUfsLogButton.style.display = "none";
                     showUfsLogButton.disabled = false;
                     if (popupFooter.contains(showUfsLogButton)) {
@@ -3739,7 +3789,7 @@ function generateUFSblock(){
                 pollactive = false;
                 clearInterval(pollInterval);
                 document.body.appendChild(ufspopupmain);
-                showFailureTooltip("loadufsbstatus", "Network Error", loadufsID);
+                showFailureTooltip("applyufsstatus", "Network Error", applyufsID);
                 popupMessage.innerHTML = "Network Error";
                 showUfsLogButton.disabled = false;
                 if (popupFooter.contains(showUfsLogButton)) {
@@ -3749,7 +3799,67 @@ function generateUFSblock(){
             }
         });
     });
-    
+
+    $('#eraseufsbuttonid').click(function (e) {
+        popupMessage.innerHTML = "<b style='display: flex; justify-content: center; align-items: center;'>Erasing UFS... Please wait</b>";
+        closeButton.disabled = true;
+        showUfsLogButton.disabled = true;
+        showUfsLogButton.style.display = "none";
+        if (popupFooter.contains(showUfsLogButton)) {
+            popupFooter.removeChild(showUfsLogButton);
+        }
+        document.body.appendChild(ufspopupmain);
+        var pollInterval = setInterval(Timer, 5000);
+        showLoadingTooltip("eraseufsstatus", eraseUfsID);
+        var ufsdata = {
+            "cmd": "ufsboot",
+            "erase": "true"
+        };
+        pollactive = true;
+        $.ajax({
+            url: "/scriptrunner",
+            type: 'GET',
+            dataType: 'json',
+            data: ufsdata,
+            success: function (res) {
+                clearInterval(pollInterval);
+                if (res.status === 'error') {
+                    pollactive = false;
+                    showFailureTooltip("eraseufsstatus", res.data.message, eraseUfsID);
+                    popupMessage.textContent = res.data.message;
+                    popupMessage.style.whiteSpace = "pre-wrap";
+                    showUfsLogButton.style.display = "inline-block";
+                    showUfsLogButton.disabled = false;
+                    if (!popupFooter.contains(showUfsLogButton)) {
+                        popupFooter.insertBefore(showUfsLogButton, closeButton);
+                    }
+                    closeButton.disabled = false;
+                } else {
+                    showSuccessTooltip("eraseufsstatus", "Success", eraseUfsID);
+                    showUfsLogButton.style.display = "none";
+                    showUfsLogButton.disabled = false;
+                    if (popupFooter.contains(showUfsLogButton)) {
+                        popupFooter.removeChild(showUfsLogButton);
+                    }
+                    closeButton.disabled = false;
+                    ufsSuccess();
+                }
+            },
+            error: function () {
+                pollactive = false;
+                clearInterval(pollInterval);
+                document.body.appendChild(ufspopupmain);
+                showFailureTooltip("eraseufsstatus", "Network Error", eraseUfsID);
+                popupMessage.innerHTML = "Network Error";
+                showUfsLogButton.disabled = false;
+                if (popupFooter.contains(showUfsLogButton)) {
+                    popupFooter.removeChild(showUfsLogButton);
+                }
+                closeButton.disabled = false;
+            }
+        });
+    });
+
     if (!app_strings.hasOwnProperty('UFS_feature') || !app_strings.UFS_feature.isSuppot){
         document.getElementById("detectUFS").remove();
     }

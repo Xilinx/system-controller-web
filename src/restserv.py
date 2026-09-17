@@ -763,10 +763,19 @@ class ScriptRunner(Resource):
                     pass
                 # api should be 
                 # /scriptrunner?cmd=ufsboot,file=<ufile>
+                verify_flag = request.args.get('verify')
+                program_flag = request.args.get('program')
+                erase_flag = request.args.get('erase')
                 file = request.args.get('file')
                 script = app_config["ufsrunscript"]
 
                 cmd = script + " -U"
+                if verify_flag:
+                    cmd += " -v"
+                if program_flag:
+                    cmd += " -p"
+                if erase_flag:
+                    cmd += " -e"
                 if file:
                     cmd += file
                 result = SysFactory.exec_cmd(cmd,SysFactory.SCRIPT,app_config["ufsrunstatusfile"])
