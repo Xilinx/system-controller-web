@@ -1,6 +1,6 @@
 ##
 # Copyright (c) 2020 - 2022 Xilinx, Inc.  All rights reserved.
-# Copyright (c) 2022 - 2024 Advanced Micro Devices, Inc.  All rights reserved.
+# Copyright (c) 2022 - 2026 Advanced Micro Devices, Inc.  All rights reserved.
 #
 # SPDX-License-Identifier: MIT
 ##
@@ -216,19 +216,19 @@ or component == "geteeprom" or component == "getvoltage"):
             if progress and len(inprog_key):
                 dict[inprog_key] = progress
         return dict
-    def parse_program_program_ufs_response(self,data):
+    def parse_program_ufs_response(self,data):
         dict = {
             "Initializing Update":"In progress"
             ,"Booting device over JTAG (step 1/3)":""
             ,"Booting Status":""
             ,"Downloading image to DDR (step 2/3)":""
             ,"Download status":""
-            ,"UFS/eMMC programming...this could take up to 5 minutes (step 3/3)":""
+            ,"UFS/eMMC programming...this could take up to 60 minutes (step 3/3)":""
             ,"Programming":""
         }
         inprog_key = ""
         for line in data.split('\n'):
-            if "Booting device over JTAG (step 1/3" in line:
+            if "Booting device over JTAG (step 1/3)" in line:
                 dict["Initializing Update"] = "Done"
                 dict["Booting device over JTAG (step 1/3)"] = "In progress"
                 inprog_key = "Booting Status"
@@ -239,14 +239,14 @@ or component == "geteeprom" or component == "getvoltage"):
                 dict["Booting Status"] = "Done"
                 inprog_key = "Download status"
                 continue
-            if "UFS/eMMC programming...this could take up to 5 minutes (step 3/3)" in line:
+            if "UFS/eMMC programming...this could take up to 60 minutes (step 3/3)" in line:
                 dict["Downloading image to DDR (step 2/3)"] = "Done"
-                dict["UFS/eMMC programming...this could take up to 5 minutes (step 3/3)"] = "In progress"
+                dict["UFS/eMMC programming...this could take up to 60 minutes (step 3/3)"] = "In progress"
                 dict["Download status"] = "Done"
                 inprog_key = "Programming"
                 continue
             if "UFS written successfully" in line:
-                dict["UFS/eMMC programming...this could take up to 5 minutes (step 3/3)"] = "Done"
+                dict["UFS/eMMC programming...this could take up to 60 minutes (step 3/3)"] = "Done"
                 dict["Programming"] = "Done"
                 inprog_key = ""
                 continue                
@@ -254,14 +254,96 @@ or component == "geteeprom" or component == "getvoltage"):
             if progress and len(inprog_key):
                 dict[inprog_key] = progress
         return dict
-    def parse_program_usb_program_ufs_response(self,data):
+    def parse_verify_ufs_response(self,data):
+            dict = {
+                "Initializing Update":"In progress"
+                ,"Booting device over JTAG (step 1/3)":""
+                ,"Booting Status":""
+                ,"UFS full verification (step 2/3)":""
+                ,"Verify status":""
+                ,"UFS/eMMC programming...this could take up to 60 minutes (step 3/3)":""
+                ,"Programming":""
+            }
+            inprog_key = ""
+            for line in data.split('\n'):
+                if "Booting device over JTAG (step 1/3)" in line:
+                    dict["Initializing Update"] = "Done"
+                    dict["Booting device over JTAG (step 1/3)"] = "In progress"
+                    inprog_key = "Booting Status"
+                    continue
+                if "UFS full verification (step 2/3)" in line:
+                    dict["Booting device over JTAG (step 1/3)"] = "Done"
+                    dict["UFS full verification (step 2/3)"] = "In progress"
+                    dict["Booting Status"] = "Done"
+                    inprog_key = "Verify status"
+                    continue
+                if "UFS/eMMC programming...this could take up to 60 minutes (step 3/3)" in line:
+                    dict["UFS full verification (step 2/3)"] = "Done"
+                    dict["UFS/eMMC programming...this could take up to 60 minutes (step 3/3)"] = "In progress"
+                    dict["Verify status"] = "Done"
+                    inprog_key = "Programming"
+                    continue
+                if "Full UFS verification successful" in line:
+                    dict["UFS/eMMC programming...this could take up to 60 minutes (step 3/3)"] = "Done"
+                    dict["Programming"] = "Done"
+                    inprog_key = ""
+                    continue
+                progress = self._extract_progress_percentage(line)
+                if progress and len(inprog_key):
+                    dict[inprog_key] = progress
+            return dict
+    def parse_program_verify_ufs_response(self,data):
+                dict = {
+                    "Initializing Update":"In progress"
+                    ,"Booting device over JTAG (step 1/4)":""
+                    ,"Booting Status":""
+                    ,"Downloading image to DDR (step 2/4)":""
+                    ,"Download status":""
+                    ,"UFS/eMMC programming...this could take up to 60 minutes (step 3/4)":""
+                    ,"Programming":""
+                    ,"UFS full verification (step 4/4)":""
+                    ,"Verify status":""
+                }
+                inprog_key = ""
+                for line in data.split('\n'):
+                    if "Booting device over JTAG (step 1/4)" in line:
+                        dict["Initializing Update"] = "Done"
+                        dict["Booting device over JTAG (step 1/4)"] = "In progress"
+                        inprog_key = "Booting Status"
+                        continue
+                    if "Downloading image to DDR (step 2/4)" in line:
+                        dict["Booting device over JTAG (step 1/4)"] = "Done"
+                        dict["Downloading image to DDR (step 2/4)"] = "In progress"
+                        dict["Booting Status"] = "Done"
+                        inprog_key = "Download status"
+                        continue
+                    if "UFS/eMMC programming...this could take up to 60 minutes (step 3/4)" in line:
+                        dict["Downloading image to DDR (step 2/4)"] = "Done"
+                        dict["UFS/eMMC programming...this could take up to 60 minutes (step 3/4)"] = "In progress"
+                        dict["Download status"] = "Done"
+                        inprog_key = "Programming"
+                        continue
+                    if "UFS full verification (step 4/4)" in line:
+                        dict["UFS/eMMC programming...this could take up to 60 minutes (step 3/4)"] = "Done"
+                        dict["Programming"] = "Done"
+                        dict["UFS full verification (step 4/4)"] = "In progress"
+                        inprog_key = "Verify status"
+                        continue
+                    if "Full UFS verification successful" in line:
+                        dict["UFS full verification (step 4/4)"] = "Done"
+                        dict["Verify status"] = "Done"
+                    progress = self._extract_progress_percentage(line)
+                    if progress and len(inprog_key):
+                        dict[inprog_key] = progress
+                return dict
+    def parse_usb_program_ufs_response(self,data):
         dict = {
             "Initializing Update":"In progress"
             ,"Booting device over JTAG (step 1/3)":""
             ,"Booting Status":""
             ,"Loading image from USB to DDR (step 2/3)":""
             ,"Load status":""
-            ,"UFS/eMMC programming...this could take up to 5 minutes (step 3/3)":""
+            ,"UFS/eMMC programming...this could take up to 60 minutes (step 3/3)":""
             ,"Programming":""
         }
         inprog_key = ""
@@ -277,14 +359,14 @@ or component == "geteeprom" or component == "getvoltage"):
                 dict["Booting Status"] = "Done"
                 inprog_key = "Load status"
                 continue
-            if "UFS/eMMC programming...this could take up to 5 minutes (step 3/3)" in line:
+            if "UFS/eMMC programming...this could take up to 60 minutes (step 3/3)" in line:
                 dict["Loading image from USB to DDR (step 2/3)"] = "Done"
-                dict["UFS/eMMC programming...this could take up to 5 minutes (step 3/3)"] = "In progress"
+                dict["UFS/eMMC programming...this could take up to 60 minutes (step 3/3)"] = "In progress"
                 dict["Load status"] = "Done"
                 inprog_key = "Programming"
                 continue
             if "UFS written successfully" in line:
-                dict["UFS/eMMC programming...this could take up to 5 minutes (step 3/3)"] = "Done"
+                dict["UFS/eMMC programming...this could take up to 60 minutes (step 3/3)"] = "Done"
                 dict["Programming"] = "Done"
                 inprog_key = ""
                 continue                
@@ -292,6 +374,88 @@ or component == "geteeprom" or component == "getvoltage"):
             if progress and len(inprog_key):
                 dict[inprog_key] = progress
         return dict
+    def parse_usb_program_verify_ufs_response(self,data):
+            dict = {
+                "Initializing Update":"In progress"
+                ,"Booting device over JTAG (step 1/4)":""
+                ,"Booting Status":""
+                ,"Loading image from USB to DDR (step 2/4)":""
+                ,"Load status":""
+                ,"UFS/eMMC programming...this could take up to 60 minutes (step 3/4)":""
+                ,"Programming":""
+                ,"UFS full verification (step 4/4)":""
+                ,"Verify status":""
+            }
+            inprog_key = ""
+            for line in data.split('\n'):
+                if "Booting device over JTAG (step 1/4" in line:
+                    dict["Initializing Update"] = "Done"
+                    dict["Booting device over JTAG (step 1/4)"] = "In progress"
+                    inprog_key = "Booting Status"
+                    continue
+                if "Loading image from USB to DDR (step 2/4)" in line:
+                    dict["Booting device over JTAG (step 1/4)"] = "Done"
+                    dict["Loading image from USB to DDR (step 2/4)"] = "In progress"
+                    dict["Booting Status"] = "Done"
+                    inprog_key = "Load status"
+                    continue
+                if "UFS/eMMC programming...this could take up to 60 minutes (step 3/4)" in line:
+                    dict["Loading image from USB to DDR (step 2/4)"] = "Done"
+                    dict["UFS/eMMC programming...this could take up to 60 minutes (step 3/4)"] = "In progress"
+                    dict["Load status"] = "Done"
+                    inprog_key = "Programming"
+                    continue
+                if "UFS full verification (step 4/4)" in line:
+                    dict["UFS/eMMC programming...this could take up to 60 minutes (step 3/4)"] = "Done"
+                    dict["Programming"] = "Done"
+                    dict["UFS full verification (step 4/4)"] = "In progress"
+                    inprog_key = "Verify status"
+                if "Full UFS verification successful" in line:
+                    dict["UFS full verification (step 4/4)"] = "Done"
+                    dict["Verify status"] = "Done"
+                    continue
+                progress = self._extract_progress_percentage(line)
+                if progress and len(inprog_key):
+                    dict[inprog_key] = progress
+            return dict
+    def parse_usb_verify_ufs_response(self,data):
+                dict = {
+                "Initializing Update":"In progress"
+                ,"Booting device over JTAG (step 1/3)":""
+                ,"Booting Status":""
+                ,"UFS full verification (step 2/3)":""
+                ,"Verify status":""
+                ,"UFS/eMMC programming...this could take up to 60 minutes (step 3/3)":""
+                ,"Programming":""
+            }
+                inprog_key = ""
+                for line in data.split('\n'):
+                    if "Booting device over JTAG (step 1/3)" in line:
+                        dict["Initializing Update"] = "Done"
+                        dict["Booting device over JTAG (step 1/3)"] = "In progress"
+                        inprog_key = "Booting Status"
+                        continue
+                    if "UFS full verification (step 2/3)" in line:
+                        dict["Booting device over JTAG (step 1/3)"] = "Done"
+                        dict["UFS full verification (step 2/3)"] = "In progress"
+                        dict["Booting Status"] = "Done"
+                        inprog_key = "Verify status"
+                        continue
+                    if "UFS/eMMC programming...this could take up to 60 minutes (step 3/3)" in line:
+                        dict["UFS full verification (step 2/3)"] = "Done"
+                        dict["UFS/eMMC programming...this could take up to 60 minutes (step 3/3)"] = "In progress"
+                        dict["Verify status"] = "Done"
+                        inprog_key = "Programming"
+                        continue
+                    if "Full UFS verification successful" in line:
+                        dict["UFS/eMMC programming...this could take up to 60 minutes (step 3/3)"] = "Done"
+                        dict["Programming"] = "Done"
+                        inprog_key = ""
+                        continue
+                    progress = self._extract_progress_percentage(line)
+                    if progress and len(inprog_key):
+                        dict[inprog_key] = progress
+                return dict
     def parse_eeprom_yaml(self, yaml_data):
         """Parse EEPROM YAML data to extract MAC addresses"""
         data = {

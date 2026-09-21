@@ -668,16 +668,48 @@ class StatusRequest(Resource):
                 # /status?cmd=ufsboot,file=<ufsfile>
                 cmd = app_config["ufsrunstatusfile_getstatus"]
                 result = SysFactory.exec_cmd(cmd,SysFactory.TERMINAL)
-                if ("Operation programming UFS enabled" in result and 
+                if ("Operation programming UFS enabled" in result and
+                    "Operation verifying UFS enabled" in result and
                     "Payload in USB" in result):
-                    result = parse.parse_program_usb_program_ufs_response(result)
+                    result = parse.parse_usb_program_verify_ufs_response(result)
                     resp_json = {
                         "status": "success"
                         , "data": {"message":result}
                         }
                     return resp_json
+                elif ("Operation programming UFS enabled" not in result and
+                      "Payload in USB" in result):
+                    result = parse.parse_usb_program_ufs_response(result)
+                    resp_json = {
+                        "status": "success"
+                        , "data": {"message":result}
+                    }
+                    return resp_json
+                elif ("Operation verifying UFS enabled" not in result and
+                      "Payload in USB" in result):
+                    result = parse.parse_usb_verify_ufs_response(result)
+                    resp_json = {
+                        "status": "success"
+                        , "data": {"message":result}
+                    }
+                    return resp_json
+                elif ("Operation programming UFS enabled" in result and
+                      "Operation verifying UFS enabled" in result):
+                    result = parse.parse_program_verify_ufs_response(result)
+                    resp_json = {
+                        "status": "success"
+                        , "data": {"message":result}
+                    }
+                    return resp_json
                 elif "Operation programming UFS enabled" in result:
-                    result = parse.parse_program_program_ufs_response(result)
+                    result = parse.parse_program_ufs_response(result)
+                    resp_json = {
+                        "status": "success"
+                        , "data": {"message":result}
+                    }
+                    return resp_json
+                elif "Operation verifying UFS enabled" in result:
+                    result = parse.parse_verify_ufs_response(result)
                     resp_json = {
                         "status": "success"
                         , "data": {"message":result}
