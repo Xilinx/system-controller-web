@@ -221,7 +221,7 @@ or component == "geteeprom" or component == "getvoltage"):
             "Initializing Update":"In progress"
             ,"Booting device over JTAG (step 1/3)":""
             ,"Booting Status":""
-            ,"Downloading image to DDR (step 2/3)":""
+            ,"Download image to ddr through XSDB. this could take a while (step 2/3)":""
             ,"Download status":""
             ,"UFS/eMMC programming...this could take up to 60 minutes (step 3/3)":""
             ,"Programming":""
@@ -233,14 +233,14 @@ or component == "geteeprom" or component == "getvoltage"):
                 dict["Booting device over JTAG (step 1/3)"] = "In progress"
                 inprog_key = "Booting Status"
                 continue
-            if "Downloading image to DDR (step 2/3)" in line:
+            if "Download image to ddr through XSDB. this could take a while (step 2/3)" in line:
                 dict["Booting device over JTAG (step 1/3)"] = "Done"
-                dict["Downloading image to DDR (step 2/3)"] = "In progress"
+                dict["Download image to ddr through XSDB. this could take a while (step 2/3)"] = "In progress"
                 dict["Booting Status"] = "Done"
                 inprog_key = "Download status"
                 continue
             if "UFS/eMMC programming...this could take up to 60 minutes (step 3/3)" in line:
-                dict["Downloading image to DDR (step 2/3)"] = "Done"
+                dict["Download image to ddr through XSDB. this could take a while (step 2/3)"] = "Done"
                 dict["UFS/eMMC programming...this could take up to 60 minutes (step 3/3)"] = "In progress"
                 dict["Download status"] = "Done"
                 inprog_key = "Programming"
@@ -259,9 +259,9 @@ or component == "geteeprom" or component == "getvoltage"):
                 "Initializing Update":"In progress"
                 ,"Booting device over JTAG (step 1/3)":""
                 ,"Booting Status":""
-                ,"UFS full verification (step 2/3)":""
+                ,"UFS verification do not require downloading payload to DDR (step 2/3)":""
                 ,"Verify status":""
-                ,"UFS/eMMC programming...this could take up to 60 minutes (step 3/3)":""
+                ,"UFS full verification (step 3/3)":""
                 ,"Programming":""
             }
             inprog_key = ""
@@ -271,20 +271,20 @@ or component == "geteeprom" or component == "getvoltage"):
                     dict["Booting device over JTAG (step 1/3)"] = "In progress"
                     inprog_key = "Booting Status"
                     continue
-                if "UFS full verification (step 2/3)" in line:
+                if "UFS verification do not require downloading payload to DDR (step 2/3)" in line:
                     dict["Booting device over JTAG (step 1/3)"] = "Done"
-                    dict["UFS full verification (step 2/3)"] = "In progress"
+                    dict["UFS verification do not require downloading payload to DDR (step 2/3)"] = "In progress"
                     dict["Booting Status"] = "Done"
                     inprog_key = "Verify status"
                     continue
-                if "UFS/eMMC programming...this could take up to 60 minutes (step 3/3)" in line:
-                    dict["UFS full verification (step 2/3)"] = "Done"
-                    dict["UFS/eMMC programming...this could take up to 60 minutes (step 3/3)"] = "In progress"
+                if "UFS full verification (step 3/3)" in line:
+                    dict["UFS verification do not require downloading payload to DDR (step 2/3)"] = "Done"
+                    dict["UFS full verification (step 3/3)"] = "In progress"
                     dict["Verify status"] = "Done"
                     inprog_key = "Programming"
                     continue
                 if "Full UFS verification successful" in line:
-                    dict["UFS/eMMC programming...this could take up to 60 minutes (step 3/3)"] = "Done"
+                    dict["UFS full verification (step 3/3)"] = "Done"
                     dict["Programming"] = "Done"
                     inprog_key = ""
                     continue
@@ -297,7 +297,7 @@ or component == "geteeprom" or component == "getvoltage"):
                     "Initializing Update":"In progress"
                     ,"Booting device over JTAG (step 1/4)":""
                     ,"Booting Status":""
-                    ,"Downloading image to DDR (step 2/4)":""
+                    ,"Download image to ddr through XSDB. this could take a while (step 2/4)":""
                     ,"Download status":""
                     ,"UFS/eMMC programming...this could take up to 60 minutes (step 3/4)":""
                     ,"Programming":""
@@ -311,14 +311,14 @@ or component == "geteeprom" or component == "getvoltage"):
                         dict["Booting device over JTAG (step 1/4)"] = "In progress"
                         inprog_key = "Booting Status"
                         continue
-                    if "Downloading image to DDR (step 2/4)" in line:
+                    if "Download image to ddr through XSDB. this could take a while (step 2/4)" in line:
                         dict["Booting device over JTAG (step 1/4)"] = "Done"
-                        dict["Downloading image to DDR (step 2/4)"] = "In progress"
+                        dict["Download image to ddr through XSDB. this could take a while (step 2/4)"] = "In progress"
                         dict["Booting Status"] = "Done"
                         inprog_key = "Download status"
                         continue
                     if "UFS/eMMC programming...this could take up to 60 minutes (step 3/4)" in line:
-                        dict["Downloading image to DDR (step 2/4)"] = "Done"
+                        dict["Download image to ddr through XSDB. this could take a while (step 2/4)"] = "Done"
                         dict["UFS/eMMC programming...this could take up to 60 minutes (step 3/4)"] = "In progress"
                         dict["Download status"] = "Done"
                         inprog_key = "Programming"
@@ -348,7 +348,7 @@ or component == "geteeprom" or component == "getvoltage"):
         }
         inprog_key = ""
         for line in data.split('\n'):
-            if "Booting device over JTAG (step 1/3" in line:
+            if "Booting device over JTAG (step 1/3)" in line:
                 dict["Initializing Update"] = "Done"
                 dict["Booting device over JTAG (step 1/3)"] = "In progress"
                 inprog_key = "Booting Status"
