@@ -677,7 +677,7 @@ class StatusRequest(Resource):
                         , "data": {"message":result}
                         }
                     return resp_json
-                elif ("Operation programming UFS enabled" not in result and
+                elif ("Operation programming UFS enabled" in result and
                       "Payload in USB" in result):
                     result = parse.parse_usb_program_ufs_response(result)
                     resp_json = {
@@ -685,7 +685,7 @@ class StatusRequest(Resource):
                         , "data": {"message":result}
                     }
                     return resp_json
-                elif ("Operation verifying UFS enabled" not in result and
+                elif ("Operation verifying UFS enabled" in result and
                       "Payload in USB" in result):
                     result = parse.parse_usb_verify_ufs_response(result)
                     resp_json = {

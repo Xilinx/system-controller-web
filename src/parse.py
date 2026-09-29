@@ -257,35 +257,27 @@ or component == "geteeprom" or component == "getvoltage"):
     def parse_verify_ufs_response(self,data):
             dict = {
                 "Initializing Update":"In progress"
-                ,"Booting device over JTAG (step 1/3)":""
+                ,"Booting device over JTAG (step 1/2)":""
                 ,"Booting Status":""
-                ,"UFS verification do not require downloading payload to DDR (step 2/3)":""
+                ,"UFS full verification (step 2/2)":""
                 ,"Verify status":""
-                ,"UFS full verification (step 3/3)":""
-                ,"Programming":""
             }
             inprog_key = ""
             for line in data.split('\n'):
-                if "Booting device over JTAG (step 1/3)" in line:
+                if "Booting device over JTAG (step 1/2)" in line:
                     dict["Initializing Update"] = "Done"
-                    dict["Booting device over JTAG (step 1/3)"] = "In progress"
+                    dict["Booting device over JTAG (step 1/2)"] = "In progress"
                     inprog_key = "Booting Status"
                     continue
-                if "UFS verification do not require downloading payload to DDR (step 2/3)" in line:
-                    dict["Booting device over JTAG (step 1/3)"] = "Done"
-                    dict["UFS verification do not require downloading payload to DDR (step 2/3)"] = "In progress"
+                if "UFS full verification (step 2/2)" in line:
+                    dict["Booting device over JTAG (step 1/2)"] = "Done"
+                    dict["UFS full verification (step 2/2)"] = "In progress"
                     dict["Booting Status"] = "Done"
                     inprog_key = "Verify status"
                     continue
-                if "UFS full verification (step 3/3)" in line:
-                    dict["UFS verification do not require downloading payload to DDR (step 2/3)"] = "Done"
-                    dict["UFS full verification (step 3/3)"] = "In progress"
-                    dict["Verify status"] = "Done"
-                    inprog_key = "Programming"
-                    continue
                 if "Full UFS verification successful" in line:
-                    dict["UFS full verification (step 3/3)"] = "Done"
-                    dict["Programming"] = "Done"
+                    dict["UFS full verification (step 2/2)"] = "Done"
+                    dict["Verify status"] = "Done"
                     inprog_key = ""
                     continue
                 progress = self._extract_progress_percentage(line)
@@ -421,35 +413,27 @@ or component == "geteeprom" or component == "getvoltage"):
     def parse_usb_verify_ufs_response(self,data):
                 dict = {
                 "Initializing Update":"In progress"
-                ,"Booting device over JTAG (step 1/3)":""
+                ,"Booting device over JTAG (step 1/2)":""
                 ,"Booting Status":""
-                ,"UFS full verification (step 2/3)":""
+                ,"UFS full verification (step 2/2)":""
                 ,"Verify status":""
-                ,"UFS/eMMC programming...this could take up to 60 minutes (step 3/3)":""
-                ,"Programming":""
             }
                 inprog_key = ""
                 for line in data.split('\n'):
-                    if "Booting device over JTAG (step 1/3)" in line:
+                    if "Booting device over JTAG (step 1/2)" in line:
                         dict["Initializing Update"] = "Done"
-                        dict["Booting device over JTAG (step 1/3)"] = "In progress"
+                        dict["Booting device over JTAG (step 1/2)"] = "In progress"
                         inprog_key = "Booting Status"
                         continue
-                    if "UFS full verification (step 2/3)" in line:
-                        dict["Booting device over JTAG (step 1/3)"] = "Done"
-                        dict["UFS full verification (step 2/3)"] = "In progress"
+                    if "UFS full verification (step 2/2)" in line:
+                        dict["Booting device over JTAG (step 1/2)"] = "Done"
+                        dict["UFS full verification (step 2/2)"] = "In progress"
                         dict["Booting Status"] = "Done"
                         inprog_key = "Verify status"
                         continue
-                    if "UFS/eMMC programming...this could take up to 60 minutes (step 3/3)" in line:
-                        dict["UFS full verification (step 2/3)"] = "Done"
-                        dict["UFS/eMMC programming...this could take up to 60 minutes (step 3/3)"] = "In progress"
-                        dict["Verify status"] = "Done"
-                        inprog_key = "Programming"
-                        continue
                     if "Full UFS verification successful" in line:
-                        dict["UFS/eMMC programming...this could take up to 60 minutes (step 3/3)"] = "Done"
-                        dict["Programming"] = "Done"
+                        dict["UFS full verification (step 2/2)"] = "Done"
+                        dict["Verify status"] = "Done"
                         inprog_key = ""
                         continue
                     progress = self._extract_progress_percentage(line)
