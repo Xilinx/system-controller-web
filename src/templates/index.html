@@ -146,8 +146,13 @@
     </span>
     <span class="homecolumn3" id="tables">
       <div class="block_dashboard_1" id="db_dashboard" >
-          <a class="logo-align align-center" href="#"><img
-            src="{{url_for('static',filename='images/versal.png')}}" alt="logo" height="38" style="padding-top:30px; padding-bottom:10px"/></a>
+          <script>
+            if (app_strings.hasOwnProperty('Device') && app_strings['Device'].Device_name === 'Spartan UltraScale+') {
+              document.write("<a class='logo-align align-center' href='#'><img src='{{url_for('static',filename='images/SpartanUltraScale+.png')}}' alt='Spartan UltraScale+' height='38' style='padding-top:30px; padding-bottom:10px'/></a>");
+            } else {
+              document.write("<a class='logo-align align-center' href='#'><img src='{{url_for('static',filename='images/versal.png')}}' alt='Versal' height='38' style='padding-top:30px; padding-bottom:10px'/></a>");
+            }
+          </script>
       </div>
         
     </span>
