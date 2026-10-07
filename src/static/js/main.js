@@ -3239,7 +3239,12 @@ function generateOSPIblock(){
         var pollInterval = setInterval(Timer, 1000);
         showLoadingTooltip("applyospistatus", applyospiID);
         var ospifile = $('#OSPIselectionOption').val().split("\t")[0];
-        var ospidata = {"cmd": "ospiboot","file": " -i /data/OSPI/" + ospifile};
+        var ospidata;
+        if (app_strings.hasOwnProperty('Device') && app_strings['Device'].Device_name === 'Spartan UltraScale+') {
+            ospidata = {"cmd": "ospiboot", "file": " -d mbv -i /data/OSPI/" + ospifile};
+        } else {
+            ospidata = {"cmd": "ospiboot", "file": " -d versal_eval -i /data/OSPI/" + ospifile};
+        }
         if (verifyChecked) {
         ospidata.verify = "true";
         }
@@ -3303,12 +3308,12 @@ function generateOSPIblock(){
 
         var pollInterval = setInterval(Timer, 1000);
         showLoadingTooltip("eraseospistatus", eraseospiID);
-
-        var ospidata = {
-            "cmd": "ospiboot",
-            "erase": "true"
-        };
-
+        var ospidata;
+        if (app_strings.hasOwnProperty('Device') && app_strings['Device'].Device_name === 'Spartan UltraScale+') {
+            ospidata = { "cmd": "ospiboot", "erase": "true", "file": " -d mbv" };
+        } else {
+            ospidata = { "cmd": "ospiboot", "erase": "true", "file": " -d versal_eval" };
+        }
         pollactive = true;
         $.ajax({
             url: "/scriptrunner",
