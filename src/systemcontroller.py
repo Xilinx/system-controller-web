@@ -15,6 +15,7 @@ from flask import Response  ,jsonify
 from flask_restful import Resource, Api , reqparse
 import shutil
 import os
+import json
 
 from logg import *
 from restserv import *
@@ -97,8 +98,27 @@ api.add_resource(RaucUpdate, "/raucupdate")
 import threading
 req_lock = threading.Lock()
 
+def pmcapture_busy_message():
+    path = app_config.get("pmcapture_status_path", "/run/pmcapture/status.json")
+    if not os.path.exists(path):
+        return None
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except (OSError, ValueError):
+        return None
+    state = data.get("state", "idle")
+    if state != "running":
+        return None
+    summary = (data.get("capture") or {}).get("summary", "") or state
+    return app_config["pmcapture_busy_message"].format(summary)
+
 @app.before_request
 def lock_next_requests():
+    if request.endpoint != "static":
+        message = pmcapture_busy_message()
+        if message:
+            return render_template("pmcapture_busy.html", message=message)
     #if  "cmdquery" in request.path or "eeprom_details" in request.path or "funcreq" in request.path:
     #    if checkJNK() >= 1:
     #        return {"key":"A jupyter notebook kernel is running"},204

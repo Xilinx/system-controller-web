@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<!--
+- Copyright (c) 2026 Advanced Micro Devices, Inc.  All rights reserved.
+-
+- SPDX-License-Identifier: MIT
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>BOARD EVALUATION AND MANAGEMENT (BEAM) TOOL</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/common.css') }}">
+  <style>
+    #pmcapture_busy_box {
+      margin: 80px auto 0;
+      max-width: 900px;
+      padding: 0 20px;
+      text-align: center;
+      color: #ffffff;
+    }
+    #pmcapture_busy_box p {
+      margin: 0 0 16px 0;
+      font-size: 26px;
+      line-height: 1.4;
+      white-space: pre-line;
+    }
+    #pmcapture_busy_tabbar {
+      height: 44px;
+    }
+    #pmcapture_busy_box button {
+      padding: 8px 20px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="logo-align align-left"><img
+            src="{{ url_for('static', filename='images/xilinx.png') }}" alt="logo" height="38" style="padding:10px 10px"/></a>
+        <h4 class="app-title">BOARD EVALUATION AND MANAGEMENT (BEAM) TOOL</h4>
+      </div>
+    </div>
+  </nav>
+  <nav class="tab_sec" id="pmcapture_busy_tabbar"></nav>
+  <div id="pmcapture_busy_box">
+    <p>{{ message }}</p>
+    <button onclick="window.location.reload()">Refresh</button>
+  </div>
+</body>
+</html>

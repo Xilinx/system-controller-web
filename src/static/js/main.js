@@ -490,6 +490,11 @@ function Banner() {
         });
     }
 }
+$(document).ajaxComplete(function (event, xhr) {
+    if (xhr.responseText && xhr.responseText.indexOf('id="pmcapture_busy_box"') !== -1) {
+        window.location.reload();
+    }
+});
 function startPolling() {
     pollInterval = setInterval(Banner, 5000);
   }
