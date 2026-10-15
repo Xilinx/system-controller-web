@@ -1109,16 +1109,16 @@ function addVadjTab() {
         , "components": ["C,L0,V0,B0"]    // Checkbox, Label, editfield, info, button, Action
         , "L0": "Get " + tds + " All"
         , "V0": "- V"
-        , "V0N": "V"
-        , "V0V": "io"
+        , "V0N": ""
+        , "V0V": "Voltage"
         , "B0": "Get"
         , "B0A": apiCall
         , "B0sc_cmd": "getvoltage"
         , "B0target": tds
-        , "B0params": "all"
+        , "B0params": "True"
         , "B0disabled":false
     };
-    // innCompsget.push(getv2);
+     innCompsget.push(getv2);
 
     var setv = {
         "type": "list"

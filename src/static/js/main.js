@@ -1028,7 +1028,7 @@ function cmdBtnonclick(e){
                             if(cn.nodeName.toLowerCase() == "label"){
                                 if (res.data[cn.getAttribute("respKey")] != undefined){
                                     if (res.data[cn.getAttribute("respKey")] != "-"){
-                                        cn.innerHTML = res.data[cn.getAttribute("respKey")] + " " + cn.getAttribute("notation");
+                                        cn.innerHTML = String(res.data[cn.getAttribute("respKey")]).replace(/\n/g, "<br>") + " " + cn.getAttribute("notation");
                                      }
                                      else{
                                         cn.innerHTML = "NA";
