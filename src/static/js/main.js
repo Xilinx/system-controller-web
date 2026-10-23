@@ -4050,7 +4050,7 @@ function formatEEPROMDisplay(data) {
         if (data.versalMacs.length === 1) {
             // Single Versal MAC
             var versalLabel = document.createElement('b');
-            versalLabel.textContent = 'Versal MAC: ';
+            versalLabel.textContent = 'DUT MAC: ';
             container.appendChild(versalLabel);
             
             var versalMacInput = document.createElement('input');
@@ -4069,7 +4069,7 @@ function formatEEPROMDisplay(data) {
             // Multiple Versal MACs
             for (var i = 0; i < data.versalMacs.length; i++) {
                 var versalLabelMulti = document.createElement('b');
-                versalLabelMulti.textContent = 'Versal MAC ' + (i + 1) + ': ';
+                versalLabelMulti.textContent = 'DUT MAC ' + (i + 1) + ': ';
                 container.appendChild(versalLabelMulti);
                 
                 var versalMacInputMulti = document.createElement('input');
@@ -4094,7 +4094,7 @@ function formatEEPROMDisplay(data) {
     } else {
         // Show empty Versal MAC field by default
         var versalLabelEmpty = document.createElement('b');
-        versalLabelEmpty.textContent = 'Versal MAC: ';
+        versalLabelEmpty.textContent = 'DUT MAC: ';
         container.appendChild(versalLabelEmpty);
         
         var versalMacInputEmpty = document.createElement('input');
@@ -4135,9 +4135,9 @@ function writeEEPROMData() {
         } else {
             hasEmptyField = true;
             if (versalMacInputs.length === 1) {
-                emptyFields.push('Versal MAC');
+                emptyFields.push('DUT MAC');
             } else {
-                emptyFields.push('Versal MAC ' + (index + 1));
+                emptyFields.push('DUT MAC ' + (index + 1));
             }
         }
     });
@@ -4146,13 +4146,13 @@ function writeEEPROMData() {
         return;
     }
     if (versalMacs.length === 0) {
-        alert('Please enter at least one Versal MAC address');
+        alert('Please enter at least one DUT MAC address');
         return;
     }
     var macPattern = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/;
     for (var i = 0; i < versalMacs.length; i++) {
         if (!macPattern.test(versalMacs[i])) {
-            alert('Invalid Versal MAC address format at position ' + (i + 1) + '. Please use format: xx:xx:xx:xx:xx:xx');
+            alert('Invalid DUT MAC address format at position ' + (i + 1) + '. Please use format: xx:xx:xx:xx:xx:xx');
             return;
         }
     }
