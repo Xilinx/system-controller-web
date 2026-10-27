@@ -4832,7 +4832,7 @@ if(general.boardName.toLowerCase()=="vck190" || general.boardName.toLowerCase()=
 
 }
 $(document).ready(function () {
-    
+    if (general.boardName.toLowerCase() === "vmk365") { $("#setmacaddress").parent().hide(); }
     layoutDesigns();
     generateBoardSettingsTabJSON();
     generateBoardSettingsUI();
