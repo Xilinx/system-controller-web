@@ -3149,7 +3149,7 @@ function generateOSPIblock(){
                 popupMessage.innerHTML = table;
             },
             error: function () {
-                popupMessage.innerHTML = "Network Error";
+                popupMessage.innerHTML = "Network connection is lost, retrying...";
             }
         });
     }
@@ -3291,7 +3291,7 @@ function generateOSPIblock(){
                 clearInterval(pollInterval);
                 document.body.appendChild(ospipopupmain);
                 showFailureTooltip("applyospistatus", "Network Error", applyospiID);
-                popupMessage.innerHTML = "Network Error";
+                popupMessage.innerHTML = "Network connection is lost, retrying...";
                 showLogButton.disabled = false;
                 if (popupFooter.contains(showLogButton)) {
                     popupFooter.removeChild(showLogButton);
@@ -3354,7 +3354,7 @@ function generateOSPIblock(){
                 clearInterval(pollInterval);
                 document.body.appendChild(ospipopupmain);
                 showFailureTooltip("eraseospistatus", "Network Error", eraseospiID);
-                popupMessage.innerHTML = "Network Error";
+                popupMessage.innerHTML = "Network connection is lost, retrying...";
                 showLogButton.disabled = false;
                 if (popupFooter.contains(showLogButton)) {
                     popupFooter.removeChild(showLogButton);
@@ -3627,7 +3627,7 @@ function generateUFSblock(){
                 popupMessage.innerHTML = table;
             },
             error: function () {
-                popupMessage.innerHTML = "Network Error";
+                popupMessage.innerHTML = "Network connection is lost, retrying...";
             }
         });
     }
@@ -3800,7 +3800,7 @@ function generateUFSblock(){
                 clearInterval(pollInterval);
                 document.body.appendChild(ufspopupmain);
                 showFailureTooltip("applyufsstatus", "Network Error", applyufsID);
-                popupMessage.innerHTML = "Network Error";
+                popupMessage.innerHTML = "Network connection is lost, retrying...";
                 showUfsLogButton.disabled = false;
                 if (popupFooter.contains(showUfsLogButton)) {
                     popupFooter.removeChild(showUfsLogButton);
@@ -3860,7 +3860,7 @@ function generateUFSblock(){
                 clearInterval(pollInterval);
                 document.body.appendChild(ufspopupmain);
                 showFailureTooltip("eraseufsstatus", "Network Error", eraseUfsID);
-                popupMessage.innerHTML = "Network Error";
+                popupMessage.innerHTML = "Network connection is lost, retrying...";
                 showUfsLogButton.disabled = false;
                 if (popupFooter.contains(showUfsLogButton)) {
                     popupFooter.removeChild(showUfsLogButton);
